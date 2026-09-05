@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://ck2c7q06fx04h"]
+
+[ext_resource type="PackedScene" uid="uid://bb1hqxv1ucvya" path="res://escenas/01_habitacion/jugador.tscn" id="1_omcwt"]
+[ext_resource type="Script" uid="uid://cwk0cvinu70ri" path="res://escenas/01_habitacion/interactuable.gd" id="2_85pyb"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v2hei"]
+albedo_color = Color(0.6355681, 0.3845597, 0.68622553, 1)
+normal_scale = 0.66
+
+[sub_resource type="BoxMesh" id="BoxMesh_wyn8c"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wyn8c"]
+albedo_color = Color(1, 0, 0.38431373, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_v2hei"]
+
+[node name="Node3D" type="Node3D" unique_id=672041231]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=302719860]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6135254, -0.087385714, 0.6942749)
+use_collision = true
+size = Vector3(20, 2, 20)
+material = SubResource("StandardMaterial3D_v2hei")
+
+[node name="Jugador" parent="." unique_id=817807663 instance=ExtResource("1_omcwt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.27982616, 1.0783875, 0.35859394)
+
+[node name="Despertador" type="StaticBody3D" parent="." unique_id=95779158]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3769221, -3.4931722)
+script = ExtResource("2_85pyb")
+texto_interaccion = "Apagar"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Despertador" unique_id=1332406730]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5507599, 0)
+mesh = SubResource("BoxMesh_wyn8c")
+surface_material_override/0 = SubResource("StandardMaterial3D_wyn8c")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Despertador" unique_id=1934712558]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.54983914, 0)
+shape = SubResource("BoxShape3D_v2hei")
