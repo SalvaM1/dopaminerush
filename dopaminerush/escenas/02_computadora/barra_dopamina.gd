@@ -16,7 +16,7 @@ func _ready() -> void:
 	# Nos suscribimos a las señales. A partir de aca, cada vez que la dopamina
 	# cambie, se llama _al_cambiar_dopamina automaticamente.
 	GameManager.dopamina_cambio.connect(_al_cambiar_dopamina)
-	GameManager.fase_cambio.connect(_al_cambiar_fase)
+	GameManager.app_desbloqueada.connect(_al_desbloquear_app)
 
 	# Estado inicial
 	barra.max_value = GameManager.DOPAMINA_MAX
@@ -37,8 +37,8 @@ func _al_cambiar_dopamina(valor: float, maximo: float) -> void:
 		barra.modulate = Color(1.0, 1.0, 1.0)      # normal
 
 
-func _al_cambiar_fase(_nueva: int) -> void:
-	# Un pequeño golpe visual para que se note el cambio de fase.
+func _al_desbloquear_app(_indice: int) -> void:
+	# Un golpe visual cuando se desbloquea una app nueva.
 	var tween := create_tween()
 	tween.tween_property(barra, "scale", Vector2(1.05, 1.3), 0.15)
 	tween.tween_property(barra, "scale", Vector2(1.0, 1.0), 0.25)

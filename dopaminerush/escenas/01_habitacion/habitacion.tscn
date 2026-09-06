@@ -26,7 +26,7 @@ material = SubResource("StandardMaterial3D_v2hei")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.27982616, 1.0783875, 0.35859394)
 
 [node name="Despertador" type="StaticBody3D" parent="." unique_id=95779158]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3769221, -3.4931722)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.062870264, 1.5570278, -3.2461464)
 script = ExtResource("2_85pyb")
 texto_interaccion = "Apagar"
 
