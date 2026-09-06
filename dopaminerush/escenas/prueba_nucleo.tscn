@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://clua6jvo20a7e"]
+
+[ext_resource type="Script" uid="uid://dyr746c3bdvab" path="res://escenas/prueba_nucleo.gd" id="1_ckuvx"]
+[ext_resource type="PackedScene" uid="uid://crf3rcrvcemnh" path="res://escenas/02_computadora/barra_dopamina.tscn" id="2_3woh7"]
+
+[node name="PruebaNucleo" type="Control" unique_id=716468516]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ckuvx")
+
+[node name="BotonSumar" type="Button" parent="." unique_id=2023787625]
+layout_mode = 0
+offset_left = 174.0
+offset_top = 210.0
+offset_right = 242.0
+offset_bottom = 273.0
+text = "sumar 10"
+
+[node name="BotonAceptar" type="Button" parent="." unique_id=2016163649]
+layout_mode = 0
+offset_left = 470.0
+offset_top = 178.0
+offset_right = 617.0
+offset_bottom = 304.0
+
+[node name="Info" type="Label" parent="." unique_id=494617936]
+layout_mode = 0
+offset_left = 829.0
+offset_top = 60.0
+offset_right = 1079.0
+offset_bottom = 196.0
+
+[node name="BarraDopamina" parent="." unique_id=348357759 instance=ExtResource("2_3woh7")]
+layout_mode = 1
+offset_left = -412.0
+offset_top = 35.0
+offset_right = 125.0
+offset_bottom = 80.0
