@@ -33,7 +33,7 @@ const POSICION_INICIAL := Vector2(80, 70)
 @onready var fin_dia: Panel = $FinDia
 
 # Cuantos minutos del juego pasan por cada segundo real
-const VELOCIDAD_RELOJ: float = 12.0
+const VELOCIDAD_RELOJ: float = 2
 var _minutos: float = 8 * 60.0   # arranca a las 08:00
 
 # indice de app -> ventana abierta
@@ -65,7 +65,8 @@ func _ready() -> void:
 	tropiezo.hide()
 	fin_dia.hide()
 
-	GameManager.iniciar_sesion_pc()
+	if get_parent() == get_tree().root:
+		GameManager.iniciar_sesion_pc()
 
 
 func _process(delta: float) -> void:

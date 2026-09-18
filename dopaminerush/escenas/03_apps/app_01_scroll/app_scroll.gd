@@ -25,7 +25,7 @@ const VELOCIDAD_RAPIDA: float = 2.0        # multiplicador al mantener apretado
 const UMBRAL_2X: float = 60.0              # dopamina a la que se desbloquea el 2x
 const DISTANCIA_SCROLL: float = 250      # pixeles a arrastrar para pasar
 const PROB_JACKPOT: float = 0.15
-const MULT_JACKPOT: float = 3.0
+const MULT_JACKPOT: float = 2
 
 # Para probar la escena sola con F6. En el juego real dejar en false.
 @export var forzar_2x_desbloqueado: bool = false
