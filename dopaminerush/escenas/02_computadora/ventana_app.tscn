@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://6bjgvwtihnqv"]
+
+[ext_resource type="Script" uid="uid://c40uy51kh3e48" path="res://escenas/02_computadora/ventana_app.gd" id="1_30nna"]
+
+[node name="Ventana" type="Panel" unique_id=555937795]
+offset_right = 400.0
+offset_bottom = 300.0
+script = ExtResource("1_30nna")
+
+[node name="Layout" type="VBoxContainer" parent="." unique_id=1302931444]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BarraTitulo" type="HBoxContainer" parent="Layout" unique_id=1270899479]
+layout_mode = 2
+
+[node name="Titulo" type="Label" parent="Layout/BarraTitulo" unique_id=532871439]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Titulo"
+
+[node name="BotonCerrar" type="Button" parent="Layout/BarraTitulo" unique_id=668349457]
+layout_mode = 2
+text = "X"
+
+[node name="Contenido" type="Control" parent="Layout" unique_id=855449481]
+layout_mode = 2
+size_flags_vertical = 3
