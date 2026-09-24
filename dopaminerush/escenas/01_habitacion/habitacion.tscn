@@ -5,17 +5,42 @@
 [ext_resource type="Script" uid="uid://cwk0cvinu70ri" path="res://escenas/01_habitacion/interactuable.gd" id="2_85pyb"]
 [ext_resource type="PackedScene" uid="uid://dwipbhfst0fvj" path="res://escenas/02_computadora/escritorio.tscn" id="3_qplji"]
 [ext_resource type="AudioStream" uid="uid://cp5cuh0d76m1l" path="res://assets/audio/ambiente/despertador.ogg" id="4_wbbac"]
+[ext_resource type="PackedScene" path="res://escenas/01_habitacion/habitacion_visual.tscn" id="5_visual"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v2hei"]
 albedo_color = Color(0.70019305, 0.5339784, 0, 1)
 normal_scale = 0.66
 
 [sub_resource type="BoxMesh" id="BoxMesh_wyn8c"]
+size = Vector3(0.56, 0.28, 0.22)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wyn8c"]
-albedo_color = Color(1, 0, 0.38431373, 1)
+albedo_color = Color(0.105, 0.12, 0.15, 1)
+metallic = 0.35
+roughness = 0.42
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_v2hei"]
+size = Vector3(0.56, 0.28, 0.22)
+
+[sub_resource type="StandardMaterial3D" id="AlarmDisplayMaterial"]
+albedo_color = Color(0.01, 0.025, 0.035, 1)
+emission_enabled = true
+emission = Color(0.05, 0.75, 0.95, 1)
+emission_energy_multiplier = 3.0
+
+[sub_resource type="BoxMesh" id="AlarmDisplayMesh"]
+size = Vector3(0.36, 0.11, 0.025)
+
+[sub_resource type="StandardMaterial3D" id="MetalMaterial"]
+albedo_color = Color(0.045, 0.055, 0.075, 1)
+metallic = 0.75
+roughness = 0.32
+
+[sub_resource type="CylinderMesh" id="AlarmButtonMesh"]
+top_radius = 0.055
+bottom_radius = 0.055
+height = 0.06
+radial_segments = 12
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wbbac"]
 albedo_color = Color(0, 0, 0, 1)
@@ -23,6 +48,14 @@ albedo_color = Color(0, 0, 0, 1)
 [sub_resource type="BoxMesh" id="BoxMesh_v2hei"]
 material = SubResource("StandardMaterial3D_wbbac")
 size = Vector3(1.2, 0.72, 0.05)
+
+[sub_resource type="BoxMesh" id="MonitorNeckMesh"]
+material = SubResource("MetalMaterial")
+size = Vector3(0.14, 0.42, 0.13)
+
+[sub_resource type="BoxMesh" id="MonitorBaseMesh"]
+material = SubResource("MetalMaterial")
+size = Vector3(0.68, 0.08, 0.38)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_or7tu"]
 size = Vector3(1.2, 0.72, 0.05)
@@ -36,11 +69,32 @@ size = Vector3(1.1, 0.62, 0.01)
 [sub_resource type="BoxMesh" id="BoxMesh_l87xu"]
 size = Vector3(1.4, 3, 0.2)
 
+[sub_resource type="StandardMaterial3D" id="DoorMaterial"]
+albedo_color = Color(0.24, 0.105, 0.045, 1)
+roughness = 0.72
+
+[sub_resource type="BoxMesh" id="DoorFrameVerticalMesh"]
+material = SubResource("DoorMaterial")
+size = Vector3(0.16, 3.35, 0.28)
+
+[sub_resource type="BoxMesh" id="DoorFrameTopMesh"]
+material = SubResource("DoorMaterial")
+size = Vector3(1.72, 0.16, 0.28)
+
+[sub_resource type="SphereMesh" id="DoorHandleMesh"]
+material = SubResource("MetalMaterial")
+radius = 0.085
+height = 0.17
+radial_segments = 12
+rings = 6
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_xehkl"]
 size = Vector3(1.4, 3, 0.2)
 
 [node name="Node3D" type="Node3D" unique_id=672041231]
 script = ExtResource("1_asbsv")
+
+[node name="HabitacionVisual" parent="." instance=ExtResource("5_visual")]
 
 [node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=302719860]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6135254, -0.087385714, 0.6942749)
@@ -52,7 +106,7 @@ material = SubResource("StandardMaterial3D_v2hei")
 transform = Transform3D(-0.8864261, 0, -0.46287018, 0, 1, 0, 0.46287018, 0, -0.8864261, -2.5572863, 1.0783875, -1.3690017)
 
 [node name="Despertador" type="StaticBody3D" parent="." unique_id=95779158]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.062870264, 0.955503, -3.2461464)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 1.27, -3.25)
 script = ExtResource("2_85pyb")
 texto_interaccion = "Apagar"
 
@@ -67,6 +121,16 @@ shape = SubResource("BoxShape3D_v2hei")
 
 [node name="Sonido" type="AudioStreamPlayer3D" parent="Despertador" unique_id=1211045533]
 stream = ExtResource("4_wbbac")
+
+[node name="Display" type="MeshInstance3D" parent="Despertador"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0.125)
+mesh = SubResource("AlarmDisplayMesh")
+material_override = SubResource("AlarmDisplayMaterial")
+
+[node name="BotonSuperior" type="MeshInstance3D" parent="Despertador"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.725, 0)
+mesh = SubResource("AlarmButtonMesh")
+material_override = SubResource("MetalMaterial")
 
 [node name="PantallaViewport" type="SubViewport" parent="." unique_id=1505153128]
 size = Vector2i(1920, 1080)
@@ -88,13 +152,21 @@ script = ExtResource("2_85pyb")
 texto_interaccion = "Sentarse"
 
 [node name="PuntoSentado" type="Marker3D" parent="Monitor" unique_id=1076091277]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 1.55)
 
 [node name="Marco" type="MeshInstance3D" parent="Monitor" unique_id=1751420019]
 mesh = SubResource("BoxMesh_v2hei")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Monitor" unique_id=953500038]
 shape = SubResource("BoxShape3D_or7tu")
+
+[node name="Soporte" type="MeshInstance3D" parent="Monitor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.54, 0)
+mesh = SubResource("MonitorNeckMesh")
+
+[node name="Base" type="MeshInstance3D" parent="Monitor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.78, 0.08)
+mesh = SubResource("MonitorBaseMesh")
 
 [node name="Pantalla" type="MeshInstance3D" parent="Monitor" unique_id=1927828228]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.03)
@@ -123,11 +195,30 @@ texto_interaccion = "Salir"
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Puerta" unique_id=1465475805]
 mesh = SubResource("BoxMesh_l87xu")
+material_override = SubResource("DoorMaterial")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Puerta" unique_id=1960982235]
 shape = SubResource("BoxShape3D_xehkl")
 
+[node name="MarcoIzquierdo" type="MeshInstance3D" parent="Puerta"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.79, 0, 0)
+mesh = SubResource("DoorFrameVerticalMesh")
+
+[node name="MarcoDerecho" type="MeshInstance3D" parent="Puerta"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.79, 0, 0)
+mesh = SubResource("DoorFrameVerticalMesh")
+
+[node name="MarcoSuperior" type="MeshInstance3D" parent="Puerta"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.58, 0)
+mesh = SubResource("DoorFrameTopMesh")
+
+[node name="Picaporte" type="MeshInstance3D" parent="Puerta"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 0.48, 0, -0.18)
+mesh = SubResource("DoorHandleMesh")
+
 [node name="SpotLight3D" type="SpotLight3D" parent="." unique_id=1035674596]
 transform = Transform3D(1, 0, 0, 0, 0.1673363, 0.98589987, 0, -0.98589987, 0.1673363, 3.6852703, 5.269793, -1.7185807)
-light_energy = 13.536
+light_color = Color(0.32, 0.48, 0.88, 1)
+light_energy = 4.5
+shadow_enabled = true
 spot_range = 4.8570056
