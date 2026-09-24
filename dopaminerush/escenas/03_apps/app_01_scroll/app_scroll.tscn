@@ -1,0 +1,188 @@
+[gd_scene format=3 uid="uid://c4phertkh5esl"]
+
+[ext_resource type="Script" uid="uid://dgm3krx7baofs" path="res://escenas/03_apps/app_01_scroll/app_scroll.gd" id="1_kthrw"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v2hei"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.2051174, 0.20511746, 0.20511732, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7j80i"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(1, 1, 1, 1)
+
+[node name="AppScroll" type="Control" unique_id=1286198691]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 400.0
+offset_bottom = 800.0
+script = ExtResource("1_kthrw")
+id_app = "scroll"
+nombre_app = "TikBrainRot"
+tamano_ventana = Vector2(400, 800)
+posicion_ventana = Vector2(120, 140)
+dopamina_por_interaccion = 10.0
+
+[node name="Telefono" type="Panel" parent="." unique_id=927458906]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Video" type="ColorRect" parent="Telefono" unique_id=1834163140]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -60.0
+grow_horizontal = 2
+grow_vertical = 2
+offset_transform_enabled = true
+mouse_filter = 2
+
+[node name="FondoTop" type="ColorRect" parent="Telefono" unique_id=2125056578]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 40.0
+grow_horizontal = 2
+color = Color(0, 0, 0, 1)
+
+[node name="TopBar" type="HBoxContainer" parent="Telefono/FondoTop" unique_id=287837142]
+layout_mode = 1
+anchors_preset = -1
+offset_right = 340.0
+offset_bottom = 40.0
+theme_override_constants/separation = 30
+
+[node name="Siguiendo" type="Label" parent="Telefono/FondoTop/TopBar" unique_id=1167068264]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "                    Siguiendo"
+
+[node name="ParaTi" type="Label" parent="Telefono/FondoTop/TopBar" unique_id=883779015]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Para ti"
+
+[node name="Descripcion" type="Label" parent="Telefono" unique_id=1683781575]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 485.0
+offset_right = 196.0
+offset_bottom = 536.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 17
+text = "Descripcion de ejemplo
+asdasdadsa"
+
+[node name="Acciones" type="VBoxContainer" parent="Telefono" unique_id=518490206]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -40.0
+offset_bottom = 119.5
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="Likes" type="Label" parent="Telefono/Acciones" unique_id=942163103]
+layout_mode = 2
+
+[node name="Comentarios" type="Label" parent="Telefono/Acciones" unique_id=1572076427]
+layout_mode = 2
+
+[node name="Compartir" type="Label" parent="Telefono/Acciones" unique_id=242769611]
+layout_mode = 2
+
+[node name="BarraProgreso" type="ProgressBar" parent="Telefono" unique_id=2129094206]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -72.0
+offset_bottom = -60.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 8
+theme_override_styles/background = SubResource("StyleBoxFlat_v2hei")
+theme_override_styles/fill = SubResource("StyleBoxFlat_7j80i")
+
+[node name="Velocidad" type="Label" parent="Telefono" unique_id=1880083782]
+layout_mode = 0
+offset_left = 132.0
+offset_top = 56.0
+offset_right = 245.0
+offset_bottom = 104.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "VELOCIDAD X2"
+
+[node name="Aviso" type="Label" parent="Telefono" unique_id=443738913]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -113.5
+offset_top = -16.5
+offset_right = 113.5
+offset_bottom = 16.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "AVISO DESBLOQUEO X2"
+
+[node name="Indicador" type="Label" parent="Telefono" unique_id=881695984]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -42.5
+offset_top = -39.0
+offset_right = 42.5
+offset_bottom = 39.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="NavBar" type="HBoxContainer" parent="Telefono" unique_id=1730306323]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -60.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Inicio" type="Label" parent="Telefono/NavBar" unique_id=882181325]
+layout_mode = 2
+
+[node name="Amigos" type="Label" parent="Telefono/NavBar" unique_id=1988750634]
+layout_mode = 2
+
+[node name="Mas" type="Label" parent="Telefono/NavBar" unique_id=664957482]
+layout_mode = 2
+
+[node name="Bandeja" type="Label" parent="Telefono/NavBar" unique_id=675057377]
+layout_mode = 2
+
+[node name="Perfil" type="Label" parent="Telefono/NavBar" unique_id=550100883]
+layout_mode = 2
