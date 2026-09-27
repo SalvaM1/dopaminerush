@@ -32,6 +32,11 @@ const FUNDIDO_DESPERTAR: float = 2.0  # cuanto tarda en aparecer la imagen
 
 # Colapso
 const NEGRO_COLAPSO: float = 2.0
+const DURACION_SIN_SENAL: float = 4.0
+const RUTA_APAGON := "res://assets/audio/ui/powerdown.wav"
+const PITCH_APAGON: float = 0.78     # un poco mas grave que el original
+const VOLUMEN_APAGON: float = 5.0    # y un poco mas fuerte
+const CAJA_TAMANO := Vector2(660, 300)
 
 # Cuanto retrocede el cuerpo al colapsar, para salir de adentro del
 # escritorio antes de que el jugador pueda mirar alrededor.
@@ -97,6 +102,8 @@ var _vapeando: bool = false
 var _vape_desbloqueado: bool = false
 var _aviso_vape: Panel = null
 var _zumbido: AudioStreamPlayer = null
+var _sin_senal: Control = null
+var _snd_apagon: AudioStreamPlayer = null
 var _boton_aviso: Panel = null
 var _cooldown_vape: float = 0.0
 var _vape_pos_base: Vector3
@@ -122,6 +129,7 @@ func _ready() -> void:
 	indicador_vape.hide()
 	_crear_aviso_vape()
 	_crear_zumbido()
+	_crear_sin_senal()
 	GameManager.app_desbloqueada.connect(_al_desbloquear_app)
 
 	despertador.usado.connect(_apagar_despertador)
@@ -303,31 +311,31 @@ func _sentarse() -> void:
 # ============================================================
 
 func _al_colapsar() -> void:
-	# Lo primero: matar las apps. Ocultar el escritorio no alcanza,
-	# porque siguen corriendo y sonando adentro del SubViewport.
+	# 1. Mueren las apps y su audio. El zumbido de la habitacion sigue:
+	#    lo que fallo es la computadora, no el mundo.
 	escritorio.cortar_todo()
+	escritorio.hide()
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
-	# El zumbido tambien se corta. De golpe, sin fundido: el contraste
-	# es todo el efecto.
+	# 2. El monitor pierde la señal, como cuando se desconecta un cable.
+	#    No explica nada, pero se entiende al instante.
+	_mostrar_sin_senal(true)
+	await get_tree().create_timer(DURACION_SIN_SENAL).timeout
+
+	# 3. EL APAGON. Todo en el mismo frame: el sonido, la pantalla negra
+	#    y el corte del zumbido. Que no quede claro si se corto la luz,
+	#    si murio la maquina o si el que colapso fue el jugador.
+	if _snd_apagon and _snd_apagon.stream:
+		_snd_apagon.play()
+	_mostrar_sin_senal(false)
+	apagada.show()
 	if _zumbido:
 		_zumbido.stop()
 
-	# Version minima. Falta todavia apagar las luces de la habitacion
-	# en el mismo frame (paso 38).
-	escritorio.hide()
-	apagada.show()
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-
-	# El cuerpo se aparta del escritorio, despacio, durante el silencio.
-	# Estaba metido adentro de la madera: si no se corre, al mirar
-	# alrededor se veria desde adentro del mueble.
-	# 1. Quieto en el silencio. Nada se mueve: es el momento mas
-	# importante de la obra y no hay que rellenarlo.
+	# 4. Silencio. La tentacion va a ser rellenarlo; hay que resistirla.
 	await get_tree().create_timer(NEGRO_COLAPSO).timeout
 
-	# 2. Recien ahora el cuerpo se aparta del escritorio. Estaba metido
-	# adentro de la madera: si no se corre, al mirar alrededor se veria
-	# desde adentro del mueble.
+	# 5. El cuerpo se aparta del escritorio, despacio.
 	var destino := jugador.global_position + jugador.global_transform.basis.z * DISTANCIA_COLAPSO
 	var tween := create_tween()
 	tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
@@ -719,3 +727,161 @@ func _crear_zumbido() -> void:
 
 	# Entra despacio, junto con la conciencia
 	AudioManager.fundir_entrada(_zumbido, 4.0, VOLUMEN_ZUMBIDO)
+
+
+# ============================================================
+#  El apagon
+# ============================================================
+
+func _crear_sin_senal() -> void:
+	# Va DENTRO del SubViewport, asi aparece sobre la pantalla del
+	# monitor y no flotando en el aire.
+	#
+	# El diseño imita el OSD de un monitor real: caja oscura con borde
+	# claro, tipografia en mayusculas, jerarquia de tres niveles y una
+	# linea final que anticipa el apagon sin explicarlo.
+	_sin_senal = Control.new()
+	_sin_senal.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_sin_senal.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_sin_senal.visible = false
+
+	var fondo := ColorRect.new()
+	fondo.color = Color(0.008, 0.008, 0.012)
+	fondo.set_anchors_preset(Control.PRESET_FULL_RECT)
+	fondo.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_sin_senal.add_child(fondo)
+
+	# --- la caja que deriva ---
+	var caja := Panel.new()
+	caja.name = "Caja"
+	caja.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	caja.size = CAJA_TAMANO
+	caja.position = Vector2(650, 410)
+
+	var estilo := StyleBoxFlat.new()
+	estilo.bg_color = Color(0.043, 0.047, 0.062, 0.97)
+	estilo.border_width_left = 2
+	estilo.border_width_top = 2
+	estilo.border_width_right = 2
+	estilo.border_width_bottom = 2
+	estilo.border_color = Color(0.3, 0.33, 0.4)
+	estilo.corner_radius_top_left = 6
+	estilo.corner_radius_top_right = 6
+	estilo.corner_radius_bottom_right = 6
+	estilo.corner_radius_bottom_left = 6
+	estilo.shadow_color = Color(0, 0, 0, 0.6)
+	estilo.shadow_size = 18
+	estilo.shadow_offset = Vector2(0, 6)
+	caja.add_theme_stylebox_override("panel", estilo)
+
+	# Franja de acento arriba
+	var acento := ColorRect.new()
+	acento.color = Color(0.36, 0.55, 0.85)
+	acento.set_anchors_preset(Control.PRESET_TOP_WIDE)
+	acento.offset_left = 2.0
+	acento.offset_right = -2.0
+	acento.offset_top = 2.0
+	acento.offset_bottom = 7.0
+	acento.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	caja.add_child(acento)
+
+	# Titular
+	var titulo := Label.new()
+	titulo.text = "SIN SEÑAL"
+	titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	titulo.add_theme_font_size_override("font_size", 58)
+	titulo.add_theme_color_override("font_color", Color(0.88, 0.91, 0.96))
+	titulo.set_anchors_preset(Control.PRESET_TOP_WIDE)
+	titulo.offset_top = 38.0
+	titulo.offset_bottom = 110.0
+	titulo.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	caja.add_child(titulo)
+
+	# Separador
+	var linea := ColorRect.new()
+	linea.color = Color(0.22, 0.25, 0.31)
+	linea.set_anchors_preset(Control.PRESET_TOP_WIDE)
+	linea.offset_left = 70.0
+	linea.offset_right = -70.0
+	linea.offset_top = 122.0
+	linea.offset_bottom = 123.0
+	linea.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	caja.add_child(linea)
+
+	# Entrada
+	var entrada := Label.new()
+	entrada.text = "ENTRADA:  HDMI 1"
+	entrada.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	entrada.add_theme_font_size_override("font_size", 24)
+	entrada.add_theme_color_override("font_color", Color(0.55, 0.6, 0.7))
+	entrada.set_anchors_preset(Control.PRESET_TOP_WIDE)
+	entrada.offset_top = 140.0
+	entrada.offset_bottom = 176.0
+	entrada.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	caja.add_child(entrada)
+
+	# Instruccion
+	var ayuda := Label.new()
+	ayuda.text = "Verificá la conexión del cable"
+	ayuda.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	ayuda.add_theme_font_size_override("font_size", 19)
+	ayuda.add_theme_color_override("font_color", Color(0.4, 0.44, 0.52))
+	ayuda.set_anchors_preset(Control.PRESET_TOP_WIDE)
+	ayuda.offset_top = 182.0
+	ayuda.offset_bottom = 212.0
+	ayuda.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	caja.add_child(ayuda)
+
+	# Ultima linea: anticipa el apagon sin explicarlo
+	var aviso := Label.new()
+	aviso.text = "El monitor entrará en modo de ahorro de energía"
+	aviso.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	aviso.add_theme_font_size_override("font_size", 15)
+	aviso.add_theme_color_override("font_color", Color(0.29, 0.32, 0.39))
+	aviso.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
+	aviso.offset_top = -38.0
+	aviso.offset_bottom = -16.0
+	aviso.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	caja.add_child(aviso)
+
+	_sin_senal.add_child(caja)
+	pantalla_viewport.add_child(_sin_senal)
+
+	# El sonido del apagon
+	if ResourceLoader.exists(RUTA_APAGON):
+		_snd_apagon = AudioStreamPlayer.new()
+		_snd_apagon.stream = load(RUTA_APAGON)
+		_snd_apagon.bus = "Ambiente"
+		_snd_apagon.pitch_scale = PITCH_APAGON
+		_snd_apagon.volume_db = VOLUMEN_APAGON
+		add_child(_snd_apagon)
+	else:
+		print("[Habitacion] falta el sonido del apagon: ", RUTA_APAGON)
+
+
+func _mostrar_sin_senal(visible_: bool) -> void:
+	if _sin_senal == null:
+		return
+
+	_sin_senal.visible = visible_
+	if not visible_:
+		return
+
+	# La caja deriva despacio por la pantalla, como en los monitores de
+	# verdad cuando se quedan sin entrada. El recorrido esta calculado
+	# para que nunca toque los bordes.
+	var caja: Panel = _sin_senal.get_node_or_null("Caja")
+	if caja == null:
+		return
+
+	caja.modulate.a = 0.0
+	var entrada_tween := create_tween()
+	entrada_tween.tween_property(caja, "modulate:a", 1.0, 0.35)
+
+	var libre := Vector2(pantalla_viewport.size) - CAJA_TAMANO
+	var t := create_tween().set_loops()
+	t.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	t.tween_property(caja, "position", Vector2(libre.x * 0.82, libre.y * 0.74), 3.1)
+	t.tween_property(caja, "position", Vector2(libre.x * 0.14, libre.y * 0.86), 3.1)
+	t.tween_property(caja, "position", Vector2(libre.x * 0.72, libre.y * 0.16), 3.1)
+	t.tween_property(caja, "position", Vector2(libre.x * 0.5, libre.y * 0.5), 3.1)

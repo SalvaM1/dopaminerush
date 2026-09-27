@@ -83,3 +83,4 @@ vapear={
 [rendering]
 
 rendering_device/driver.windows="d3d12"
+lights_and_shadows/directional_shadow/size=2048
