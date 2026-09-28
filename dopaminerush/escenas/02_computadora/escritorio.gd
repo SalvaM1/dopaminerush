@@ -14,7 +14,7 @@ const PLACEHOLDER := "res://escenas/03_apps/app_placeholder.tscn"
 const ESCENAS_APPS := [
 	"res://escenas/03_apps/app_01_scroll/app_scroll.tscn",  # 0 - TikBrainRot
 	"res://escenas/03_apps/app_02_slots/app_slots.tscn",    # 1 - Family Savings
-	"",  # 2 - Subway Slop  (subway)
+	"res://escenas/03_apps/app_03_subway/app_subway.tscn",  # 2 - Youtube Slop
 	"res://escenas/03_apps/app_04_racha/app_racha.tscn",  # 3 - Lingofy (racha)
 	"",  # 4 - Kompralo!    (ofertas)
 	"",  # 5 - Loopify      (musica)
