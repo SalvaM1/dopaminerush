@@ -1,0 +1,75 @@
+{
+	"_comentario": "Los pensamientos del personaje al mirar cada objeto. Se editan sin tocar codigo. REGLA DE TONO: no son descripciones ni chistes, son la voz de alguien que esta evitando hacer otra cosa. Cortos. En primera persona. Nunca explican la moraleja — la dejan pasar.",
+
+	"_formato": "Cada clave puede ser un texto suelto o una lista. Si es lista, se va mostrando uno por vez en cada interaccion y se queda en el ultimo: asi insistir sobre el mismo objeto dice algo nuevo en vez de repetir.",
+
+	"mochila": [
+		"La mochila de la facultad. No la abro desde marzo.",
+		"Adentro deben estar los apuntes de la primera semana.",
+		"Igual ya es tarde para esta altura del cuatrimestre."
+	],
+
+	"ropa": [
+		"Limpia, sin guardar. Hace seis días.",
+		"La voy a guardar. En algún momento."
+	],
+
+	"cama": [
+		"No tengo ganas de acostarme.",
+		"Si me acuesto ahora voy a estar despierto igual."
+	],
+
+	"puerta_antes": [
+		"Primero tengo que revisar algo en la compu.",
+		"Dos minutos y salgo.",
+		"Después salgo."
+	],
+
+	"cajon_cerrado": "Hay algo acá adentro.",
+	"cajon_abierto": "La libreta que me regalaron para organizarme.",
+
+	"libreta_cerrar": [
+		"Eso fue hace tres semanas.",
+		"Taché una."
+	],
+
+	"planta": [
+		"Me la regalaron cuando me mudé.",
+		"Debe hacer un mes que no la riego."
+	],
+
+	"ventana": [
+		"Está empezando a aclarar.",
+		"Hoy tampoco salí."
+	],
+
+	"cuadro": [
+		"Los tres del viaje a la costa.",
+		"Ninguno me escribió esta semana. Yo tampoco a ellos."
+	],
+
+	"televisor": [
+		"No lo prendo desde que puse la compu acá.",
+		"Para qué, si ya tengo una pantalla."
+	],
+
+	"libros": [
+		"Un señalador en la página 12.",
+		"Me lo prestó Caro. Hace como un año."
+	],
+
+	"_libreta": "La lista del primer plano. Solo UNA tachada, y que sea la mas chica e insignificante de todas: que lo unico que haya logrado en tres semanas sea sacar la basura dice lo mismo que una frase explicita, pero sin decirlo. No agregar ninguna que hable de pantallas o de internet: ahi se vuelve un cartel.",
+
+	"libreta": {
+		"titulo": "ESTA SEMANA",
+		"fecha": "lunes 3",
+		"tareas": [
+			{ "texto": "Estudiar física", "hecha": false },
+			{ "texto": "Pagar el gimnasio", "hecha": false },
+			{ "texto": "Llamar a mamá", "hecha": false },
+			{ "texto": "Devolverle el libro a Caro", "hecha": false },
+			{ "texto": "Sacar turno con el dentista", "hecha": false },
+			{ "texto": "Sacar la basura", "hecha": true }
+		]
+	}
+}

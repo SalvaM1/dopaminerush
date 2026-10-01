@@ -1,0 +1,89 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="Script" path="res://escenas/01_habitacion/interactuable.gd" id="1_inter"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_remera"]
+albedo_color = Color(0.701961, 0.698039, 0.709804, 1)
+roughness = 0.95
+
+[sub_resource type="StandardMaterial3D" id="Mat_jean"]
+albedo_color = Color(0.286275, 0.337255, 0.439216, 1)
+roughness = 0.95
+
+[sub_resource type="StandardMaterial3D" id="Mat_buzo"]
+albedo_color = Color(0.419608, 0.380392, 0.352941, 1)
+roughness = 0.95
+
+[sub_resource type="StandardMaterial3D" id="Mat_media"]
+albedo_color = Color(0.823529, 0.807843, 0.772549, 1)
+roughness = 0.95
+
+[sub_resource type="SphereMesh" id="Mesh_bulto"]
+material = SubResource("Mat_buzo")
+radius = 0.42
+height = 0.44
+radial_segments = 12
+rings = 6
+
+[sub_resource type="BoxMesh" id="Mesh_remera"]
+material = SubResource("Mat_remera")
+size = Vector3(0.78, 0.075, 0.6)
+
+[sub_resource type="BoxMesh" id="Mesh_manga"]
+material = SubResource("Mat_remera")
+size = Vector3(0.34, 0.06, 0.18)
+
+[sub_resource type="BoxMesh" id="Mesh_jean"]
+material = SubResource("Mat_jean")
+size = Vector3(0.9, 0.085, 0.36)
+
+[sub_resource type="BoxMesh" id="Mesh_pernera"]
+material = SubResource("Mat_jean")
+size = Vector3(0.5, 0.07, 0.2)
+
+[sub_resource type="SphereMesh" id="Mesh_media"]
+material = SubResource("Mat_media")
+radius = 0.09
+height = 0.11
+radial_segments = 8
+rings = 4
+
+[sub_resource type="BoxShape3D" id="Forma"]
+size = Vector3(1.5, 0.5, 1.1)
+
+[node name="Ropa" type="StaticBody3D"]
+collision_layer = 1
+script = ExtResource("1_inter")
+texto_interaccion = "Mirar la ropa"
+
+[node name="Bulto" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.42, 0, 0, 0, 1, -0.05, -0.04, 0.02)
+mesh = SubResource("Mesh_bulto")
+
+[node name="Jean" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.9612617, 0, 0.2756374, 0, 1, 0, -0.2756374, 0, 0.9612617, -0.12, -0.08, -0.12)
+mesh = SubResource("Mesh_jean")
+
+[node name="Pernera" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.65605903, 0, -0.75471205, 0, 1, 0, 0.75471205, 0, 0.65605903, 0.34, -0.07, -0.26)
+mesh = SubResource("Mesh_pernera")
+
+[node name="Remera" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.8910065, 0, 0.45399052, 0, 1, 0, -0.45399052, 0, 0.8910065, 0.1, 0.04, 0.16)
+mesh = SubResource("Mesh_remera")
+
+[node name="Manga" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.42261827, 0, -0.9063078, 0, 1, 0, 0.9063078, 0, 0.42261827, 0.46, 0.03, 0.3)
+mesh = SubResource("Mesh_manga")
+
+[node name="Buzo" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.99619466, 0.0871557, 0, -0.0871557, 0.99619466, 0, 0, 0, 1, -0.36, 0.06, 0.24)
+mesh = SubResource("Mesh_remera")
+material_override = SubResource("Mat_buzo")
+
+[node name="Media" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.52, 0.02, -0.02)
+mesh = SubResource("Mesh_media")
+
+[node name="Colision" type="CollisionShape3D" parent="."]
+shape = SubResource("Forma")

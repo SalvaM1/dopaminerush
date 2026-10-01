@@ -1,0 +1,93 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="Script" path="res://escenas/01_habitacion/interactuable.gd" id="1_inter"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_tela"]
+albedo_color = Color(0.164706, 0.231373, 0.329412, 1)
+roughness = 0.85
+
+[sub_resource type="StandardMaterial3D" id="Mat_tela_clara"]
+albedo_color = Color(0.219608, 0.301961, 0.415686, 1)
+roughness = 0.8
+
+[sub_resource type="StandardMaterial3D" id="Mat_correa"]
+albedo_color = Color(0.113725, 0.156863, 0.223529, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Mat_metal"]
+albedo_color = Color(0.588235, 0.603922, 0.631373, 1)
+metallic = 0.75
+roughness = 0.35
+
+[sub_resource type="StandardMaterial3D" id="Mat_cierre"]
+albedo_color = Color(0.72549, 0.701961, 0.654902, 1)
+metallic = 0.5
+roughness = 0.45
+
+[sub_resource type="BoxMesh" id="Mesh_cuerpo"]
+material = SubResource("Mat_tela")
+size = Vector3(0.58, 0.72, 0.26)
+
+[sub_resource type="BoxMesh" id="Mesh_tapa"]
+material = SubResource("Mat_tela_clara")
+size = Vector3(0.6, 0.26, 0.29)
+
+[sub_resource type="BoxMesh" id="Mesh_bolsillo"]
+material = SubResource("Mat_tela_clara")
+size = Vector3(0.4, 0.26, 0.09)
+
+[sub_resource type="BoxMesh" id="Mesh_correa"]
+material = SubResource("Mat_correa")
+size = Vector3(0.07, 0.52, 0.05)
+
+[sub_resource type="BoxMesh" id="Mesh_hebilla"]
+material = SubResource("Mat_metal")
+size = Vector3(0.09, 0.055, 0.035)
+
+[sub_resource type="BoxShape3D" id="Forma"]
+size = Vector3(0.66, 0.95, 0.34)
+
+[node name="Mochila" type="StaticBody3D"]
+collision_layer = 1
+script = ExtResource("1_inter")
+texto_interaccion = "Mirar la mochila"
+
+[node name="Cuerpo" type="MeshInstance3D" parent="."]
+mesh = SubResource("Mesh_cuerpo")
+
+[node name="Tapa" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.99026805, -0.13917312, 0, 0.13917312, 0.99026805, 0, 0.34, 0.015)
+mesh = SubResource("Mesh_tapa")
+
+[node name="Bolsillo" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.14, 0.16)
+mesh = SubResource("Mesh_bolsillo")
+
+[node name="Cierre" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.05, 0, 0, 0, 0.09, 0, -0.005, 0.206)
+mesh = SubResource("Mesh_bolsillo")
+material_override = SubResource("Mat_cierre")
+
+[node name="CorreaIzquierda" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.9961947, 0.08715574, 0, -0.08715574, 0.9961947, 0, 0, 0, 1, -0.16, 0.02, -0.15)
+mesh = SubResource("Mesh_correa")
+
+[node name="CorreaDerecha" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.9961947, -0.08715574, 0, 0.08715574, 0.9961947, 0, 0, 0, 1, 0.16, 0.02, -0.15)
+mesh = SubResource("Mesh_correa")
+
+[node name="HebillaIzquierda" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.17, 0.21, 0.165)
+mesh = SubResource("Mesh_hebilla")
+
+[node name="HebillaDerecha" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.17, 0.21, 0.165)
+mesh = SubResource("Mesh_hebilla")
+
+[node name="Gancho" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.44, -0.16)
+mesh = SubResource("Mesh_hebilla")
+material_override = SubResource("Mat_metal")
+
+[node name="Colision" type="CollisionShape3D" parent="."]
+shape = SubResource("Forma")

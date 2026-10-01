@@ -1,0 +1,654 @@
+[gd_scene load_steps=14 format=3]
+
+[ext_resource type="Script" path="res://escenas/03_apps/app_05_ofertas/app_ofertas.gd" id="1_ofertas"]
+
+[sub_resource type="StyleBoxFlat" id="Style_fondo"]
+bg_color = Color(0.921569, 0.921569, 0.921569, 1)
+
+[sub_resource type="StyleBoxFlat" id="Style_header"]
+bg_color = Color(1, 0.901961, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="Style_tarjeta"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_color = Color(0, 0, 0, 0.12)
+shadow_size = 5
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="StyleBoxFlat" id="Style_imagen"]
+bg_color = Color(0.956863, 0.956863, 0.956863, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="Style_barra_fondo"]
+bg_color = Color(0.819608, 0.819608, 0.819608, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="Style_barra_fill"]
+bg_color = Color(0.203922, 0.513726, 0.980392, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="Style_banner"]
+bg_color = Color(0.113725, 0.168627, 0.509804, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(1, 0.901961, 0, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+shadow_color = Color(0, 0, 0, 0.35)
+shadow_size = 10
+
+[sub_resource type="StyleBoxFlat" id="Style_badge"]
+bg_color = Color(0.203922, 0.513726, 0.980392, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="Style_azul"]
+content_margin_left = 14.0
+content_margin_top = 10.0
+content_margin_right = 14.0
+content_margin_bottom = 10.0
+bg_color = Color(0.203922, 0.513726, 0.980392, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="Style_azul_hover"]
+content_margin_left = 14.0
+content_margin_top = 10.0
+content_margin_right = 14.0
+content_margin_bottom = 10.0
+bg_color = Color(0.160784, 0.423529, 0.831373, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="Style_azul_pressed"]
+content_margin_left = 14.0
+content_margin_top = 12.0
+content_margin_right = 14.0
+content_margin_bottom = 8.0
+bg_color = Color(0.125490, 0.333333, 0.658824, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="Style_tip"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(0.890196, 0.929412, 0.988235, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="AppOfertas" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 460.0
+offset_bottom = 470.0
+script = ExtResource("1_ofertas")
+id_app = "ofertas"
+nombre_app = "Mercado Libre"
+tamano_ventana = Vector2(460, 470)
+posicion_ventana = Vector2(565, 545)
+dopamina_por_interaccion = 60.0
+
+[node name="Fondo" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_fondo")
+
+[node name="Header" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 50.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_header")
+
+[node name="Logo" type="Label" parent="Header"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 14.0
+offset_top = -12.0
+offset_right = 180.0
+offset_bottom = 12.0
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_font_sizes/font_size = 17
+text = "Mercado Libre"
+vertical_alignment = 1
+
+[node name="Gasto" type="Label" parent="Header"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -200.0
+offset_right = -14.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 0.68)
+theme_override_font_sizes/font_size = 12
+text = "Gastaste hoy: $ 0"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="PanelEspera" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Texto" type="Label" parent="PanelEspera"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -20.0
+offset_right = 200.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_font_sizes/font_size = 17
+text = "No hay ofertas disponibles"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Sub" type="Label" parent="PanelEspera"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = 10.0
+offset_right = 200.0
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_font_sizes/font_size = 12
+text = "Seguí navegando, ya va a aparecer algo"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PanelOferta" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Tarjeta" type="Panel" parent="PanelOferta"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 12.0
+offset_top = 6.0
+offset_right = -12.0
+offset_bottom = 314.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_tarjeta")
+
+[node name="Imagen" type="TextureRect" parent="PanelOferta/Tarjeta"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = 118.0
+grow_horizontal = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Fondo" type="Panel" parent="PanelOferta/Tarjeta/Imagen"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_imagen")
+
+[node name="Emoji" type="Label" parent="PanelOferta/Tarjeta/Imagen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_font_sizes/font_size = 54
+text = "📦"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Badge" type="Label" parent="PanelOferta/Tarjeta/Imagen"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = -28.0
+offset_right = 152.0
+offset_bottom = -6.0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("Style_badge")
+text = "  % OFERTA IMPERDIBLE  "
+vertical_alignment = 1
+
+[node name="Titulo" type="Label" parent="PanelOferta/Tarjeta"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 10.0
+offset_top = 124.0
+offset_right = -10.0
+offset_bottom = 164.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_font_sizes/font_size = 14
+text = "Producto"
+autowrap_mode = 2
+max_lines_visible = 2
+
+[node name="Vendedor" type="Label" parent="PanelOferta/Tarjeta"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 10.0
+offset_top = 166.0
+offset_right = -10.0
+offset_bottom = 182.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_font_sizes/font_size = 11
+text = "Vendedor"
+vertical_alignment = 1
+
+[node name="PrecioViejo" type="RichTextLabel" parent="PanelOferta/Tarjeta"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 10.0
+offset_top = 186.0
+offset_right = -10.0
+offset_bottom = 204.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_colors/default_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_font_sizes/normal_font_size = 12
+bbcode_enabled = true
+text = "[s]$ 0[/s]"
+fit_content = true
+scroll_active = false
+
+[node name="Precio" type="Label" parent="PanelOferta/Tarjeta"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 10.0
+offset_top = 204.0
+offset_right = 260.0
+offset_bottom = 240.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_font_sizes/font_size = 27
+text = "$ 0"
+vertical_alignment = 1
+
+[node name="BadgeOff" type="Label" parent="PanelOferta/Tarjeta"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 264.0
+offset_top = 212.0
+offset_right = 364.0
+offset_bottom = 234.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0, 0.65098, 0.313726, 1)
+theme_override_font_sizes/font_size = 15
+text = "0% OFF"
+vertical_alignment = 1
+
+[node name="Cuotas" type="Label" parent="PanelOferta/Tarjeta"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 10.0
+offset_top = 242.0
+offset_right = -10.0
+offset_bottom = 258.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0, 0.65098, 0.313726, 1)
+theme_override_font_sizes/font_size = 12
+text = "6 cuotas de $ 0"
+vertical_alignment = 1
+
+[node name="Envio" type="Label" parent="PanelOferta/Tarjeta"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 10.0
+offset_top = 262.0
+offset_right = -10.0
+offset_bottom = 280.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0, 0.65098, 0.313726, 1)
+theme_override_font_sizes/font_size = 13
+text = "Llega gratis mañana   ⚡ FULL"
+vertical_alignment = 1
+
+[node name="Urgencia" type="Label" parent="PanelOferta/Tarjeta"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 10.0
+offset_top = 282.0
+offset_right = -10.0
+offset_bottom = 300.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_font_sizes/font_size = 11
+text = "¡Quedan 2 unidades!"
+vertical_alignment = 1
+
+[node name="BarraTiempo" type="ProgressBar" parent="PanelOferta"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 12.0
+offset_top = 324.0
+offset_right = -12.0
+offset_bottom = 332.0
+grow_horizontal = 2
+theme_override_styles/background = SubResource("Style_barra_fondo")
+theme_override_styles/fill = SubResource("Style_barra_fill")
+value = 100.0
+show_percentage = false
+
+[node name="BotonComprar" type="Button" parent="PanelOferta"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 12.0
+offset_top = 342.0
+offset_right = -12.0
+offset_bottom = 386.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 17
+theme_override_styles/normal = SubResource("Style_azul")
+theme_override_styles/hover = SubResource("Style_azul_hover")
+theme_override_styles/pressed = SubResource("Style_azul_pressed")
+text = "Comprar ahora"
+
+[node name="PanelCodigo" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Titulo" type="Label" parent="PanelCodigo"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 16.0
+offset_top = 10.0
+offset_right = -16.0
+offset_bottom = 34.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_font_sizes/font_size = 18
+text = "Verificá tu compra"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Tip" type="Label" parent="PanelCodigo"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 26.0
+offset_top = 40.0
+offset_right = -26.0
+offset_bottom = 70.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.129412, 0.345098, 0.654902, 1)
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("Style_tip")
+text = "Mirá el código en tu celular  —  tecla [C]"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Digitos" type="HBoxContainer" parent="PanelCodigo"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -98.0
+offset_top = 78.0
+offset_right = 98.0
+offset_bottom = 134.0
+grow_horizontal = 2
+theme_override_constants/separation = 14
+alignment = 1
+
+[node name="Teclado" type="GridContainer" parent="PanelCodigo"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -139.0
+offset_top = 144.0
+offset_right = 139.0
+offset_bottom = 312.0
+grow_horizontal = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 8
+columns = 3
+
+[node name="BotonConfirmar" type="Button" parent="PanelCodigo"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 12.0
+offset_top = 320.0
+offset_right = -12.0
+offset_bottom = 362.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("Style_azul")
+theme_override_styles/hover = SubResource("Style_azul_hover")
+theme_override_styles/pressed = SubResource("Style_azul_pressed")
+text = "Confirmar"
+
+[node name="PanelFinal" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Titulo" type="Label" parent="PanelFinal"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -34.0
+offset_right = 200.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0, 0.65098, 0.313726, 1)
+theme_override_font_sizes/font_size = 28
+text = "¡Listo!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Texto" type="Label" parent="PanelFinal"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = 8.0
+offset_right = 200.0
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_font_sizes/font_size = 14
+text = "Tu compra está en camino."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Banner" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -192.0
+offset_top = -76.0
+offset_right = 192.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_banner")
+
+[node name="Texto" type="Label" parent="Banner"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 10.0
+offset_top = 24.0
+offset_right = -10.0
+offset_bottom = 72.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 33
+text = "OFERTA RELÁMPAGO"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Sub" type="Label" parent="Banner"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 10.0
+offset_top = 80.0
+offset_right = -10.0
+offset_bottom = 118.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 0.901961, 0, 1)
+theme_override_font_sizes/font_size = 26
+text = "HASTA 70% OFF"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Sonidos" type="Node" parent="."]
+
+[node name="Oferta" type="AudioStreamPlayer" parent="Sonidos"]
+bus = &"UI"
+
+[node name="Comprar" type="AudioStreamPlayer" parent="Sonidos"]
+bus = &"UI"
+
+[node name="Tecla" type="AudioStreamPlayer" parent="Sonidos"]
+bus = &"UI"
+
+[node name="Error" type="AudioStreamPlayer" parent="Sonidos"]
+bus = &"UI"
+
+[node name="Exito" type="AudioStreamPlayer" parent="Sonidos"]
+bus = &"UI"

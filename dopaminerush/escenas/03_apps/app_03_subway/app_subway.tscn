@@ -1,0 +1,281 @@
+[gd_scene format=3 uid="uid://ce66e0kk6ntsm"]
+
+[ext_resource type="Script" uid="uid://isg8expwfi5o" path="res://escenas/03_apps/app_03_subway/app_subway.gd" id="1_subway"]
+
+[sub_resource type="StyleBoxFlat" id="Style_marco"]
+bg_color = Color(0.0588235, 0.0588235, 0.0588235, 1)
+
+[sub_resource type="StyleBoxFlat" id="Style_barra_sup"]
+bg_color = Color(0.129412, 0.129412, 0.129412, 1)
+
+[sub_resource type="StyleBoxFlat" id="Style_logo"]
+bg_color = Color(0.905882, 0.145098, 0.145098, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="Style_buscador"]
+bg_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.231373, 0.231373, 0.231373, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="Style_barra_inf"]
+bg_color = Color(0.0862745, 0.0862745, 0.0941176, 1)
+
+[sub_resource type="StyleBoxFlat" id="Style_boton"]
+bg_color = Color(0.180392, 0.180392, 0.196078, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.352941, 0.352941, 0.380392, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="Style_medidor"]
+bg_color = Color(0.0431373, 0.0470588, 0.0627451, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.156863, 0.168627, 0.203922, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="Style_frescura_fondo"]
+bg_color = Color(0.180392, 0.180392, 0.188235, 1)
+
+[sub_resource type="StyleBoxFlat" id="Style_frescura_fill"]
+bg_color = Color(1, 1, 1, 1)
+
+[node name="AppSubway" type="Control" unique_id=95579161]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 440.0
+offset_bottom = 384.0
+script = ExtResource("1_subway")
+id_app = "subway"
+nombre_app = "Subway Slop"
+tamano_ventana = Vector2(440, 384)
+posicion_ventana = Vector2(600, 150)
+dopamina_por_interaccion = 7.0
+
+[node name="Marco" type="Panel" parent="." unique_id=599058452]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -44.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_marco")
+
+[node name="BarraSuperior" type="Panel" parent="Marco" unique_id=732062365]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 28.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_barra_sup")
+
+[node name="Logo" type="Panel" parent="Marco/BarraSuperior" unique_id=656888499]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 7.0
+offset_right = 30.0
+offset_bottom = 21.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_logo")
+
+[node name="Marca" type="Label" parent="Marco/BarraSuperior" unique_id=1338659812]
+layout_mode = 0
+offset_left = 36.0
+offset_top = 5.0
+offset_right = 140.0
+offset_bottom = 24.0
+theme_override_colors/font_color = Color(0.85098, 0.85098, 0.85098, 1)
+theme_override_font_sizes/font_size = 14
+text = "SlopTube"
+vertical_alignment = 1
+
+[node name="Buscador" type="Panel" parent="Marco/BarraSuperior" unique_id=530117097]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -190.0
+offset_top = 5.0
+offset_right = -10.0
+offset_bottom = -5.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_buscador")
+
+[node name="Video" type="ColorRect" parent="Marco" unique_id=2075264648]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 28.0
+offset_bottom = 266.0
+grow_horizontal = 2
+color = Color(0.929412, 0.45098, 0.721569, 1)
+
+[node name="Etiqueta" type="Label" parent="Marco/Video" unique_id=978748033]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.827451)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.45)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 34
+text = "SLIME"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BarraInferior" type="Panel" parent="Marco" unique_id=488436879]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -74.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_barra_inf")
+
+[node name="Titulo" type="Label" parent="Marco/BarraInferior" unique_id=460090483]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 14.0
+offset_top = -26.0
+offset_right = 286.0
+offset_bottom = 26.0
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.941176, 0.941176, 0.941176, 1)
+theme_override_font_sizes/font_size = 15
+text = "3 HORAS de slime satisfactorio"
+vertical_alignment = 1
+autowrap_mode = 2
+max_lines_visible = 2
+
+[node name="BotonCambiar" type="Panel" parent="Marco/BarraInferior" unique_id=1155759824]
+clip_children = 1
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -128.0
+offset_top = -22.0
+offset_right = -14.0
+offset_bottom = 22.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("Style_boton")
+
+[node name="Relleno" type="ColorRect" parent="Marco/BarraInferior/BotonCambiar" unique_id=817717878]
+visible = false
+layout_mode = 0
+offset_right = 114.0
+offset_bottom = 44.0
+mouse_filter = 2
+color = Color(0.905882, 0.145098, 0.145098, 1)
+
+[node name="Texto" type="Label" parent="Marco/BarraInferior/BotonCambiar" unique_id=445721502]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.945098, 0.945098, 0.945098, 1)
+theme_override_font_sizes/font_size = 15
+text = "SIGUIENTE ⏭"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Medidor" type="Panel" parent="." unique_id=811455690]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -36.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_medidor")
+
+[node name="Etiqueta" type="Label" parent="Medidor" unique_id=650506723]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 14.0
+offset_top = -10.0
+offset_right = 156.0
+offset_bottom = 10.0
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.517647, 0.541176, 0.6, 1)
+theme_override_font_sizes/font_size = 11
+text = "ENTRETENIMIENTO"
+vertical_alignment = 1
+
+[node name="Barra" type="ProgressBar" parent="Medidor" unique_id=278732993]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 160.0
+offset_top = -6.0
+offset_right = 352.0
+offset_bottom = 6.0
+grow_vertical = 2
+theme_override_styles/background = SubResource("Style_frescura_fondo")
+theme_override_styles/fill = SubResource("Style_frescura_fill")
+value = 100.0
+show_percentage = false
+
+[node name="Tasa" type="Label" parent="Medidor" unique_id=353574467]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 356.0
+offset_top = -10.0
+offset_right = 426.0
+offset_bottom = 10.0
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.352941, 0.819608, 0.45098, 1)
+theme_override_font_sizes/font_size = 13
+text = "+7.0/s"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Sonido" type="AudioStreamPlayer" parent="." unique_id=2020689888]
+volume_db = -8.0
+bus = &"Apps"

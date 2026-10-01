@@ -1,0 +1,70 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://escenas/01_habitacion/interactuable.gd" id="1_inter"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_frente"]
+albedo_color = Color(0.396078, 0.294118, 0.215686, 1)
+roughness = 0.65
+
+[sub_resource type="StandardMaterial3D" id="Mat_interior"]
+albedo_color = Color(0.301961, 0.243137, 0.196078, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Mat_tirador"]
+albedo_color = Color(0.631373, 0.603922, 0.541176, 1)
+metallic = 0.7
+roughness = 0.35
+
+[sub_resource type="BoxMesh" id="Mesh_frente"]
+material = SubResource("Mat_frente")
+size = Vector3(1.08, 0.35, 0.05)
+
+[sub_resource type="BoxMesh" id="Mesh_lateral"]
+material = SubResource("Mat_interior")
+size = Vector3(0.035, 0.28, 0.5)
+
+[sub_resource type="BoxMesh" id="Mesh_fondo"]
+material = SubResource("Mat_interior")
+size = Vector3(1.0, 0.03, 0.5)
+
+[sub_resource type="BoxMesh" id="Mesh_trasera"]
+material = SubResource("Mat_interior")
+size = Vector3(1.0, 0.28, 0.035)
+
+[sub_resource type="BoxMesh" id="Mesh_tirador"]
+material = SubResource("Mat_tirador")
+size = Vector3(0.3, 0.045, 0.045)
+
+[sub_resource type="BoxShape3D" id="Forma"]
+size = Vector3(1.12, 0.4, 0.14)
+
+[node name="Cajon" type="StaticBody3D"]
+collision_layer = 1
+script = ExtResource("1_inter")
+texto_interaccion = "Abrir el cajón"
+
+[node name="Frente" type="MeshInstance3D" parent="."]
+mesh = SubResource("Mesh_frente")
+
+[node name="Tirador" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.046)
+mesh = SubResource("Mesh_tirador")
+
+[node name="Izquierda" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -0.02, -0.275)
+mesh = SubResource("Mesh_lateral")
+
+[node name="Derecha" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.02, -0.275)
+mesh = SubResource("Mesh_lateral")
+
+[node name="Fondo" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.155, -0.275)
+mesh = SubResource("Mesh_fondo")
+
+[node name="Trasera" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.02, -0.525)
+mesh = SubResource("Mesh_trasera")
+
+[node name="Colision" type="CollisionShape3D" parent="."]
+shape = SubResource("Forma")

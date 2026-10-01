@@ -1,0 +1,170 @@
+{
+	"_comentario": "Productos de Mercado Libre. Se pueden agregar sin tocar codigo. La regla: tienen que ser RIDICULOS y completamente innecesarios, pero escritos con el tono exacto de una publicacion real. El chiste no es el producto, es la seriedad con la que se vende.",
+
+	"_imagenes": "El campo 'imagen' es opcional. Si apunta a un archivo que existe (por ejemplo res://assets/ui/productos/tostadora.png) se muestra; si no, sale un marcador gris con el emoji. Se pueden ir cargando de a una sin romper nada.",
+
+	"_campos": "precio = lo que sale AHORA (entero, sin puntos). descuento = porcentaje, el precio viejo se calcula solo. cuotas = en cuantas se puede pagar.",
+
+	"productos": [
+		{
+			"nombre": "Tostadora que imprime tu cara en el pan",
+			"precio": 183041,
+			"descuento": 47,
+			"cuotas": 6,
+			"vendedor": "Garage Home",
+			"estrellas": 4.9,
+			"vendidos": 50,
+			"emoji": "🍞"
+		},
+		{
+			"nombre": "Máquina para batir huevos DENTRO de la cáscara",
+			"precio": 48990,
+			"descuento": 60,
+			"cuotas": 3,
+			"vendedor": "CocinaPro Oficial",
+			"estrellas": 4.2,
+			"vendidos": 500,
+			"emoji": "🥚"
+		},
+		{
+			"nombre": "Pantuflas con linterna LED incorporada y bocina",
+			"precio": 27500,
+			"descuento": 35,
+			"cuotas": 3,
+			"vendedor": "NightWalk",
+			"estrellas": 4.7,
+			"vendidos": 100,
+			"emoji": "🥿"
+		},
+		{
+			"nombre": "Paraguas para perros con arnés ajustable",
+			"precio": 35800,
+			"descuento": 52,
+			"cuotas": 6,
+			"vendedor": "MascotaFeliz",
+			"estrellas": 3.9,
+			"vendidos": 25,
+			"emoji": "🐕"
+		},
+		{
+			"nombre": "Rebanador de cebolla antilágrimas 12 piezas",
+			"precio": 61200,
+			"descuento": 70,
+			"cuotas": 6,
+			"vendedor": "UtensiliosYa",
+			"estrellas": 4.4,
+			"vendidos": 1000,
+			"emoji": "🧅"
+		},
+		{
+			"nombre": "Almohada con forma de pierna humana tamaño real",
+			"precio": 94300,
+			"descuento": 40,
+			"cuotas": 9,
+			"vendedor": "SueñoProfundo",
+			"estrellas": 4.8,
+			"vendidos": 250,
+			"emoji": "🦵"
+		},
+		{
+			"nombre": "Ventilador USB para enfriar el mate",
+			"precio": 12990,
+			"descuento": 25,
+			"cuotas": 3,
+			"vendedor": "MateTech",
+			"estrellas": 4.1,
+			"vendidos": 5000,
+			"emoji": "🧉"
+		},
+		{
+			"nombre": "Cepillo de dientes con reproductor MP3 integrado",
+			"precio": 73400,
+			"descuento": 55,
+			"cuotas": 6,
+			"vendedor": "SonrisaPlus",
+			"estrellas": 3.7,
+			"vendidos": 50,
+			"emoji": "🪥"
+		},
+		{
+			"nombre": "Aspiradora de migas de escritorio con forma de auto",
+			"precio": 19800,
+			"descuento": 65,
+			"cuotas": 3,
+			"vendedor": "CleanDesk",
+			"estrellas": 4.3,
+			"vendidos": 2000,
+			"emoji": "🚗"
+		},
+		{
+			"nombre": "Soporte de celular con forma de mano humana",
+			"precio": 15600,
+			"descuento": 30,
+			"cuotas": 3,
+			"vendedor": "GadgetHouse",
+			"estrellas": 4.6,
+			"vendidos": 500,
+			"emoji": "🤚"
+		},
+		{
+			"nombre": "Guantes para pelar papas antideslizantes x2",
+			"precio": 9990,
+			"descuento": 45,
+			"cuotas": 2,
+			"vendedor": "CocinaPro Oficial",
+			"estrellas": 4.0,
+			"vendidos": 10000,
+			"emoji": "🥔"
+		},
+		{
+			"nombre": "Peluca para bebé con vincha de flores",
+			"precio": 22400,
+			"descuento": 50,
+			"cuotas": 3,
+			"vendedor": "BabyStyle",
+			"estrellas": 3.5,
+			"vendidos": 25,
+			"emoji": "👶"
+		},
+		{
+			"nombre": "Cortador de bananas en rodajas perfectas",
+			"precio": 8750,
+			"descuento": 38,
+			"cuotas": 2,
+			"vendedor": "UtensiliosYa",
+			"estrellas": 4.5,
+			"vendidos": 25000,
+			"emoji": "🍌"
+		},
+		{
+			"nombre": "Casco de peluquería con nivel de burbuja",
+			"precio": 41300,
+			"descuento": 58,
+			"cuotas": 6,
+			"vendedor": "CorteExacto",
+			"estrellas": 3.8,
+			"vendidos": 100,
+			"emoji": "💈"
+		},
+		{
+			"nombre": "Manta con mangas para usar al revés talle único",
+			"precio": 56700,
+			"descuento": 42,
+			"cuotas": 6,
+			"vendedor": "HogarCalido",
+			"estrellas": 4.4,
+			"vendidos": 5000,
+			"emoji": "🧣"
+		},
+		{
+			"nombre": "Despertador que se escapa rodando por la pieza",
+			"precio": 38200,
+			"descuento": 48,
+			"cuotas": 6,
+			"vendedor": "WakeUpNow",
+			"estrellas": 4.7,
+			"vendidos": 1000,
+			"emoji": "⏰"
+		}
+	]
+}

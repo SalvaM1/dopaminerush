@@ -1,0 +1,186 @@
+[gd_scene load_steps=5 format=3]
+
+[sub_resource type="StandardMaterial3D" id="Mat_cuerpo"]
+albedo_color = Color(0.0862745, 0.0901961, 0.109804, 1)
+metallic = 0.5
+roughness = 0.3
+
+[sub_resource type="BoxMesh" id="Mesh_cuerpo"]
+material = SubResource("Mat_cuerpo")
+size = Vector3(0.075, 0.15, 0.009)
+
+[sub_resource type="QuadMesh" id="Mesh_pantalla"]
+size = Vector2(0.066, 0.136)
+
+[sub_resource type="StyleBoxFlat" id="Style_codigo"]
+bg_color = Color(0.956863, 0.956863, 0.956863, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.843137, 0.843137, 0.843137, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="Telefono" type="Node3D"]
+
+[node name="Vibra" type="Node3D" parent="."]
+
+[node name="Cuerpo" type="MeshInstance3D" parent="Vibra"]
+mesh = SubResource("Mesh_cuerpo")
+
+[node name="Pantalla" type="MeshInstance3D" parent="Vibra"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0055)
+mesh = SubResource("Mesh_pantalla")
+
+[node name="Luz" type="OmniLight3D" parent="Vibra"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.06)
+light_color = Color(1, 0.964706, 0.862745, 1)
+light_energy = 0.0
+omni_range = 0.95
+omni_attenuation = 1.4
+
+[node name="Sonido" type="AudioStreamPlayer3D" parent="Vibra"]
+unit_size = 3.0
+
+[node name="PantallaViewport" type="SubViewport" parent="."]
+disable_3d = true
+transparent_bg = false
+size = Vector2i(300, 600)
+render_target_update_mode = 4
+
+[node name="Fondo" type="ColorRect" parent="PantallaViewport"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 1)
+
+[node name="BarraEstado" type="ColorRect" parent="PantallaViewport"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 30.0
+grow_horizontal = 2
+color = Color(0.0980392, 0.0980392, 0.117647, 1)
+
+[node name="Hora" type="Label" parent="PantallaViewport/BarraEstado"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 15
+text = "03:12"
+vertical_alignment = 1
+
+[node name="Bateria" type="Label" parent="PantallaViewport/BarraEstado"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -12.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.792157, 0.792157, 0.792157, 1)
+theme_override_font_sizes/font_size = 15
+text = "12%"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Header" type="ColorRect" parent="PantallaViewport"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 30.0
+offset_bottom = 92.0
+grow_horizontal = 2
+color = Color(1, 0.901961, 0, 1)
+
+[node name="Marca" type="Label" parent="PantallaViewport/Header"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_font_sizes/font_size = 23
+text = "Mercado Libre"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Titulo" type="Label" parent="PantallaViewport"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 20.0
+offset_top = 130.0
+offset_right = -20.0
+offset_bottom = 156.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_font_sizes/font_size = 17
+text = "Código de verificación"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CajaCodigo" type="Panel" parent="PantallaViewport"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 26.0
+offset_top = 174.0
+offset_right = -26.0
+offset_bottom = 272.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("Style_codigo")
+
+[node name="Codigo" type="Label" parent="PantallaViewport/CajaCodigo"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.129412, 0.129412, 0.129412, 1)
+theme_override_font_sizes/font_size = 66
+text = "0 0 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Aviso" type="Label" parent="PantallaViewport"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 28.0
+offset_top = 294.0
+offset_right = -28.0
+offset_bottom = 360.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.552941, 0.552941, 0.552941, 1)
+theme_override_font_sizes/font_size = 15
+text = "No compartas este código con nadie."
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Linea" type="ColorRect" parent="PantallaViewport"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 28.0
+offset_top = 382.0
+offset_right = -28.0
+offset_bottom = 383.0
+grow_horizontal = 2
+color = Color(0.878431, 0.878431, 0.878431, 1)
+
+[node name="Pie" type="Label" parent="PantallaViewport"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 24.0
+offset_top = 400.0
+offset_right = -24.0
+offset_bottom = 460.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_font_sizes/font_size = 15
+text = "Tu compra está esperando que confirmes."
+horizontal_alignment = 1
+autowrap_mode = 2

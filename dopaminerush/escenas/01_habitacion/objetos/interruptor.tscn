@@ -1,0 +1,58 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://escenas/01_habitacion/interactuable.gd" id="1_inter"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_placa"]
+albedo_color = Color(0.886275, 0.878431, 0.858824, 1)
+roughness = 0.55
+
+[sub_resource type="StandardMaterial3D" id="Mat_tecla"]
+albedo_color = Color(0.945098, 0.941176, 0.92549, 1)
+roughness = 0.35
+
+[sub_resource type="StandardMaterial3D" id="Mat_tornillo"]
+albedo_color = Color(0.54902, 0.556863, 0.572549, 1)
+metallic = 0.8
+roughness = 0.3
+
+[sub_resource type="BoxMesh" id="Mesh_placa"]
+material = SubResource("Mat_placa")
+size = Vector3(0.26, 0.38, 0.025)
+
+[sub_resource type="BoxMesh" id="Mesh_tecla"]
+material = SubResource("Mat_tecla")
+size = Vector3(0.14, 0.21, 0.035)
+
+[sub_resource type="CylinderMesh" id="Mesh_tornillo"]
+material = SubResource("Mat_tornillo")
+top_radius = 0.016
+bottom_radius = 0.016
+height = 0.012
+radial_segments = 8
+rings = 1
+
+[sub_resource type="BoxShape3D" id="Forma"]
+size = Vector3(0.3, 0.42, 0.1)
+
+[node name="Interruptor" type="StaticBody3D"]
+collision_layer = 1
+script = ExtResource("1_inter")
+texto_interaccion = "Apagar la luz"
+
+[node name="Placa" type="MeshInstance3D" parent="."]
+mesh = SubResource("Mesh_placa")
+
+[node name="Tecla" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.02)
+mesh = SubResource("Mesh_tecla")
+
+[node name="TornilloSuperior" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.158, 0.014)
+mesh = SubResource("Mesh_tornillo")
+
+[node name="TornilloInferior" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, -0.158, 0.014)
+mesh = SubResource("Mesh_tornillo")
+
+[node name="Colision" type="CollisionShape3D" parent="."]
+shape = SubResource("Forma")

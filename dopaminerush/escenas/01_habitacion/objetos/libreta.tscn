@@ -1,0 +1,138 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://escenas/01_habitacion/interactuable.gd" id="1_inter"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_tapa"]
+albedo_color = Color(0.513726, 0.172549, 0.172549, 1)
+roughness = 0.7
+
+[sub_resource type="StandardMaterial3D" id="Mat_hojas"]
+albedo_color = Color(0.937255, 0.921569, 0.878431, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Mat_espiral"]
+albedo_color = Color(0.631373, 0.643137, 0.670588, 1)
+metallic = 0.8
+roughness = 0.3
+
+[sub_resource type="BoxMesh" id="Mesh_tapa"]
+material = SubResource("Mat_tapa")
+size = Vector3(0.34, 0.44, 0.016)
+
+[sub_resource type="BoxMesh" id="Mesh_hojas"]
+material = SubResource("Mat_hojas")
+size = Vector3(0.32, 0.42, 0.012)
+
+[sub_resource type="TorusMesh" id="Mesh_anilla"]
+material = SubResource("Mat_espiral")
+inner_radius = 0.012
+outer_radius = 0.02
+rings = 10
+ring_segments = 6
+
+[sub_resource type="QuadMesh" id="Mesh_pagina"]
+size = Vector2(0.31, 0.41)
+
+[sub_resource type="BoxShape3D" id="Forma"]
+size = Vector3(0.4, 0.5, 0.12)
+
+[node name="Libreta" type="StaticBody3D"]
+collision_layer = 1
+script = ExtResource("1_inter")
+texto_interaccion = "Leer la libreta"
+
+[node name="Tapa" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.012)
+mesh = SubResource("Mesh_tapa")
+
+[node name="Hojas" type="MeshInstance3D" parent="."]
+mesh = SubResource("Mesh_hojas")
+
+[node name="Pagina" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.008)
+mesh = SubResource("Mesh_pagina")
+
+[node name="Anilla1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, -0.12, 0.222, -0.004)
+mesh = SubResource("Mesh_anilla")
+
+[node name="Anilla2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, -0.04, 0.222, -0.004)
+mesh = SubResource("Mesh_anilla")
+
+[node name="Anilla3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0.04, 0.222, -0.004)
+mesh = SubResource("Mesh_anilla")
+
+[node name="Anilla4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0.12, 0.222, -0.004)
+mesh = SubResource("Mesh_anilla")
+
+[node name="Colision" type="CollisionShape3D" parent="."]
+shape = SubResource("Forma")
+
+[node name="PaginaViewport" type="SubViewport" parent="."]
+disable_3d = true
+transparent_bg = false
+size = Vector2i(420, 560)
+render_target_update_mode = 4
+
+[node name="Papel" type="ColorRect" parent="PaginaViewport"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.956863, 0.945098, 0.909804, 1)
+
+[node name="MargenRojo" type="ColorRect" parent="PaginaViewport"]
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 52.0
+offset_right = 53.0
+grow_vertical = 2
+color = Color(0.843137, 0.419608, 0.407843, 0.627451)
+
+[node name="Titulo" type="Label" parent="PaginaViewport"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 66.0
+offset_top = 40.0
+offset_right = -24.0
+offset_bottom = 76.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.141176, 0.180392, 0.309804, 1)
+theme_override_font_sizes/font_size = 30
+text = "ESTA SEMANA"
+
+[node name="Fecha" type="Label" parent="PaginaViewport"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 66.0
+offset_top = 78.0
+offset_right = -24.0
+offset_bottom = 102.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.439216, 0.470588, 0.541176, 1)
+theme_override_font_sizes/font_size = 19
+text = "lunes 3"
+
+[node name="Subrayado" type="ColorRect" parent="PaginaViewport"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 66.0
+offset_top = 116.0
+offset_right = -24.0
+offset_bottom = 117.0
+grow_horizontal = 2
+color = Color(0.74902, 0.741176, 0.705882, 1)
+
+[node name="Tareas" type="VBoxContainer" parent="PaginaViewport"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 66.0
+offset_top = 142.0
+offset_right = -24.0
+offset_bottom = 520.0
+grow_horizontal = 2
+theme_override_constants/separation = 18
