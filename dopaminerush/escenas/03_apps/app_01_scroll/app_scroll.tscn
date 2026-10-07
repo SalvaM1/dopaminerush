@@ -26,7 +26,7 @@ id_app = "scroll"
 nombre_app = "TikBrainRot"
 tamano_ventana = Vector2(400, 800)
 posicion_ventana = Vector2(120, 140)
-dopamina_por_interaccion = 10.0
+dopamina_por_interaccion = 16.0
 
 [node name="Telefono" type="Panel" parent="." unique_id=927458906]
 clip_contents = true
@@ -48,6 +48,26 @@ grow_horizontal = 2
 grow_vertical = 2
 offset_transform_enabled = true
 mouse_filter = 2
+
+[node name="MarcoVideo" type="Control" parent="Telefono"]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -60.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Reproductor" type="VideoStreamPlayer" parent="Telefono/MarcoVideo"]
+layout_mode = 0
+offset_right = 400.0
+offset_bottom = 710.0
+mouse_filter = 2
+expand = true
+loop = true
+bus = &"Video"
 
 [node name="FondoTop" type="ColorRect" parent="Telefono" unique_id=2125056578]
 layout_mode = 1

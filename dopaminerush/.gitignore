@@ -1,3 +1,7 @@
 # Godot 4+ specific ignores
 .godot/
 /android/
+
+# Los .mp4 originales de TikTok: pesan y no hacen falta en el repo.
+# Lo que el juego usa son los .ogv de assets/video/scroll/
+videos_originales/

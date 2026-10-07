@@ -36,7 +36,7 @@ Más **el vape**, que no es una app sino una acción del mundo 3D. **Listo.**
 
 Scroll infinito vertical, estética de celular con navbar decorativa.
 
-Cada video dura 5 segundos y la barra de progreso **es** el cooldown: no se puede pasar hasta que termine. **Manteniendo apretado** el video corre al doble de velocidad — se desbloquea la primera vez que la dopamina baja de 60.
+Cada video dura 8 segundos y la barra de progreso **es** el cooldown: no se puede pasar hasta que termine. **Manteniendo apretado** el video corre al doble de velocidad — se desbloquea la primera vez que la dopamina baja de 60.
 
 Cuando termina, hay que **arrastrar de abajo hacia arriba** para pasar al siguiente. Ese gesto es lo único que da dopamina, con **recompensa variable**: casi siempre poco, un 15% de las veces el triple. Es el mecanismo de las tragamonedas, y es lo que hace que scrollear no se pueda parar.
 
@@ -220,7 +220,7 @@ Lo que importa no es cuánta dopamina da una app por click, sino **cuánta da po
 
 | App | Rinde |
 |---|---|
-| TikBrainRot | 25 por deslizar cada 5 s (o 2.5 s con 2x) |
+| TikBrainRot | 16 por deslizar cada 8 s (o 4 s con 2x), 32 el 15% de las veces |
 | Family Savings™ | 20-35 por tirada cada 5 s |
 | Subway Slop | 7/seg con el canal fresco, menos a medida que se quema |
 | Preguntados | 55 por acierto × multiplicador, cada ~5 s |

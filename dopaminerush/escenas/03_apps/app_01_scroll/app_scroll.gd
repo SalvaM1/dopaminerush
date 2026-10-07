@@ -20,18 +20,56 @@ extends AppBase
 #      no pasa nada.
 
 # ---- BALANCEO ----
-const DURACION_VIDEO: float = 5.0          # segundos a velocidad normal
+# OJO: esto NO es la duracion del video, es el COOLDOWN. Los clips duran
+# lo que duran y vuelven a empezar solos si se terminan antes de que
+# deslices: son dos relojes distintos.
+const DURACION_VIDEO: float = 8.0          # segundos a velocidad normal
 const VELOCIDAD_RAPIDA: float = 2.0        # multiplicador al mantener apretado
 const UMBRAL_2X: float = 60.0              # dopamina a la que se desbloquea el 2x
 const DISTANCIA_SCROLL: float = 250      # pixeles a arrastrar para pasar
+
+# RECOMPENSA VARIABLE: casi siempre entra dopamina_por_interaccion, y un
+# 15% de las veces entra DOPAMINA_JACKPOT. Se guarda como numero absoluto
+# y no como multiplicador para que cambiar la base no mueva el premio.
+# Los tres numeros se mueven JUNTOS. El rendimiento de la app es
+# dopamina / DURACION_VIDEO, asi que estirar el cooldown sin subir la
+# dopamina la deja rindiendo menos y desequilibra el juego entero.
+#   8 s y 16 de dopamina  -> 2.00/s, igual que 5 s y 10
+#   jackpot = el doble de la base, como siempre
 const PROB_JACKPOT: float = 0.15
-const MULT_JACKPOT: float = 2
+const DOPAMINA_JACKPOT: float = 32.0
+
+# ---- LOS VIDEOS ----
+# Godot solo reproduce Ogg Theora (.ogv). Todos los .ogv que haya en esta
+# carpeta entran al mazo solos: no hay que anotarlos en ningun lado, se
+# agregan copiando el archivo.
+#
+# OJO CON LA BARRA: la barra NO es la duracion del video, es el COOLDOWN.
+# El video dura lo que dure y vuelve a empezar solo si se termina antes
+# de que deslices, igual que en la app real. Son dos relojes distintos y
+# tienen que seguir siendolo: si la barra dependiera del video, un clip
+# largo haria esperar medio minuto y uno corto regalaria la dopamina.
+const CARPETA_VIDEOS := "res://assets/video/scroll/"
+
+# EL TONO DEL 2x. speed_scale acelera el stream entero, asi que el audio
+# tambien sube de tono y queda voz de ardilla. Para evitarlo, el video
+# tiene su propio bus con un AudioEffectPitchShift: al acelerar se
+# enciende con pitch_scale 0.5, que baja justo una octava y compensa
+# exactamente el x2. El tempo se mantiene al doble; solo vuelve el tono.
+#
+# Es un efecto de FFT, asi que algo de artefacto mete. Si al escucharlo
+# molesta mas de lo que suma, con poner CORREGIR_TONO en false se vuelve
+# al comportamiento anterior.
+const CORREGIR_TONO: bool = true
+const BUS_VIDEO := "Video"
 
 # Para probar la escena sola con F6. En el juego real dejar en false.
 @export var forzar_2x_desbloqueado: bool = false
 
 # ---- NODOS ----
 @onready var video: ColorRect = $Telefono/Video
+@onready var marco_video: Control = $Telefono/MarcoVideo
+@onready var reproductor: VideoStreamPlayer = $Telefono/MarcoVideo/Reproductor
 @onready var descripcion: Label = $Telefono/Descripcion
 @onready var barra: ProgressBar = $Telefono/BarraProgreso
 @onready var etiqueta_velocidad: Label = $Telefono/Velocidad
@@ -46,6 +84,11 @@ var _acumulado: float = 0.0       # pixeles arrastrados hacia arriba
 var _numero_video: int = 0
 var _x2_desbloqueado: bool = false
 var _tween_destello: Tween = null
+
+var _videos: Array[String] = []
+var _ultimo_video: String = ""
+var _tam_video_previo: Vector2 = Vector2.ZERO
+var _tam_marco_previo: Vector2 = Vector2.ZERO
 
 
 func _ready() -> void:
@@ -62,6 +105,7 @@ func _ready() -> void:
 
 	GameManager.dopamina_cambio.connect(_al_cambiar_dopamina)
 
+	_buscar_videos()
 	_cargar_video()
 
 	# Si la app se abre sola (F6) nadie llama a iniciar(), asi que la
@@ -72,9 +116,22 @@ func _ready() -> void:
 		iniciar()
 
 
+# Si hay videos, NO se arranca la capa de audio de la app: los clips ya
+# traen su propio sonido y las dos cosas juntas serian un ruido. Con la
+# carpeta vacia la capa suena como siempre.
+func iniciar() -> void:
+	esta_activa = true
+	if _videos.is_empty():
+		AudioManager.iniciar_capa(id_app)
+
+
 func _process(delta: float) -> void:
 	if not esta_activa:
 		return
+
+	# Barato: solo recalcula si cambio el tamano del marco o del video.
+	if reproductor.is_playing():
+		_ajustar_video()
 
 	# El video ya termino: no gotea nada hasta que se deslice.
 	if _progreso >= 1.0:
@@ -91,6 +148,12 @@ func _process(delta: float) -> void:
 
 	if _progreso >= 1.0:
 		_actualizar_velocidad()
+
+
+func detener() -> void:
+	reproductor.stop()
+	_corregir_tono(false)   # si no, el bus queda con el tono bajado
+	super()
 
 
 # ============================================================
@@ -134,8 +197,12 @@ func _cargar_video() -> void:
 	_progreso = 0.0
 	barra.value = 0.0
 
-	# Color aleatorio como placeholder. En la fase F esto es un video real.
+	# El color de atras se sortea igual: es lo que se ve si todavia no
+	# hay videos, y tambien lo que asoma en los bordes si el clip no
+	# tiene exactamente la proporcion de la ventana.
 	video.color = Color.from_hsv(randf(), 0.55, 0.85)
+
+	_poner_clip()
 
 	descripcion.text = "%s\n%s" % [
 		USUARIOS[randi() % USUARIOS.size()],
@@ -146,10 +213,121 @@ func _cargar_video() -> void:
 	_actualizar_velocidad()
 
 
+# Busca los .ogv de la carpeta. Se miran los .import y .remap tambien
+# porque en el juego exportado los archivos no se llaman igual que en el
+# proyecto: sin esto, los videos andarian al probar y desaparecerian en
+# el ejecutable final.
+func _buscar_videos() -> void:
+	_videos.clear()
+
+	var dir := DirAccess.open(CARPETA_VIDEOS)
+	if dir == null:
+		print("[TikBrainRot] no existe la carpeta ", CARPETA_VIDEOS)
+		_sin_videos()
+		return
+
+	var vistos := {}
+	for archivo in dir.get_files():
+		var nombre := archivo
+		if nombre.ends_with(".import") or nombre.ends_with(".remap") or nombre.ends_with(".uid"):
+			nombre = nombre.get_basename()
+		if not nombre.ends_with(".ogv"):
+			continue
+		if vistos.has(nombre):
+			continue
+		vistos[nombre] = true
+		_videos.append(CARPETA_VIDEOS + nombre)
+
+	_videos.sort()
+
+	if _videos.is_empty():
+		print("[TikBrainRot] no hay .ogv en ", CARPETA_VIDEOS, " -- se usan colores")
+		_sin_videos()
+	else:
+		print("[TikBrainRot] %d videos cargados" % _videos.size())
+
+
+func _sin_videos() -> void:
+	reproductor.hide()
+
+
+# Elige uno al azar sin repetir el anterior, y lo arranca desde cero.
+func _poner_clip() -> void:
+	if _videos.is_empty():
+		return
+
+	var elegido: String = _videos[randi() % _videos.size()]
+	if _videos.size() > 1:
+		while elegido == _ultimo_video:
+			elegido = _videos[randi() % _videos.size()]
+	_ultimo_video = elegido
+
+	var stream = load(elegido)
+	if stream == null:
+		push_warning("[TikBrainRot] no se pudo cargar " + elegido)
+		return
+
+	reproductor.stream = stream
+	reproductor.show()
+	reproductor.speed_scale = 1.0
+	reproductor.play()
+
+	# El clip nuevo puede tener otra medida que el anterior.
+	_tam_video_previo = Vector2.ZERO
+
+
+# Enciende o apaga el corrector de tono del bus del video.
+func _corregir_tono(rapido: bool) -> void:
+	if not CORREGIR_TONO:
+		return
+
+	var bus := AudioServer.get_bus_index(BUS_VIDEO)
+	if bus < 0:
+		return   # alguien saco el bus del layout: mejor sin tono que sin audio
+
+	AudioServer.set_bus_effect_enabled(bus, 0, rapido)
+
+
+# El video se escala a mano para que NUNCA se deforme. Con expand y los
+# anclajes al marco, Godot lo estira hasta llenar el rectangulo, y como
+# la ventana no tiene exactamente la proporcion de un 9:16, las caras
+# salian apenas achatadas.
+#
+# Lo que hace es lo mismo que la app real: agranda el video hasta tapar
+# todo el marco y recorta lo que sobra, en vez de deformarlo. Como el
+# marco tiene clip_contents, lo que se pasa no se ve.
+func _ajustar_video() -> void:
+	var textura := reproductor.get_video_texture()
+	if textura == null:
+		return
+
+	var tam_video: Vector2 = textura.get_size()
+	if tam_video.x <= 0.0 or tam_video.y <= 0.0:
+		return
+
+	var tam_marco: Vector2 = marco_video.size
+	if tam_marco.x <= 0.0 or tam_marco.y <= 0.0:
+		return
+
+	# Nada cambio: no hay que recalcular.
+	if tam_video == _tam_video_previo and tam_marco == _tam_marco_previo:
+		return
+	_tam_video_previo = tam_video
+	_tam_marco_previo = tam_marco
+
+	# max() = tapar todo recortando. Con min() seria al reves: se veria
+	# el cuadro entero pero con bandas negras.
+	var escala: float = max(tam_marco.x / tam_video.x, tam_marco.y / tam_video.y)
+	var final: Vector2 = tam_video * escala
+
+	reproductor.size = final
+	reproductor.position = (tam_marco - final) * 0.5
+
+
 func _dar_bonus() -> void:
-	if randf() < PROB_JACKPOT:
-		recompensar(MULT_JACKPOT)
-		_mostrar_indicador("+%d" % int(dopamina_por_interaccion * MULT_JACKPOT), Color.YELLOW)
+	if randf() < PROB_JACKPOT and dopamina_por_interaccion > 0.0:
+		recompensar(DOPAMINA_JACKPOT / dopamina_por_interaccion)
+		_mostrar_indicador("+%d" % int(DOPAMINA_JACKPOT), Color.YELLOW)
 	else:
 		recompensar()
 		_mostrar_indicador("+%d" % int(dopamina_por_interaccion), Color.WHITE)
@@ -188,8 +366,18 @@ func _al_cambiar_dopamina(valor: float, _maximo: float) -> void:
 
 
 func _actualizar_velocidad() -> void:
-	etiqueta_velocidad.visible = _manteniendo and _x2_desbloqueado and _progreso < 1.0
+	var rapido: bool = _manteniendo and _x2_desbloqueado and _progreso < 1.0
+
+	etiqueta_velocidad.visible = rapido
 	etiqueta_velocidad.text = "2x"
+
+	# speed_scale mueve el stream entero, imagen Y sonido. Por eso al
+	# acelerar la voz suena mas aguda, igual que cuando adelantas un
+	# video de verdad -- que es exactamente el efecto que se busca.
+	if reproductor.stream != null:
+		reproductor.speed_scale = VELOCIDAD_RAPIDA if rapido else 1.0
+
+	_corregir_tono(rapido)
 
 
 # ============================================================
@@ -209,9 +397,10 @@ func _mostrar_indicador(texto: String, color: Color) -> void:
 func _destello(color: Color) -> void:
 	if _tween_destello and _tween_destello.is_running():
 		_tween_destello.kill()
-	video.modulate = color
+	var sobre: Control = marco_video if reproductor.visible else video
+	sobre.modulate = color
 	_tween_destello = create_tween()
-	_tween_destello.tween_property(video, "modulate", Color.WHITE, 0.18)
+	_tween_destello.tween_property(sobre, "modulate", Color.WHITE, 0.18)
 
 
 func _mostrar_aviso(texto: String) -> void:

@@ -44,6 +44,7 @@ omni_attenuation = 1.4
 
 [node name="Sonido" type="AudioStreamPlayer3D" parent="Vibra"]
 unit_size = 3.0
+bus = &"Ambiente"
 
 [node name="PantallaViewport" type="SubViewport" parent="."]
 disable_3d = true
