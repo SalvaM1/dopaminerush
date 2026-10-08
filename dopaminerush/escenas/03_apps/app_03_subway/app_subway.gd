@@ -64,6 +64,11 @@ const DURACION_BUFFERING: float = 3.0     # el castigo del zapping
 
 const RUTA_AUDIO := "res://assets/audio/apps/canales/"
 
+# Un video por canal, con el nombre del id: subway.ogv, slime.ogv, etc.
+# El canal que todavia no tiene archivo sigue andando con su color, asi
+# se pueden ir agregando de a uno sin que nada se rompa.
+const RUTA_VIDEO := "res://assets/video/subway/"
+
 # ---- LOS CANALES ----
 # Cada uno tiene que ser reconocible en dos segundos por su color, porque
 # el jugador lo va a ver de reojo mientras atiende otra ventana.
@@ -120,6 +125,8 @@ const CANALES := [
 
 # ---- NODOS ----
 @onready var video: ColorRect = $Marco/Video
+@onready var marco_video: Control = $Marco/Video/MarcoVideo
+@onready var reproductor: VideoStreamPlayer = $Marco/Video/MarcoVideo/Reproductor
 @onready var etiqueta_canal: Label = $Marco/Video/Etiqueta
 @onready var barra_frescura: ProgressBar = $Medidor/Barra
 @onready var tasa: Label = $Medidor/Tasa
@@ -141,6 +148,9 @@ var _acumulado: float = 0.0
 var _tiempo_numero: float = 0.0
 
 var _spinner: Control = null       # la rueda de carga
+var _hay_video: bool = false       # el canal actual tiene archivo?
+var _tam_video_previo: Vector2 = Vector2.ZERO
+var _tam_marco_previo: Vector2 = Vector2.ZERO
 
 
 func _ready() -> void:
@@ -151,6 +161,7 @@ func _ready() -> void:
 	barra_frescura.max_value = 100.0
 
 	_crear_spinner()
+	reproductor.hide()
 	boton.gui_input.connect(_input_boton)
 	_poner_canal(randi() % CANALES.size(), false)
 
@@ -267,6 +278,7 @@ func _poner_canal(indice: int, con_buffering: bool) -> void:
 	etiqueta_canal.text = str(datos["id"]).to_upper()
 	titulo_video.text = str(datos["titulo"])
 
+	_cargar_video(str(datos["id"]))
 	_cargar_sonido(str(datos["id"]))
 
 	if con_buffering:
@@ -282,6 +294,12 @@ func _empezar_buffering() -> void:
 	_spinner.visible = true
 	video.modulate = Color(0.25, 0.25, 0.25)
 	etiqueta_canal.hide()
+
+	# El video se congela de verdad: si siguiera corriendo detras de la
+	# rueda, al volver estaria tres segundos mas adelante y el castigo
+	# del zapping se perderia.
+	reproductor.paused = true
+
 	if sonido.playing:
 		sonido.stop()
 
@@ -290,12 +308,66 @@ func _terminar_buffering() -> void:
 	_buffering = 0.0
 	_spinner.visible = false
 	video.modulate = Color.WHITE
-	etiqueta_canal.show()
+
+	reproductor.paused = false
+	etiqueta_canal.visible = not _hay_video
+
 	if sonido.stream:
 		sonido.play()
 
 
+# Busca el video del canal. Si no esta, el canal se ve con su color de
+# siempre: los ocho no tienen por que tener archivo al mismo tiempo.
+func _cargar_video(id_canal: String) -> void:
+	var ruta := RUTA_VIDEO + id_canal + ".ogv"
+	_hay_video = ResourceLoader.exists(ruta)
+	_tam_video_previo = Vector2.ZERO
+
+	if not _hay_video:
+		reproductor.stream = null
+		reproductor.hide()
+		etiqueta_canal.show()
+		return
+
+	reproductor.stream = load(ruta)
+	reproductor.show()
+	reproductor.play()
+
+	# Con video real, el cartelon con el nombre del canal sobra: estaba
+	# ahi justamente porque no habia nada que mirar.
+	etiqueta_canal.hide()
+
+
+# El video se escala a mano para no deformarse: se agranda hasta tapar
+# todo el marco y lo que sobra se recorta. Igual que en TikBrainRot.
+func _ajustar_video() -> void:
+	var textura := reproductor.get_video_texture()
+	if textura == null:
+		return
+
+	var tam_video: Vector2 = textura.get_size()
+	var tam_marco: Vector2 = marco_video.size
+	if tam_video.x <= 0.0 or tam_video.y <= 0.0 or tam_marco.x <= 0.0:
+		return
+	if tam_video == _tam_video_previo and tam_marco == _tam_marco_previo:
+		return
+
+	_tam_video_previo = tam_video
+	_tam_marco_previo = tam_marco
+
+	var escala: float = max(tam_marco.x / tam_video.x, tam_marco.y / tam_video.y)
+	var final: Vector2 = tam_video * escala
+	reproductor.size = final
+	reproductor.position = (tam_marco - final) * 0.5
+
+
 func _cargar_sonido(id_canal: String) -> void:
+	# Si el canal tiene video, el audio sale del video: poner ademas el
+	# .ogg del canal seria el mismo contenido sonando dos veces.
+	if _hay_video:
+		sonido.stream = null
+		return
+
 	var ruta := RUTA_AUDIO + id_canal + ".ogg"
 	if ResourceLoader.exists(ruta):
 		sonido.stream = load(ruta)
@@ -318,6 +390,14 @@ func _actualizar_hud(frescura: float, delta: float) -> void:
 	var apagado := Color(gris, gris, gris) * 0.45
 	video.color = apagado.lerp(base, frescura)
 	etiqueta_canal.modulate.a = 0.25 + frescura * 0.6
+
+	# El video tambien se apaga. Es la misma idea que con el color: el
+	# aburrimiento se entiende sin una sola palabra porque la imagen se
+	# va poniendo gris y oscura a medida que el canal se quema.
+	if _hay_video and _buffering <= 0.0:
+		var apagon: float = 0.35 + frescura * 0.65
+		reproductor.modulate = Color(apagon, apagon, apagon, 1.0)
+		_ajustar_video()
 
 	# LA TASA EN VIVO. Es lo que convierte la barra en informacion: sin
 	# esto el jugador ve bajar algo, pero no sabe que lo que baja es

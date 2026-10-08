@@ -197,6 +197,15 @@ var _ultima_pos_viewport: Vector2 = Vector2.ZERO
 
 var _vapeando: bool = false
 var _vape_desbloqueado: bool = false
+
+# DOS COSAS DISTINTAS, a proposito:
+#   _vape_desbloqueado  el juego ya decidio dartelo (al desbloquear la 3ra app)
+#   _vape_anunciado     YA TE ENTERASTE: salio el cartel
+# El indicador [V] mira la segunda. Si mirara la primera, el boton
+# aparecia 8 segundos antes que el cartel y podias vapear sin que el
+# juego te lo hubiera ofrecido nunca -- que es justo lo contrario de lo
+# que la escena quiere contar.
+var _vape_anunciado: bool = false
 var _aviso_vape: Panel = null
 var _zumbido: AudioStreamPlayer = null
 var _sin_senal: Control = null
@@ -567,7 +576,7 @@ func _salir_al_parque() -> void:
 func _actualizar_vape(delta: float) -> void:
 	# Solo existe mientras esta sentado frente a la compu, y despues
 	# de que el juego lo haya ofrecido.
-	if not _sentado or _puede_levantarse or not _vape_desbloqueado or _mirando_telefono:
+	if not _sentado or _puede_levantarse or not _vape_anunciado or _mirando_telefono:
 		indicador_vape.hide()
 		return
 
@@ -1410,7 +1419,10 @@ func _crear_aviso_vape() -> void:
 
 
 func _mostrar_aviso_vape() -> void:
+	# Sin cartel no hay anuncio posible, pero dejar el vape inaccesible
+	# para siempre seria peor: se habilita igual.
 	if _aviso_vape == null:
+		_vape_anunciado = true
 		return
 
 	# Le damos tiempo al jugador a abrir la app que acaba de desbloquear
@@ -1425,6 +1437,13 @@ func _mostrar_aviso_vape() -> void:
 	_aviso_vape.scale = Vector2(0.7, 0.7)
 	_aviso_vape.rotation = deg_to_rad(-3.0)
 	_aviso_vape_visible = true
+
+	# EL BOTON APARECE ACA, en el mismo frame que el cartel. Entra con un
+	# pop para que se lea como parte del anuncio y no como algo que ya
+	# estaba ahi.
+	_vape_anunciado = true
+	Juice.centrar_pivote(indicador_vape)
+	Juice.pop(indicador_vape, 0.2, 0.4)
 
 	# Entrada con rebote: salta, no aparece
 	var entrada := create_tween()

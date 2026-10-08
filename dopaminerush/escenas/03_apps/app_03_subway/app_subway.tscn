@@ -136,6 +136,25 @@ offset_bottom = 266.0
 grow_horizontal = 2
 color = Color(0.929412, 0.45098, 0.721569, 1)
 
+[node name="MarcoVideo" type="Control" parent="Marco/Video"]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Reproductor" type="VideoStreamPlayer" parent="Marco/Video/MarcoVideo"]
+layout_mode = 0
+offset_right = 440.0
+offset_bottom = 238.0
+mouse_filter = 2
+expand = true
+loop = true
+bus = &"Apps"
+
 [node name="Etiqueta" type="Label" parent="Marco/Video" unique_id=978748033]
 layout_mode = 1
 anchors_preset = 15

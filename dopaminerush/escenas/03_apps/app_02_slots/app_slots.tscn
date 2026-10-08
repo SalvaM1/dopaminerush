@@ -2,22 +2,171 @@
 
 [ext_resource type="Script" uid="uid://b61k1sim45qyc" path="res://escenas/03_apps/app_02_slots/app_slots.gd" id="1_slots"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_perilla"]
-bg_color = Color(0.847059, 0.176471, 0.176471, 1)
+[sub_resource type="StyleBoxFlat" id="Style_gabinete"]
+bg_color = Color(0.152941, 0.0627451, 0.0784314, 1)
 border_width_left = 3
 border_width_top = 3
 border_width_right = 3
 border_width_bottom = 3
-border_color = Color(0.996078, 0.780392, 0.360784, 1)
+border_color = Color(0.517647, 0.388235, 0.164706, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="Style_marquesina"]
+bg_color = Color(0.439216, 0.0784314, 0.117647, 1)
+border_width_bottom = 3
+border_color = Color(0.831373, 0.639216, 0.290196, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+
+[sub_resource type="StyleBoxFlat" id="Style_visor"]
+bg_color = Color(0.0470588, 0.0470588, 0.0666667, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.682353, 0.513725, 0.223529, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="Style_rodillo"]
+bg_color = Color(0.0862745, 0.0862745, 0.109804, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="Style_panel_inferior"]
+bg_color = Color(0.0980392, 0.0431373, 0.054902, 1)
+border_width_top = 2
+border_color = Color(0.419608, 0.313726, 0.133333, 1)
+
+[sub_resource type="StyleBoxFlat" id="Style_display"]
+bg_color = Color(0.027451, 0.027451, 0.0352941, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.345098, 0.258824, 0.109804, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="Style_base_palanca"]
+bg_color = Color(0.113725, 0.113725, 0.133333, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.341176, 0.345098, 0.388235, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="Style_riel"]
+bg_color = Color(0.164706, 0.172549, 0.207843, 1)
+border_width_left = 2
+border_width_right = 2
+border_color = Color(0.294118, 0.305882, 0.360784, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+
+[sub_resource type="StyleBoxFlat" id="Style_vastago"]
+bg_color = Color(0.517647, 0.533333, 0.584314, 1)
+border_width_left = 2
+border_width_right = 2
+border_color = Color(0.701961, 0.717647, 0.772549, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+
+[sub_resource type="StyleBoxFlat" id="Style_tope"]
+bg_color = Color(0.247059, 0.254902, 0.298039, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.439216, 0.454902, 0.509804, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="Style_perilla"]
+bg_color = Color(0.705882, 0.117647, 0.133333, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.901961, 0.337255, 0.317647, 1)
 corner_radius_top_left = 34
 corner_radius_top_right = 34
 corner_radius_bottom_right = 34
 corner_radius_bottom_left = 34
+shadow_color = Color(0, 0, 0, 0.47)
+shadow_size = 7
+shadow_offset = Vector2(0, 4)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_paywall"]
-bg_color = Color(0.0627451, 0.0666667, 0.0862745, 0.968627)
+[sub_resource type="StyleBoxFlat" id="Style_paywall"]
+bg_color = Color(0.0588235, 0.0313726, 0.0392157, 0.980392)
 
-[node name="AppSlots" type="Control" unique_id=166878510]
+[sub_resource type="StyleBoxFlat" id="Style_tarjeta_oferta"]
+bg_color = Color(0.141176, 0.0666667, 0.0823529, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.831373, 0.639216, 0.290196, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="Style_btn_oro"]
+content_margin_left = 26.0
+content_margin_top = 13.0
+content_margin_right = 26.0
+content_margin_bottom = 13.0
+bg_color = Color(0.882353, 0.682353, 0.254902, 1)
+border_width_bottom = 4
+border_color = Color(0.603922, 0.439216, 0.117647, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+
+[sub_resource type="StyleBoxFlat" id="Style_btn_oro_pressed"]
+content_margin_left = 26.0
+content_margin_top = 17.0
+content_margin_right = 26.0
+content_margin_bottom = 9.0
+bg_color = Color(0.733333, 0.552941, 0.188235, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+
+[sub_resource type="StyleBoxFlat" id="Style_btn_oro_hover"]
+content_margin_left = 26.0
+content_margin_top = 13.0
+content_margin_right = 26.0
+content_margin_bottom = 13.0
+bg_color = Color(0.964706, 0.788235, 0.364706, 1)
+border_width_bottom = 4
+border_color = Color(0.603922, 0.439216, 0.117647, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+
+[node name="AppSlots" type="Control" unique_id=108356522]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 720.0
@@ -29,179 +178,381 @@ tamano_ventana = Vector2(720, 460)
 posicion_ventana = Vector2(1100, 100)
 dopamina_por_interaccion = 20.0
 
-[node name="Maquina" type="Panel" parent="." unique_id=1315615393]
+[node name="Maquina" type="Panel" parent="." unique_id=1615076565]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = -124.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_gabinete")
 
-[node name="Marquesina" type="ColorRect" parent="Maquina" unique_id=865835624]
+[node name="Marquesina" type="Panel" parent="Maquina" unique_id=493462850]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_right = -120.0
-offset_bottom = 70.0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = -3.0
+offset_bottom = 62.0
 grow_horizontal = 2
-color = Color(0.478431, 0.0941176, 0.133333, 1)
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_marquesina")
 
-[node name="Titulo" type="Label" parent="Maquina/Marquesina" unique_id=536479799]
+[node name="Bombitas" type="Control" parent="Maquina/Marquesina" unique_id=291469517]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_color = Color(1, 0.843137, 0.4, 1)
-theme_override_font_sizes/font_size = 32
+mouse_filter = 2
+
+[node name="Titulo" type="Label" parent="Maquina/Marquesina" unique_id=356608364]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 0.898039, 0.6, 1)
+theme_override_colors/font_outline_color = Color(0.254902, 0.0235294, 0.0431373, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 30
 text = "FAMILY SAVINGS™"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="FondoRodillos" type="ColorRect" parent="Maquina" unique_id=854728200]
+[node name="Visor" type="Panel" parent="Maquina" unique_id=278984271]
 layout_mode = 1
-offset_left = 40.0
-offset_top = 110.0
-offset_right = 560.0
-offset_bottom = 300.0
-color = Color(0.113725, 0.117647, 0.14902, 1)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 30.0
+offset_top = 76.0
+offset_right = -30.0
+offset_bottom = -112.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_visor")
 
-[node name="Rodillos" type="HBoxContainer" parent="Maquina" unique_id=872925535]
+[node name="Rodillo0" type="Panel" parent="Maquina/Visor" unique_id=1822163648]
+clip_contents = true
 layout_mode = 1
-offset_left = 50.0
-offset_top = 120.0
-offset_right = 550.0
-offset_bottom = 290.0
-theme_override_constants/separation = 12
-alignment = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 6.0
+offset_right = 176.0
+offset_bottom = -6.0
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_rodillo")
 
-[node name="Simbolo0" type="Label" parent="Maquina/Rodillos" unique_id=1620298313]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 72
-text = "🍒"
-horizontal_alignment = 1
-vertical_alignment = 1
+[node name="Rodillo1" type="Panel" parent="Maquina/Visor" unique_id=1844199388]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 186.0
+offset_top = 6.0
+offset_right = 354.0
+offset_bottom = -6.0
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_rodillo")
 
-[node name="Simbolo1" type="Label" parent="Maquina/Rodillos" unique_id=1899761502]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 72
-text = "🔔"
-horizontal_alignment = 1
-vertical_alignment = 1
+[node name="Rodillo2" type="Panel" parent="Maquina/Visor" unique_id=1767796738]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 364.0
+offset_top = 6.0
+offset_right = 532.0
+offset_bottom = -6.0
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_rodillo")
 
-[node name="Simbolo2" type="Label" parent="Maquina/Rodillos" unique_id=2084984275]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 72
-text = "⭐"
-horizontal_alignment = 1
-vertical_alignment = 1
+[node name="LineaPago" type="ColorRect" parent="Maquina/Visor" unique_id=873470351]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 4.0
+offset_top = -1.0
+offset_right = -4.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.886275, 0.231373, 0.231373, 0.392157)
 
-[node name="PanelInferior" type="ColorRect" parent="Maquina" unique_id=1800711369]
+[node name="Destello" type="ColorRect" parent="Maquina/Visor" unique_id=450753212]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 0)
+
+[node name="Chispas" type="GPUParticles2D" parent="Maquina/Visor" unique_id=172948761]
+emitting = false
+
+[node name="Chispas2" type="GPUParticles2D" parent="Maquina/Visor" unique_id=829518665]
+emitting = false
+
+[node name="PanelInferior" type="Panel" parent="Maquina" unique_id=1849185167]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -80.0
-offset_right = -120.0
+offset_left = 3.0
+offset_top = -100.0
+offset_right = -3.0
+offset_bottom = -3.0
 grow_horizontal = 2
 grow_vertical = 0
-color = Color(0.0784314, 0.0823529, 0.105882, 1)
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_panel_inferior")
 
-[node name="Creditos" type="Label" parent="Maquina/PanelInferior" unique_id=2088262071]
+[node name="DisplayCreditos" type="Panel" parent="Maquina/PanelInferior" unique_id=1161968733]
 layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 30.0
-offset_top = -25.0
+offset_left = 20.0
+offset_top = 14.0
 offset_right = 250.0
-offset_bottom = 25.0
+offset_bottom = 72.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_display")
+
+[node name="Etiqueta" type="Label" parent="Maquina/PanelInferior/DisplayCreditos" unique_id=2145647845]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 10.0
+offset_top = 5.0
+offset_right = -10.0
+offset_bottom = 20.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.619608, 0.52549, 0.337255, 1)
+theme_override_font_sizes/font_size = 12
+text = "CRÉDITOS"
+
+[node name="Creditos" type="Label" parent="Maquina/PanelInferior/DisplayCreditos" unique_id=1249123740]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 16.0
+offset_right = -10.0
+offset_bottom = -4.0
+grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_color = Color(0.427451, 0.937255, 0.505882, 1)
-theme_override_font_sizes/font_size = 36
+theme_override_colors/font_color = Color(1, 0.831373, 0.290196, 1)
+theme_override_font_sizes/font_size = 32
 text = "$0"
 vertical_alignment = 1
 
-[node name="Mensaje" type="Label" parent="Maquina/PanelInferior" unique_id=2001572490]
+[node name="DisplayApuesta" type="Panel" parent="Maquina/PanelInferior" unique_id=2038123297]
 layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
+offset_left = 262.0
+offset_top = 14.0
+offset_right = 392.0
+offset_bottom = 72.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_display")
+
+[node name="Etiqueta" type="Label" parent="Maquina/PanelInferior/DisplayApuesta" unique_id=866881770]
+layout_mode = 1
+anchors_preset = 10
 anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -320.0
-offset_top = -20.0
-offset_right = -25.0
+offset_left = 10.0
+offset_top = 5.0
+offset_right = -10.0
 offset_bottom = 20.0
-grow_horizontal = 0
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.658824, 0.678431, 0.72549, 1)
-theme_override_font_sizes/font_size = 20
-text = "bajá la palanca"
-horizontal_alignment = 2
-vertical_alignment = 1
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.619608, 0.52549, 0.337255, 1)
+theme_override_font_sizes/font_size = 12
+text = "APUESTA"
 
-[node name="Indicador" type="Label" parent="Maquina" unique_id=969411373]
+[node name="Apuesta" type="Label" parent="Maquina/PanelInferior/DisplayApuesta" unique_id=1849386407]
 layout_mode = 1
-offset_left = 150.0
-offset_top = 315.0
-offset_right = 450.0
-offset_bottom = 370.0
-theme_override_font_sizes/font_size = 40
-text = "+0"
-horizontal_alignment = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 16.0
+offset_right = -10.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.858824, 0.858824, 0.886275, 1)
+theme_override_font_sizes/font_size = 32
+text = "$25"
 vertical_alignment = 1
 
-[node name="Palanca" type="Control" parent="." unique_id=1317053357]
+[node name="Mensaje" type="Label" parent="Maquina/PanelInferior" unique_id=2067775249]
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -120.0
+offset_left = -290.0
+offset_right = -20.0
 grow_horizontal = 0
 grow_vertical = 2
-mouse_default_cursor_shape = 6
+theme_override_colors/font_color = Color(0.952941, 0.835294, 0.6, 1)
+theme_override_font_sizes/font_size = 22
+text = "bajá la palanca"
+horizontal_alignment = 2
+vertical_alignment = 1
 
-[node name="Riel" type="ColorRect" parent="Palanca" unique_id=1021824115]
+[node name="CartelPremio" type="Label" parent="Maquina" unique_id=916460522]
+visible = false
 layout_mode = 1
-offset_left = 54.0
-offset_top = 30.0
-offset_right = 66.0
-offset_bottom = 400.0
-mouse_filter = 2
-color = Color(0.2, 0.211765, 0.254902, 1)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -280.0
+offset_top = -62.0
+offset_right = 280.0
+offset_bottom = 62.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 0.890196, 0.380392, 1)
+theme_override_colors/font_outline_color = Color(0.321569, 0.0392157, 0.0627451, 1)
+theme_override_constants/outline_size = 14
+theme_override_font_sizes/font_size = 76
+text = "¡JACKPOT!"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="Perilla" type="Panel" parent="Palanca" unique_id=468705989]
-layout_mode = 0
-offset_left = 26.0
-offset_top = 30.0
-offset_right = 94.0
-offset_bottom = 98.0
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_perilla")
+[node name="Indicador" type="Label" parent="Maquina" unique_id=344568857]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = -34.0
+offset_right = 160.0
+offset_bottom = 34.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.784314)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 54
+text = "+20"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="Etiqueta" type="Label" parent="Palanca" unique_id=1016037883]
+[node name="Palanca" type="Control" parent="." unique_id=1128087913]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -124.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="Base" type="Panel" parent="Palanca" unique_id=469169044]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -45.0
+offset_left = 14.0
+offset_top = -58.0
+offset_right = -14.0
+offset_bottom = -10.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_colors/font_color = Color(0.556863, 0.576471, 0.623529, 1)
-theme_override_font_sizes/font_size = 16
-text = "bajá"
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_base_palanca")
+
+[node name="Riel" type="Panel" parent="Palanca" unique_id=911402285]
+layout_mode = 1
+offset_left = 48.0
+offset_top = 40.0
+offset_right = 76.0
+offset_bottom = 378.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_riel")
+
+[node name="Vastago" type="Panel" parent="Palanca" unique_id=1158793411]
+layout_mode = 0
+offset_left = 54.0
+offset_top = 76.0
+offset_right = 70.0
+offset_bottom = 340.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_vastago")
+
+[node name="Tope" type="Panel" parent="Palanca" unique_id=369455393]
+layout_mode = 1
+offset_left = 40.0
+offset_top = 24.0
+offset_right = 84.0
+offset_bottom = 38.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_tope")
+
+[node name="Perilla" type="Panel" parent="Palanca" unique_id=1979591301]
+layout_mode = 0
+offset_left = 26.0
+offset_top = 40.0
+offset_right = 98.0
+offset_bottom = 112.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_perilla")
+
+[node name="Brillo" type="Panel" parent="Palanca/Perilla" unique_id=627494004]
+self_modulate = Color(1, 1, 1, 0.439216)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 14.0
+offset_top = 10.0
+offset_right = -36.0
+offset_bottom = -42.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_perilla")
+
+[node name="Etiqueta" type="Label" parent="Palanca" unique_id=406818402]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -92.0
+offset_bottom = -64.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.952941, 0.835294, 0.6, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.627451)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 19
+text = "BAJÁ"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Paywall" type="Panel" parent="." unique_id=485023809]
+[node name="Paywall" type="Panel" parent="." unique_id=231036119]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -209,32 +560,125 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_paywall")
+theme_override_styles/panel = SubResource("Style_paywall")
 
-[node name="TextoPaywall" type="Label" parent="Paywall" unique_id=417654988]
+[node name="Tarjeta" type="Panel" parent="Paywall" unique_id=416394812]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -300.0
-offset_top = -110.0
-offset_right = 300.0
-offset_bottom = -30.0
+offset_left = -250.0
+offset_top = -168.0
+offset_right = 250.0
+offset_bottom = 168.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 30
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_tarjeta_oferta")
+
+[node name="Cinta" type="Label" parent="Paywall/Tarjeta" unique_id=1732028195]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 3.0
+offset_top = 14.0
+offset_right = -3.0
+offset_bottom = 40.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 0.792157, 0.278431, 1)
+theme_override_font_sizes/font_size = 15
+text = "⭐ OFERTA POR TIEMPO LIMITADO ⭐"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextoPaywall" type="Label" parent="Paywall/Tarjeta" unique_id=1973699289]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 24.0
+offset_top = 54.0
+offset_right = -24.0
+offset_bottom = 110.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 0.964706, 0.909804, 1)
+theme_override_font_sizes/font_size = 27
 text = "Te quedaste sin créditos."
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="BotonPaywall" type="Button" parent="Paywall" unique_id=2105953798]
+[node name="Monedas" type="Label" parent="Paywall/Tarjeta" unique_id=2143023978]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 24.0
+offset_top = 114.0
+offset_right = -24.0
+offset_bottom = 158.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 34
+text = "🪙 🪙 🪙"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Reloj" type="Label" parent="Paywall/Tarjeta" unique_id=481921248]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 24.0
+offset_top = 162.0
+offset_right = -24.0
+offset_bottom = 186.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.886275, 0.329412, 0.294118, 1)
+theme_override_font_sizes/font_size = 16
+text = "la oferta vence en 04:59"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BotonPaywall" type="Button" parent="Paywall" unique_id=1731834894]
 layout_mode = 0
-offset_left = 200.0
-offset_top = 260.0
-offset_right = 520.0
-offset_bottom = 324.0
-theme_override_font_sizes/font_size = 26
-text = "Comprar más"
+offset_left = 260.0
+offset_top = 300.0
+offset_right = 460.0
+offset_bottom = 352.0
+theme_override_colors/font_color = Color(0.168627, 0.0862745, 0.027451, 1)
+theme_override_colors/font_pressed_color = Color(0.168627, 0.0862745, 0.027451, 1)
+theme_override_colors/font_hover_color = Color(0.168627, 0.0862745, 0.027451, 1)
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("Style_btn_oro")
+theme_override_styles/pressed = SubResource("Style_btn_oro_pressed")
+theme_override_styles/hover = SubResource("Style_btn_oro_hover")
+text = "COMPRAR MÁS"
+
+[node name="Monedas" type="GPUParticles2D" parent="Paywall" unique_id=255042016]
+emitting = false
+
+[node name="Sonidos" type="Node" parent="." unique_id=449766180]
+
+[node name="Palanca" type="AudioStreamPlayer" parent="Sonidos" unique_id=1314557631]
+bus = &"Apps"
+
+[node name="PalancaSube" type="AudioStreamPlayer" parent="Sonidos" unique_id=1534035445]
+bus = &"Apps"
+
+[node name="Girando" type="AudioStreamPlayer" parent="Sonidos" unique_id=1825403684]
+bus = &"Apps"
+
+[node name="RodilloPara" type="AudioStreamPlayer" parent="Sonidos" unique_id=1114368690]
+bus = &"Apps"
+
+[node name="Casi" type="AudioStreamPlayer" parent="Sonidos" unique_id=861615872]
+bus = &"Apps"
+
+[node name="Jackpot" type="AudioStreamPlayer" parent="Sonidos" unique_id=162408236]
+bus = &"Apps"
+
+[node name="Moneda" type="AudioStreamPlayer" parent="Sonidos" unique_id=2041028702]
+bus = &"Apps"
+
+[node name="Luz" type="AudioStreamPlayer" parent="Sonidos" unique_id=1725436697]
+volume_db = -10.0
+bus = &"Apps"
