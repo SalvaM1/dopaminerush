@@ -70,6 +70,11 @@ const RUTA_AUDIO := "res://assets/audio/apps/canales/"
 const RUTA_VIDEO := "res://assets/video/subway/"
 
 # ---- LOS CANALES ----
+# Son SEIS. Sacar o agregar uno es tocar esta lista y nada mas: la
+# frescura, el sorteo y el medidor se arman solos a partir de aca.
+#
+# El id es tambien el nombre del archivo de video (assets/video/subway/
+# <id>.ogv). Un canal sin video no se rompe: se ve con su color.
 # Cada uno tiene que ser reconocible en dos segundos por su color, porque
 # el jugador lo va a ver de reojo mientras atiende otra ventana.
 const CANALES := [
@@ -80,22 +85,10 @@ const CANALES := [
 		"color": Color(0.93, 0.45, 0.72),
 	},
 	{
-		"id": "cuchillo",
-		"nombre": "HotKnife",
-		"titulo": "CUCHILLO AL ROJO VIVO vs 20 COSAS",
-		"color": Color(0.96, 0.44, 0.13),
-	},
-	{
 		"id": "subway",
 		"nombre": "GameplayParaVer",
 		"titulo": "gameplay sin copyright para tus videos",
 		"color": Color(0.22, 0.52, 0.95),
-	},
-	{
-		"id": "mukbang",
-		"nombre": "MEGA MUKBANG",
-		"titulo": "COMIENDO 40.000 CALORIAS (me sentí mal)",
-		"color": Color(0.82, 0.22, 0.18),
 	},
 	{
 		"id": "prensa",

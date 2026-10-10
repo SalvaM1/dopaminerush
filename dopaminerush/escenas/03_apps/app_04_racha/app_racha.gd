@@ -62,6 +62,26 @@ const NEUTRO := Color(1, 1, 1, 1)
 const APAGADO := Color(0.45, 0.47, 0.5, 0.65)
 const NARANJA := Color(1.0, 0.65, 0.2, 1.0)
 
+# Los cuatro colores de las opciones, en el orden de los botones. Tienen
+# que coincidir con los del .tscn porque desde aca se repintan en vivo.
+const COLORES_OPCION := [
+	Color(0.203922, 0.454902, 0.898039),   # A - azul
+	Color(0.498039, 0.321569, 0.898039),   # B - violeta
+	Color(0.839216, 0.478431, 0.054902),   # C - ambar
+	Color(0.035294, 0.607843, 0.705882),   # D - cian
+]
+
+# El verde y el rojo del reveal se pintan sobre el FONDO del boton, no
+# sobre su modulate: tintar de verde un boton azul da un verde sucio.
+const VERDE_OK := Color(0.133, 0.773, 0.369)
+const ROJO_MAL := Color(0.937, 0.267, 0.267)
+const GRIS_MUERTO := Color(0.192, 0.216, 0.286)
+
+# Fallar teniendo racha encadena DOS sonidos: primero el de errar la
+# pregunta, y recien despues el de la racha que se rompe. Son dos
+# perdidas distintas y se tienen que escuchar como dos golpes.
+const DEMORA_RACHA_ROTA: float = 0.42
+
 # ---- NODOS ----
 @onready var barra_superior: Panel = $BarraSuperior
 @onready var barra_racha: ProgressBar = $BarraSuperior/BarraRacha
@@ -83,6 +103,7 @@ const NARANJA := Color(1.0, 0.65, 0.2, 1.0)
 
 @onready var chispas: GPUParticles2D = $Chispas
 @onready var confeti: GPUParticles2D = $Confeti
+@onready var tarjeta: Panel = $TarjetaPregunta
 
 # Sonidos: todos opcionales. Si el nodo no existe o no tiene archivo
 # cargado, la app funciona igual en silencio.
@@ -110,9 +131,17 @@ var _ultimo_segundo: int = -1
 var _estilo_alerta: StyleBoxFlat = null
 var _tween_alerta: Tween = null
 
+# Cada boton y la barra de tiempo necesitan su PROPIO StyleBoxFlat. Si
+# comparten el recurso del .tscn, pintar uno pinta todos.
+var _estilos_opcion: Array = []
+var _tweens_opcion: Array = []
+var _estilo_tiempo: StyleBoxFlat = null
+
 const ELOGIOS_BAJO := ["Bien", "Correcto", "Dale", "Ahí va"]
 const ELOGIOS_MEDIO := ["¡Muy bien!", "¡Seguí así!", "¡Excelente!", "¡Genio!"]
-const ELOGIOS_ALTO := ["¡SOS IMPARABLE 🔥", "¡NADIE TE PARA!", "¡LEYENDA!", "¡INCREÍBLE!"]
+# Sin emoji a proposito: Open Sans, la fuente por defecto del proyecto,
+# no tiene glifos de simbolo y los dibuja como cuadraditos.
+const ELOGIOS_ALTO := ["¡SOS IMPARABLE!", "¡NADIE TE PARA!", "¡LEYENDA!", "¡INCREÍBLE!"]
 
 
 func _ready() -> void:
@@ -127,6 +156,7 @@ func _ready() -> void:
 		alerta.add_theme_stylebox_override("panel", _estilo_alerta)
 
 	_cargar_sonidos()
+	_preparar_estilos()
 
 	Juice.configurar_rafaga(chispas, VERDE, 14, 200.0)
 	Juice.configurar_rafaga(confeti, Color(1.0, 0.85, 0.3), 32, 260.0)
@@ -268,6 +298,7 @@ func _nueva_pregunta() -> void:
 			b.modulate = NEUTRO
 			b.scale = Vector2.ONE
 			b.rotation = 0.0
+			_pintar_boton(i, COLORES_OPCION[i % COLORES_OPCION.size()], 0.0)
 		else:
 			b.hide()
 
@@ -327,9 +358,14 @@ func _acertar(indice: int) -> void:
 	var boton := opciones.get_child(indice) as Button
 	if boton:
 		Juice.flash(boton)
-		Juice.tintar(boton, VERDE, 0.1)
-		Juice.pop(boton, 0.14)
+		_pintar_boton(indice, VERDE_OK, 0.1)
+		Juice.pop(boton, 0.18)
 		_lanzar_particulas(chispas, boton)
+
+	# La tarjeta de la pregunta tambien festeja: el acierto tiene que
+	# mover la pantalla entera, no solo el boton que apretaste.
+	Juice.flash(tarjeta, Color(1.6, 1.9, 1.6), 0.18)
+	Juice.pop(tarjeta, 0.03, 0.4)
 
 	var racha_previa := _racha
 	_racha = min(_racha + 1, RACHA_MAX)
@@ -352,8 +388,12 @@ func _acertar(indice: int) -> void:
 	# Hito: cada RACHA_HITO aciertos, fanfarria y confeti
 	if _racha % RACHA_HITO == 0 and _racha > 0:
 		Juice.sonar(snd_hito)
-		Juice.pop(barra_superior, 0.06, 0.4)
+		Juice.pop(barra_superior, 0.08, 0.45)
 		_lanzar_particulas(confeti, barra_racha)
+		Juice.numero_flotante(
+			self, "¡RACHA DE %d!" % _racha, Color(1.0, 0.84, 0.41),
+			Vector2(size.x * 0.5, size.y * 0.2), 30
+		)
 
 	resultado.text = _elogio()
 	resultado.modulate = VERDE
@@ -382,18 +422,22 @@ func _fallar(indice: int) -> void:
 	if indice >= 0:
 		var b := opciones.get_child(indice) as Button
 		if b:
-			Juice.tintar(b, ROJO, 0.1)
-			Juice.tambalear(b, 5.0, 0.35)
+			_pintar_boton(indice, ROJO_MAL, 0.1)
+			Juice.tambalear(b, 6.0, 0.4)
+
+	# El sonido de errar suena SIEMPRE, haya racha o no: equivocarse es
+	# lo primero que pasa. Si ademas habia racha, el powerdown entra
+	# despues, encadenado, como una segunda perdida.
+	Juice.sonar(snd_error)
+	Juice.flash(tarjeta, Color(1.9, 1.2, 1.2), 0.2)
 
 	var racha_previa := _racha
 	if racha_previa > 0:
-		# Romper una racha larga tiene su propio sonido y su propio peso
-		Juice.sonar(snd_racha_rota)
+		_sonar_demorado(snd_racha_rota, DEMORA_RACHA_ROTA)
 		resultado.text = "Perdiste tu racha de %d días" % racha_previa
 		Juice.shake(barra_superior, 9.0, 0.45)
 		Juice.shake(self, 5.0, 0.3)
 	else:
-		Juice.sonar(snd_error)
 		resultado.text = "Se te pasó" if indice < 0 else "Incorrecto"
 
 	_racha = 0
@@ -412,8 +456,9 @@ func _fallar(indice: int) -> void:
 		await get_tree().create_timer(0.5).timeout
 		var bc := opciones.get_child(correcta) as Button
 		if is_instance_valid(bc):
-			Juice.tintar(bc, VERDE, 0.25)
-			Juice.pop(bc, 0.08)
+			_pintar_boton(correcta, VERDE_OK, 0.25)
+			Juice.tintar(bc, Color(1, 1, 1, 1), 0.25)
+			Juice.pop(bc, 0.1)
 
 
 func _terminar_pregunta() -> void:
@@ -448,17 +493,21 @@ func _apagar_las_otras(elegida: int) -> void:
 	for i in range(opciones.get_child_count()):
 		var b := opciones.get_child(i) as Button
 		if b and b.visible and i != elegida:
-			Juice.tintar(b, APAGADO, 0.2)
+			_pintar_boton(i, GRIS_MUERTO, 0.2)
+			Juice.tintar(b, Color(1, 1, 1, 0.45), 0.2)
 
 
 # ============================================================
 #  Botones: hover y press
 # ============================================================
 
+# Los cuatro estados del boton comparten un mismo stylebox (el color lo
+# maneja el juego), asi que el hover se responde con brillo y escala.
 func _al_entrar_mouse(boton: Button) -> void:
 	if _fase != Fase.PREGUNTANDO:
 		return
-	Juice.escalar_a(boton, 1.03)
+	Juice.escalar_a(boton, 1.035)
+	Juice.tintar(boton, Color(1.14, 1.14, 1.14), 0.09)
 	Juice.sonar(snd_hover, 0.0, 0.06)
 
 
@@ -466,6 +515,7 @@ func _al_salir_mouse(boton: Button) -> void:
 	if _fase != Fase.PREGUNTANDO:
 		return
 	Juice.escalar_a(boton, 1.0)
+	Juice.tintar(boton, NEUTRO, 0.12)
 
 
 func _al_apretar(boton: Button) -> void:
@@ -519,7 +569,7 @@ func _actualizar_estado_racha() -> void:
 		# Al tope: se prende fuego
 		barra_racha.modulate = Color(1.0, 0.55, 0.15)
 		etiqueta_mult.modulate = Color(1.0, 0.7, 0.25)
-		etiqueta_mult.text = "🔥 %.1fx" % multiplicador_racha()
+		etiqueta_mult.text = "MAX %.1fx" % multiplicador_racha()
 		fuego.emitting = true
 		_latir(barra_racha, 1.03, 0.7)
 		_latir(etiqueta_mult, 1.06, 0.55)
@@ -563,17 +613,16 @@ func _actualizar_temporizador() -> void:
 	tiempo_barra.value = (restante / TIEMPO_PREGUNTA) * 100.0
 	tiempo_texto.text = "%.1f s" % restante
 
+	# La barra se PINTA (su relleno), no se modula: modular un relleno
+	# verde con rojo da un marron sucio en vez de rojo.
 	if restante <= UMBRAL_CRITICO:
-		tiempo_barra.modulate = ROJO
-		tiempo_texto.modulate = ROJO
+		_color_tiempo(ROJO)
 		_color_alerta(ROJO, 0.22)
 	elif restante <= UMBRAL_ALERTA:
-		tiempo_barra.modulate = Color(1.0, 0.5, 0.25)
-		tiempo_texto.modulate = Color(1.0, 0.5, 0.25)
+		_color_tiempo(Color(1.0, 0.5, 0.25))
 		_color_alerta(Color(1.0, 0.45, 0.2), 0.32)
 	else:
-		tiempo_barra.modulate = NEUTRO
-		tiempo_texto.modulate = NARANJA
+		_color_tiempo(VERDE)
 
 	# Tic-tac y pop del numero en cada segundo entero de la zona de alerta
 	var seg := int(ceil(restante))
@@ -593,6 +642,74 @@ func _mostrar_pregunta_ui(visible_: bool) -> void:
 	opciones.visible = visible_
 	tiempo_barra.visible = visible_
 	tiempo_texto.visible = visible_
+
+
+# Le da a cada boton y a la barra de tiempo su propia copia del
+# StyleBoxFlat, para poder pintarlos por separado en tiempo real.
+func _preparar_estilos() -> void:
+	_estilos_opcion.clear()
+	_tweens_opcion.clear()
+
+	for i in range(opciones.get_child_count()):
+		var b := opciones.get_child(i) as Button
+		var copia: StyleBoxFlat = null
+		if b:
+			var base := b.get_theme_stylebox("normal")
+			if base is StyleBoxFlat:
+				copia = base.duplicate()
+				# El mismo fondo para los cuatro estados: el color lo
+				# maneja el juego, no el tema del boton.
+				for estado in ["normal", "hover", "pressed", "disabled", "focus"]:
+					b.add_theme_stylebox_override(estado, copia)
+		_estilos_opcion.append(copia)
+		_tweens_opcion.append(null)
+
+	var relleno := tiempo_barra.get_theme_stylebox("fill")
+	if relleno is StyleBoxFlat:
+		_estilo_tiempo = relleno.duplicate()
+		tiempo_barra.add_theme_stylebox_override("fill", _estilo_tiempo)
+
+
+# Lleva el fondo de un boton a un color. duracion 0 lo cambia de una.
+func _pintar_boton(indice: int, color: Color, duracion: float = 0.18) -> void:
+	if indice < 0 or indice >= _estilos_opcion.size():
+		return
+	var estilo: StyleBoxFlat = _estilos_opcion[indice]
+	if estilo == null:
+		return
+
+	# Un solo tween por boton. Si quedara uno vivo del color anterior,
+	# los dos escribirian el mismo bg_color y el resultado seria erratico.
+	var anterior = _tweens_opcion[indice]
+	if anterior is Tween and anterior.is_valid():
+		anterior.kill()
+	_tweens_opcion[indice] = null
+
+	if duracion <= 0.0:
+		estilo.bg_color = color
+		return
+
+	var t := create_tween()
+	t.tween_property(estilo, "bg_color", color, duracion)
+	_tweens_opcion[indice] = t
+
+
+func _color_tiempo(color: Color) -> void:
+	if _estilo_tiempo:
+		_estilo_tiempo.bg_color = color
+
+
+# Suena despues de una demora SIN bloquear a quien la llama: la fase
+# del juego tiene que cambiar ya, no cuando termine el sonido.
+func _sonar_demorado(reproductor: AudioStreamPlayer, demora: float) -> void:
+	if reproductor == null or reproductor.stream == null:
+		return
+
+	var crono := get_tree().create_timer(demora)
+	crono.timeout.connect(func() -> void:
+		if is_instance_valid(self) and is_instance_valid(reproductor) and esta_activa:
+			Juice.sonar(reproductor)
+	)
 
 
 func _lanzar_particulas(particulas: GPUParticles2D, sobre: Control) -> void:

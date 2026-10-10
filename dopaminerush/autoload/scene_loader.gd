@@ -48,6 +48,18 @@ func cambiar_escena(ruta: String, color := Color.BLACK, duracion := DURACION_DEF
 	await fundir_desde(duracion)
 
 
+# Funde a negro y cambia de escena, pero NO vuelve de la oscuridad: eso
+# queda a cargo de la escena nueva.
+#
+# Lo usa todo lo que lleva a la HABITACION, porque el despertar empieza
+# a oscuras a proposito: tres segundos de negro con el despertador
+# sonando antes de ver nada. Si el que cambia la escena fundiera de
+# vuelta, le pisaria ese negro y la habitacion apareceria de entrada.
+func fundir_y_cambiar(ruta: String, color := Color.BLACK, duracion := DURACION_DEFAULT) -> void:
+	await fundir_a(color, duracion)
+	get_tree().change_scene_to_file(ruta)
+
+
 # Oscurece la pantalla hasta tapar todo.
 func fundir_a(color := Color.BLACK, duracion := DURACION_DEFAULT) -> void:
 	_panel.color = Color(color.r, color.g, color.b, _panel.color.a)

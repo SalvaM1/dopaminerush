@@ -7,81 +7,297 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v2hei"]
 bg_color = Color(0.86466414, 0.14590713, 0, 1)
 
+[sub_resource type="Gradient" id="Grad_fondo"]
+offsets = PackedFloat32Array(0, 0.55, 1)
+colors = PackedColorArray(0.090196, 0.105882, 0.207843, 1, 0.141176, 0.117647, 0.254902, 1, 0.062745, 0.062745, 0.113725, 1)
+
+[sub_resource type="GradientTexture2D" id="Tex_fondo"]
+gradient = SubResource("Grad_fondo")
+width = 16
+height = 256
+fill_to = Vector2(0.35, 1)
+
+[sub_resource type="StyleBoxFlat" id="Style_barra_tareas"]
+bg_color = Color(0.070588, 0.074510, 0.105882, 0.901961)
+border_width_top = 1
+border_color = Color(1, 1, 1, 0.090196)
+
+[sub_resource type="StyleBoxFlat" id="Style_icono"]
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 16.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 0)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+
+[sub_resource type="StyleBoxFlat" id="Style_icono_hover"]
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 16.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 0.117647)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+
+[sub_resource type="StyleBoxFlat" id="Style_icono_pressed"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 6.0
+bg_color = Color(1, 1, 1, 0.188235)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+
+[sub_resource type="StyleBoxFlat" id="Style_bandeja"]
+content_margin_left = 14.0
+content_margin_top = 6.0
+content_margin_right = 14.0
+content_margin_bottom = 6.0
+bg_color = Color(1, 1, 1, 0.047059)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+
+[sub_resource type="StyleBoxFlat" id="Style_bsod"]
+bg_color = Color(0.0117647, 0.278431, 0.619608, 1)
+
+[sub_resource type="StyleBoxFlat" id="Style_btn_bsod"]
+content_margin_left = 30.0
+content_margin_top = 14.0
+content_margin_right = 30.0
+content_margin_bottom = 14.0
+bg_color = Color(1, 1, 1, 0.141176)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 0.639216)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="Style_btn_bsod_hover"]
+content_margin_left = 30.0
+content_margin_top = 14.0
+content_margin_right = 30.0
+content_margin_bottom = 14.0
+bg_color = Color(1, 1, 1, 0.282353)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 0.878431)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
 [node name="Escritorio" type="CanvasLayer" unique_id=18339753]
 script = ExtResource("1_ojo0s")
 
-[node name="Fondo" type="ColorRect" parent="." unique_id=834021830]
+[node name="Fondo" type="TextureRect" parent="." unique_id=834021830]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.4247859, 0.7390818, 0.99999994, 1)
+mouse_filter = 2
+texture = SubResource("Tex_fondo")
+expand_mode = 1
+stretch_mode = 0
 
 [node name="FondoBarra" type="Panel" parent="." unique_id=1843921954]
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -60.0
+offset_top = -64.0
 grow_horizontal = 2
 grow_vertical = 0
+theme_override_styles/panel = SubResource("Style_barra_tareas")
 
 [node name="BarraIconos" type="HBoxContainer" parent="FondoBarra" unique_id=1441179575]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 300.0
+offset_top = 8.0
+offset_right = -300.0
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 8
+alignment = 1
 
 [node name="Icono0" type="Button" parent="FondoBarra/BarraIconos" unique_id=350390448]
 layout_mode = 2
-text = "TikBrainRot"
+focus_mode = 0
+theme_override_colors/font_color = Color(0.878431, 0.894118, 0.941176, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.419608, 0.431373, 0.498039, 1)
+theme_override_font_sizes/font_size = 15
+theme_override_styles/normal = SubResource("Style_icono")
+theme_override_styles/hover = SubResource("Style_icono_hover")
+theme_override_styles/pressed = SubResource("Style_icono_pressed")
+theme_override_styles/disabled = SubResource("Style_icono")
+theme_override_styles/focus = SubResource("Style_icono")
+text = "▶  TikBrainRot"
 
 [node name="Icono1" type="Button" parent="FondoBarra/BarraIconos" unique_id=1782012569]
 modulate = Color(0.34781694, 0.34781697, 0.3478169, 1)
 layout_mode = 2
 disabled = true
-text = "Family Savings™"
+focus_mode = 0
+theme_override_colors/font_color = Color(0.878431, 0.894118, 0.941176, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.419608, 0.431373, 0.498039, 1)
+theme_override_font_sizes/font_size = 15
+theme_override_styles/normal = SubResource("Style_icono")
+theme_override_styles/hover = SubResource("Style_icono_hover")
+theme_override_styles/pressed = SubResource("Style_icono_pressed")
+theme_override_styles/disabled = SubResource("Style_icono")
+theme_override_styles/focus = SubResource("Style_icono")
+text = "🎰  Family Savings"
 
 [node name="Icono2" type="Button" parent="FondoBarra/BarraIconos" unique_id=1858304234]
 modulate = Color(0.34781694, 0.34781697, 0.3478169, 1)
 layout_mode = 2
 disabled = true
-text = "Preguntados"
+focus_mode = 0
+theme_override_colors/font_color = Color(0.878431, 0.894118, 0.941176, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.419608, 0.431373, 0.498039, 1)
+theme_override_font_sizes/font_size = 15
+theme_override_styles/normal = SubResource("Style_icono")
+theme_override_styles/hover = SubResource("Style_icono_hover")
+theme_override_styles/pressed = SubResource("Style_icono_pressed")
+theme_override_styles/disabled = SubResource("Style_icono")
+theme_override_styles/focus = SubResource("Style_icono")
+text = "🦉  Preguntados"
 
 [node name="Icono3" type="Button" parent="FondoBarra/BarraIconos" unique_id=1097811530]
 modulate = Color(0.34781694, 0.34781697, 0.3478169, 1)
 layout_mode = 2
 disabled = true
-text = "Subway Slop"
+focus_mode = 0
+theme_override_colors/font_color = Color(0.878431, 0.894118, 0.941176, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.419608, 0.431373, 0.498039, 1)
+theme_override_font_sizes/font_size = 15
+theme_override_styles/normal = SubResource("Style_icono")
+theme_override_styles/hover = SubResource("Style_icono_hover")
+theme_override_styles/pressed = SubResource("Style_icono_pressed")
+theme_override_styles/disabled = SubResource("Style_icono")
+theme_override_styles/focus = SubResource("Style_icono")
+text = "📺  Subway Slop"
 
 [node name="Icono4" type="Button" parent="FondoBarra/BarraIconos" unique_id=1241516116]
 modulate = Color(0.34781694, 0.34781697, 0.3478169, 1)
 layout_mode = 2
 disabled = true
-text = "Mercado Libre"
+focus_mode = 0
+theme_override_colors/font_color = Color(0.878431, 0.894118, 0.941176, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.419608, 0.431373, 0.498039, 1)
+theme_override_font_sizes/font_size = 15
+theme_override_styles/normal = SubResource("Style_icono")
+theme_override_styles/hover = SubResource("Style_icono_hover")
+theme_override_styles/pressed = SubResource("Style_icono_pressed")
+theme_override_styles/disabled = SubResource("Style_icono")
+theme_override_styles/focus = SubResource("Style_icono")
+text = "🛒  Mercado Libre"
 
 [node name="Icono5" type="Button" parent="FondoBarra/BarraIconos" unique_id=687475042]
 modulate = Color(0.34781694, 0.34781697, 0.3478169, 1)
 layout_mode = 2
 disabled = true
-text = "Loopify"
+focus_mode = 0
+theme_override_colors/font_color = Color(0.878431, 0.894118, 0.941176, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.419608, 0.431373, 0.498039, 1)
+theme_override_font_sizes/font_size = 15
+theme_override_styles/normal = SubResource("Style_icono")
+theme_override_styles/hover = SubResource("Style_icono_hover")
+theme_override_styles/pressed = SubResource("Style_icono_pressed")
+theme_override_styles/disabled = SubResource("Style_icono")
+theme_override_styles/focus = SubResource("Style_icono")
+text = "🎵  Loopify"
 
-[node name="Reloj" type="Label" parent="." unique_id=57387077]
-anchors_preset = 3
+[node name="Bandeja" type="Panel" parent="FondoBarra" unique_id=57387090]
+layout_mode = 1
+anchors_preset = 11
 anchor_left = 1.0
-anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -128.0
-offset_top = -53.0
-offset_right = -8.0
-offset_bottom = -8.0
+offset_left = -236.0
+offset_top = 10.0
+offset_right = -12.0
+offset_bottom = -10.0
 grow_horizontal = 0
-grow_vertical = 0
-theme_override_font_sizes/font_size = 32
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_bandeja")
+
+[node name="Iconos" type="Label" parent="FondoBarra/Bandeja" unique_id=57387091]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 14.0
+offset_top = -11.0
+offset_right = 86.0
+offset_bottom = 11.0
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.729412, 0.756863, 0.835294, 1)
+theme_override_font_sizes/font_size = 15
+text = "▲ ⌁ ◂))"
+vertical_alignment = 1
+
+[node name="Reloj" type="Label" parent="FondoBarra/Bandeja" unique_id=57387077]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -108.0
+offset_right = -14.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.945098, 0.956863, 0.984314, 1)
+theme_override_font_sizes/font_size = 19
+text = "08:00"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Fecha" type="Label" parent="FondoBarra/Bandeja" unique_id=57387078]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -108.0
+offset_top = 11.0
+offset_right = -14.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.635294, 0.662745, 0.749020, 1)
+theme_override_font_sizes/font_size = 12
+text = "lun 3"
+horizontal_alignment = 2
+vertical_alignment = 1
 
 [node name="Ventanas" type="Control" parent="." unique_id=88078910]
 layout_mode = 3
@@ -120,28 +336,139 @@ text = "CUIDADOO, TE ESTAS ABURRIENDO..."
 
 [node name="FinDia" type="Panel" parent="." unique_id=523083545]
 visible = false
-offset_left = 179.0
-offset_top = 60.0
-offset_right = 979.0
-offset_bottom = 560.0
-pivot_offset = Vector2(400, 250)
-theme_override_styles/panel = SubResource("StyleBoxFlat_v2hei")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("Style_bsod")
+
+[node name="Cara" type="Label" parent="FinDia" unique_id=523083546]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 300.0
+offset_top = 160.0
+offset_right = 560.0
+offset_bottom = 350.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 120
+text = ":("
+vertical_alignment = 1
 
 [node name="TextoFin" type="Label" parent="FinDia" unique_id=1471312261]
-layout_mode = 0
-offset_left = 124.0
-offset_top = 103.0
-offset_right = 688.0
-offset_bottom = 244.0
-theme_override_font_sizes/font_size = 50
-text = "Te aburriste...
-Faltaron mas estimulos"
+layout_mode = 1
+anchors_preset = 0
+offset_left = 300.0
+offset_top = 380.0
+offset_right = 1480.0
+offset_bottom = 560.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 40
+text = "Tu día dejó de responder y tuvo que cerrarse.
+No se guardó nada."
+autowrap_mode = 2
+
+[node name="Detalle" type="Label" parent="FinDia" unique_id=1471312262]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 300.0
+offset_top = 600.0
+offset_right = 1480.0
+offset_bottom = 700.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.792157, 0.866667, 0.960784, 1)
+theme_override_font_sizes/font_size = 21
+text = "Código de detención:  ESTIMULO_INSUFICIENTE
+Si querés saber más, podés buscarlo en línea más tarde."
+autowrap_mode = 2
 
 [node name="BotonReiniciar" type="Button" parent="FinDia" unique_id=1761869877]
-layout_mode = 0
-offset_left = 219.0
-offset_top = 332.0
-offset_right = 571.0
-offset_bottom = 420.0
-theme_override_font_sizes/font_size = 25
-text = "Empezar un nuevo dia"
+layout_mode = 1
+anchors_preset = 0
+offset_left = 300.0
+offset_top = 750.0
+offset_right = 700.0
+offset_bottom = 820.0
+focus_mode = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("Style_btn_bsod")
+theme_override_styles/hover = SubResource("Style_btn_bsod_hover")
+theme_override_styles/pressed = SubResource("Style_btn_bsod_hover")
+theme_override_styles/focus = SubResource("Style_btn_bsod")
+text = "Empezar un nuevo día"
+
+[node name="Arranque" type="Control" parent="." unique_id=523083999]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Negro" type="ColorRect" parent="Arranque" unique_id=523084000]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.019608, 0.019608, 0.027451, 1)
+
+[node name="Bios" type="Label" parent="Arranque" unique_id=523084001]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 70.0
+offset_top = 60.0
+offset_right = 1300.0
+offset_bottom = 700.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.666667, 0.717647, 0.784314, 1)
+theme_override_constants/line_spacing = 8
+theme_override_font_sizes/font_size = 20
+text = ""
+
+[node name="Logo" type="Label" parent="Arranque" unique_id=523084002]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -120.0
+offset_right = 400.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.909804, 0.921569, 0.980392, 1)
+theme_override_font_sizes/font_size = 64
+text = "dopamineOS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Estado" type="Label" parent="Arranque" unique_id=523084003]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = 110.0
+offset_right = 400.0
+offset_bottom = 146.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.631373, 0.666667, 0.737255, 1)
+theme_override_font_sizes/font_size = 22
+text = ""
+horizontal_alignment = 1
+vertical_alignment = 1

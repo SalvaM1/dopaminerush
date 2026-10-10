@@ -152,11 +152,21 @@ var drenaje_pausado: bool = false
 # mas lento. Cada app que lo toca tiene que devolverlo a 1.0 al cerrarse.
 var mult_drenaje_externo: float = 1.0
 
-# Y otro para cuando el jugador esta mirando el celular. Va SEPARADO del
-# de arriba a proposito: si los dos escribieran la misma variable, abrir
-# LinkedOut mientras mirás el codigo pisaria el alivio del celular y al
-# terminar la animacion se restauraria el valor equivocado.
-var mult_drenaje_celular: float = 1.0
+# CONGELAR LA BARRA ENTERA. No es lo mismo que drenaje_pausado:
+#
+#   drenaje_pausado  deja de PERDER, pero las apps siguen produciendo.
+#                    Es lo que usa el vape, y ahi esta bien: mientras
+#                    vapeas la barra sube un poco y ese regalito es
+#                    parte de por que vale la pena hacerlo.
+#
+#   dopamina_congelada  no pierde NI gana. La barra queda clavada.
+#
+# El celular necesita la segunda. Con la primera, Subway Slop seguiria
+# goteando mientras mirás el codigo y la barra SUBIRIA sola: mirar el
+# celular pasaria a ser una forma gratis de generar dopamina, y el
+# jugador aprenderia a spamearlo. Clavada, mirar el telefono no da ni
+# quita nada: solo cuesta los segundos que cuesta.
+var dopamina_congelada: bool = false
 
 # Cuanta dopamina esta generando el jugador por segundo. Es el dato que
 # hace falta para balancear: sin esto, ajustar numeros es adivinar.
@@ -178,7 +188,7 @@ func _process(delta: float) -> void:
 		_tiempo_medicion = 0.0
 
 	# Mientras esta pausado no corre nada: ni drenaje, ni rampa, ni ofertas
-	if drenaje_pausado:
+	if drenaje_pausado or dopamina_congelada:
 		return
 
 	_tiempo_total += delta
@@ -235,10 +245,8 @@ func drenaje_actual() -> float:
 	if buff_vape > 0.0:
 		d *= BUFF_VAPE_MULT
 
-	# Y una app abierta puede aliviarlo tambien (LinkedOut), igual que
-	# el rato que pasas mirando el celular (Mercado Libre). Se multiplican
-	# los dos: si pasan a la vez, los dos alivios valen.
-	d *= mult_drenaje_externo * mult_drenaje_celular
+	# Y una app abierta puede aliviarlo tambien (LinkedOut).
+	d *= mult_drenaje_externo
 
 	return d
 
@@ -298,6 +306,12 @@ func sumar_dopamina(cantidad: float, id_app: String = "") -> void:
 	if not activo:
 		return
 
+	# Con la barra congelada tampoco se GANA. Sin esta linea, las apps
+	# que gotean solas -Subway Slop sobre todo- seguirian sumando
+	# mientras el jugador mira el celular, y la barra subiria sola.
+	if dopamina_congelada:
+		return
+
 	var real := cantidad
 	if USAR_TOLERANCIA and id_app != "":
 		real *= _consumir_tolerancia(id_app)
@@ -354,7 +368,7 @@ func reiniciar() -> void:
 	_oferta_pendiente = false
 	drenaje_pausado = false
 	mult_drenaje_externo = 1.0
-	mult_drenaje_celular = 1.0
+	dopamina_congelada = false
 	produccion_por_segundo = 0.0
 	_produccion_acumulada = 0.0
 	_tiempo_medicion = 0.0

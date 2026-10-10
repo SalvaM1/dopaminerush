@@ -21,6 +21,9 @@ REM  PARA REHACER TODOS (si cambias la calidad, por ejemplo): borra todo
 REM  el contenido de assets\video\scroll\ y corre el script.
 REM
 REM  QUE HACE CADA OPCION:
+REM  SIN RECORTE: los clips van enteros, a proposito. (Los canales de
+REM  Subway Slop si se recortan, pero eso lo hace el otro script.)
+REM
 REM    scale=-2:854   baja a 480x854. La ventana mide 400 px de ancho:
 REM                   mas resolucion no se ve y cuesta CPU, porque Godot
 REM                   decodifica video por software.

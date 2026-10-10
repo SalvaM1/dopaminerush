@@ -1,32 +1,152 @@
-[gd_scene format=3 uid="uid://6bjgvwtihnqv"]
+[gd_scene load_steps=8 format=3 uid="uid://6bjgvwtihnqv"]
 
 [ext_resource type="Script" uid="uid://c40uy51kh3e48" path="res://escenas/02_computadora/ventana_app.gd" id="1_30nna"]
 
-[node name="Ventana" type="Panel" unique_id=555937795]
+[sub_resource type="StyleBoxFlat" id="Style_ventana"]
+bg_color = Color(0.117647, 0.117647, 0.133333, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.286275, 0.294118, 0.341176, 1)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
+shadow_color = Color(0, 0, 0, 0.549)
+shadow_size = 22
+shadow_offset = Vector2(0, 10)
+
+[sub_resource type="StyleBoxFlat" id="Style_barra_activa"]
+bg_color = Color(0.180392, 0.184314, 0.211765, 1)
+border_width_bottom = 1
+border_color = Color(0.305882, 0.313726, 0.368627, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+
+[sub_resource type="StyleBoxFlat" id="Style_btn_plano"]
+bg_color = Color(0, 0, 0, 0)
+
+[sub_resource type="StyleBoxFlat" id="Style_btn_hover"]
+bg_color = Color(1, 1, 1, 0.101961)
+corner_radius_top_right = 8
+
+[sub_resource type="StyleBoxFlat" id="Style_cerrar_hover"]
+bg_color = Color(0.768628, 0.168627, 0.109804, 1)
+corner_radius_top_right = 8
+
+[sub_resource type="StyleBoxFlat" id="Style_cerrar_pressed"]
+bg_color = Color(0.882353, 0.321569, 0.270588, 1)
+corner_radius_top_right = 8
+
+[node name="Ventana" type="Panel"]
 offset_right = 400.0
 offset_bottom = 300.0
+theme_override_styles/panel = SubResource("Style_ventana")
 script = ExtResource("1_30nna")
 
-[node name="Layout" type="VBoxContainer" parent="." unique_id=1302931444]
+[node name="Layout" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 0
 
-[node name="BarraTitulo" type="HBoxContainer" parent="Layout" unique_id=1270899479]
+[node name="BarraTitulo" type="Panel" parent="Layout"]
+custom_minimum_size = Vector2(0, 38)
 layout_mode = 2
+theme_override_styles/panel = SubResource("Style_barra_activa")
 
-[node name="Titulo" type="Label" parent="Layout/BarraTitulo" unique_id=532871439]
+[node name="Puntos" type="HBoxContainer" parent="Layout/BarraTitulo"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 13.0
+offset_top = -4.0
+offset_right = 53.0
+offset_bottom = 4.0
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 7
+
+[node name="P1" type="ColorRect" parent="Layout/BarraTitulo/Puntos"]
+custom_minimum_size = Vector2(8, 8)
 layout_mode = 2
-size_flags_horizontal = 3
+mouse_filter = 2
+color = Color(0.937255, 0.411765, 0.364706, 1)
+
+[node name="P2" type="ColorRect" parent="Layout/BarraTitulo/Puntos"]
+custom_minimum_size = Vector2(8, 8)
+layout_mode = 2
+mouse_filter = 2
+color = Color(0.952941, 0.74902, 0.298039, 1)
+
+[node name="P3" type="ColorRect" parent="Layout/BarraTitulo/Puntos"]
+custom_minimum_size = Vector2(8, 8)
+layout_mode = 2
+mouse_filter = 2
+color = Color(0.360784, 0.772549, 0.439216, 1)
+
+[node name="Titulo" type="Label" parent="Layout/BarraTitulo"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 66.0
+offset_right = -120.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.823529, 0.839216, 0.886275, 1)
+theme_override_font_sizes/font_size = 15
 text = "Titulo"
+vertical_alignment = 1
+text_overrun_behavior = 3
 
-[node name="BotonCerrar" type="Button" parent="Layout/BarraTitulo" unique_id=668349457]
-layout_mode = 2
-text = "X"
+[node name="BotonMinimizar" type="Button" parent="Layout/BarraTitulo"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -104.0
+offset_right = -52.0
+grow_horizontal = 0
+grow_vertical = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(0.72549, 0.745098, 0.803922, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 17
+theme_override_styles/normal = SubResource("Style_btn_plano")
+theme_override_styles/hover = SubResource("Style_btn_hover")
+theme_override_styles/pressed = SubResource("Style_btn_hover")
+theme_override_styles/focus = SubResource("Style_btn_plano")
+text = "—"
 
-[node name="Contenido" type="Control" parent="Layout" unique_id=855449481]
+[node name="BotonCerrar" type="Button" parent="Layout/BarraTitulo"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -52.0
+grow_horizontal = 0
+grow_vertical = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(0.843137, 0.858824, 0.901961, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("Style_btn_plano")
+theme_override_styles/hover = SubResource("Style_cerrar_hover")
+theme_override_styles/pressed = SubResource("Style_cerrar_pressed")
+theme_override_styles/focus = SubResource("Style_btn_plano")
+text = "✕"
+
+[node name="Contenido" type="Control" parent="Layout"]
+clip_contents = true
 layout_mode = 2
 size_flags_vertical = 3

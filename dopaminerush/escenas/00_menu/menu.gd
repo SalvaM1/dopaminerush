@@ -20,8 +20,7 @@ func _ready() -> void:
 func _comenzar() -> void:
 	boton_comenzar.disabled = true
 	boton_salir.disabled = true
-	await SceneLoader.fundir_a(Color.BLACK, 1.0)
-	get_tree().change_scene_to_file("res://escenas/01_habitacion/habitacion.tscn")
+	await SceneLoader.fundir_y_cambiar("res://escenas/01_habitacion/habitacion.tscn", Color.BLACK, 1.0)
 
 
 func _salir() -> void:

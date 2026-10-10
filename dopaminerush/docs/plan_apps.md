@@ -64,18 +64,17 @@ Tragamonedas horizontal con palanca vertical.
 
 Ventana chica tipo picture-in-picture, con estética de reproductor de video (barra con logo rojo, buscador falso, título abajo).
 
-**8 canales** de contenido satisfactorio, cada uno con su color y su sonido:
+**6 canales** de contenido satisfactorio, cada uno con su color y su sonido:
 
 | Canal | Color | Canal | Color |
 |---|---|---|---|
-| Slime | Rosa chicle | Prensa hidráulica | Gris industrial |
-| Cuchillo caliente | Naranja | ASMR | Violeta |
+| Slime | Rosa chicle | ASMR | Violeta |
 | Subway Surfers | Azul saturado | Jabón cortado | Pastel |
-| Mukbang | Rojo | Limpieza extrema | Verde agua |
+| Prensa hidráulica | Gris industrial | Limpieza extrema | Verde agua |
 
 **Cada canal tiene su propia FRESCURA.** Mientras lo mirás baja (se quema en ~30 s) y la dopamina es proporcional a ella. **Los canales que no estás mirando se recuperan solos** (~91 s).
 
-Eso convierte la app en un problema de rotación: no es "apretá de nuevo", es *"cuál de los ocho estará recuperado ahora"*.
+Eso convierte la app en un problema de rotación: no es "apretá de nuevo", es *"cuál de los seis estará recuperado ahora"*.
 
 **El gesto:** mantener apretado el botón `SIGUIENTE ⏭` de la barra inferior, que se llena de rojo. El canal nuevo sale **al azar**, así que puede tocar uno ya quemado.
 
@@ -83,7 +82,7 @@ Eso convierte la app en un problema de rotación: no es "apretá de nuevo", es *
 
 **Cómo se entiende el aburrimiento sin una palabra:** el video se apaga. A medida que el canal se quema, su color se desatura y oscurece — el rosa chicle del slime termina en gris sucio. Y el botón late cuando la frescura baja del 35%.
 
-**El medidor** es una tira separada, pegada debajo del reproductor, que dice `ENTRETENIMIENTO`. Solo muestra el canal actual: ver el estado de los ocho mataría la apuesta.
+**El medidor** es una tira separada, pegada debajo del reproductor, que dice `ENTRETENIMIENTO`. Solo muestra el canal actual: ver el estado de los seis mataría la apuesta.
 
 **Es la tolerancia hecha mecánica:** quemás una fuente, deja de darte algo, tenés que dejarla descansar.
 

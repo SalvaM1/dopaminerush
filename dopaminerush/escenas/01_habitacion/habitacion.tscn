@@ -1,14 +1,6 @@
 [gd_scene format=3 uid="uid://ck2c7q06fx04h"]
 
 [ext_resource type="Script" uid="uid://cs3r3dts1fqxg" path="res://escenas/01_habitacion/habitacion.gd" id="1_asbsv"]
-[ext_resource type="PackedScene" path="res://escenas/01_habitacion/objetos/cajon.tscn" id="15_cajon"]
-[ext_resource type="PackedScene" path="res://escenas/01_habitacion/objetos/ropa.tscn" id="16_ropa"]
-[ext_resource type="PackedScene" path="res://escenas/comun/dialogo.tscn" id="11_dialogo"]
-[ext_resource type="PackedScene" path="res://escenas/01_habitacion/objetos/mochila.tscn" id="12_mochila"]
-[ext_resource type="PackedScene" path="res://escenas/01_habitacion/objetos/interruptor.tscn" id="13_interr"]
-[ext_resource type="PackedScene" path="res://escenas/01_habitacion/objetos/libreta.tscn" id="14_libreta"]
-[ext_resource type="PackedScene" path="res://escenas/01_habitacion/indicador_celular.tscn" id="10_indcel"]
-[ext_resource type="PackedScene" path="res://escenas/01_habitacion/telefono.tscn" id="9_telef"]
 [ext_resource type="PackedScene" uid="uid://bb1hqxv1ucvya" path="res://escenas/01_habitacion/jugador.tscn" id="1_omcwt"]
 [ext_resource type="Script" uid="uid://cwk0cvinu70ri" path="res://escenas/01_habitacion/interactuable.gd" id="2_85pyb"]
 [ext_resource type="PackedScene" uid="uid://dwipbhfst0fvj" path="res://escenas/02_computadora/escritorio.tscn" id="3_qplji"]
@@ -16,6 +8,14 @@
 [ext_resource type="PackedScene" path="res://escenas/01_habitacion/vape.tscn" id="6_i1e07"]
 [ext_resource type="PackedScene" path="res://escenas/01_habitacion/indicador_vape.tscn" id="7_lag50"]
 [ext_resource type="PackedScene" uid="uid://dpi5hjtp3womh" path="res://escenas/01_habitacion/habitacion_visual.tscn" id="8_visual"]
+[ext_resource type="PackedScene" path="res://escenas/01_habitacion/telefono.tscn" id="9_telef"]
+[ext_resource type="PackedScene" path="res://escenas/01_habitacion/indicador_celular.tscn" id="10_indcel"]
+[ext_resource type="PackedScene" path="res://escenas/comun/dialogo.tscn" id="11_dialogo"]
+[ext_resource type="PackedScene" path="res://escenas/01_habitacion/objetos/mochila.tscn" id="12_mochila"]
+[ext_resource type="PackedScene" path="res://escenas/01_habitacion/objetos/interruptor.tscn" id="13_interr"]
+[ext_resource type="PackedScene" path="res://escenas/01_habitacion/objetos/libreta.tscn" id="14_libreta"]
+[ext_resource type="PackedScene" path="res://escenas/01_habitacion/objetos/cajon.tscn" id="15_cajon"]
+[ext_resource type="PackedScene" path="res://escenas/01_habitacion/objetos/ropa.tscn" id="16_ropa"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v2hei"]
 albedo_color = Color(0.70019305, 0.5339784, 0, 1)
@@ -75,6 +75,9 @@ size = Vector2(1.1, 0.62)
 [sub_resource type="BoxShape3D" id="BoxShape3D_7j80i"]
 size = Vector3(1.1, 0.62, 0.01)
 
+[sub_resource type="BoxShape3D" id="Forma_cama"]
+size = Vector3(2.42, 0.55, 4.15)
+
 [sub_resource type="StandardMaterial3D" id="DoorMaterial"]
 albedo_color = Color(0.24, 0.105, 0.045, 1)
 roughness = 0.72
@@ -125,9 +128,6 @@ tonemap_white = 6.0
 ssao_enabled = true
 ssao_radius = 0.9
 ssao_intensity = 1.4
-
-[sub_resource type="BoxShape3D" id="Forma_cama"]
-size = Vector3(2.42, 0.55, 4.15)
 
 [node name="Node3D" type="Node3D" unique_id=672041231]
 script = ExtResource("1_asbsv")
@@ -250,35 +250,34 @@ vertical_alignment = 1
 
 [node name="IndicadorCelular" parent="UI" unique_id=771203483 instance=ExtResource("10_indcel")]
 
-[node name="Interactuables" type="Node3D" parent="."]
+[node name="Interactuables" type="Node3D" parent="." unique_id=765237577]
 
-[node name="Mochila" parent="Interactuables" instance=ExtResource("12_mochila")]
-transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -8.66, 3.05, 2.2)
+[node name="Mochila" parent="Interactuables" unique_id=1317894296 instance=ExtResource("12_mochila")]
+transform = Transform3D(0.99998903, 0, 0.0046878126, 0, 1, 0, -0.0046878126, 0, 0.99998903, -1.8758268, 3.05, 9.915356)
 
-[node name="Interruptor" parent="Interactuables" instance=ExtResource("13_interr")]
+[node name="Interruptor" parent="Interactuables" unique_id=826103554 instance=ExtResource("13_interr")]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 1.35, 3.15, 10.06)
 
-[node name="Cajon" parent="Interactuables" instance=ExtResource("15_cajon")]
+[node name="Cajon" parent="Interactuables" unique_id=38830249 instance=ExtResource("15_cajon")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 1.47, -2.63)
 
-[node name="Libreta" parent="Interactuables/Cajon" instance=ExtResource("14_libreta")]
+[node name="Libreta" parent="Interactuables/Cajon" unique_id=1970958638 instance=ExtResource("14_libreta")]
 transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, -0.1, -0.24)
 visible = false
-texto_interaccion = "Leer la libreta"
 activo = false
 
-[node name="Cama" type="StaticBody3D" parent="Interactuables"]
+[node name="Cama" type="StaticBody3D" parent="Interactuables" unique_id=1440025014]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.2, 1.47, -2.9)
 script = ExtResource("2_85pyb")
 texto_interaccion = "Mirar la cama"
 
-[node name="Colision" type="CollisionShape3D" parent="Interactuables/Cama"]
+[node name="Colision" type="CollisionShape3D" parent="Interactuables/Cama" unique_id=2076526669]
 shape = SubResource("Forma_cama")
 
-[node name="Ropa" parent="Interactuables" instance=ExtResource("16_ropa")]
+[node name="Ropa" parent="Interactuables" unique_id=1670774512 instance=ExtResource("16_ropa")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.2, 1.18, 1.95)
 
-[node name="Dialogo" parent="." instance=ExtResource("11_dialogo")]
+[node name="Dialogo" parent="." unique_id=1544768062 instance=ExtResource("11_dialogo")]
 
 [node name="Puerta" type="StaticBody3D" parent="." unique_id=1225415880]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5945108, 10.007773)

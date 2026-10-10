@@ -92,15 +92,23 @@ const TELEFONO_IDA: float = 0.55       # girar y agarrar el telefono
 const TELEFONO_LECTURA: float = 1.95   # el telefono quieto frente a vos
 const TELEFONO_VUELTA: float = 0.5     # dejarlo y volver a la pantalla
 
-# Mientras mirás el codigo el drenaje corre al 60%. No se congela como
-# con el vape -el tramite tiene que doler- pero perder la partida por
-# una animacion que no podes cortar seria injusto, no tenso.
-const TELEFONO_ALIVIO: float = 0.6
+# Mientras mirás el codigo la barra queda CONGELADA: no baja ni sube.
+# Perder la partida durante una animacion que no podes cortar seria
+# injusto, pero dejar solo de perder tampoco servia: las apps que gotean
+# solas habrian hecho subir la barra, y mirar el celular se habria
+# convertido en una forma gratis de generar dopamina.
+#
+# Clavada, el tramite no da ni quita: solo cuesta los segundos que
+# cuesta, que es exactamente lo que tiene que costar.
 const TELEFONO_SUBE: float = 0.35      # el temblor de aviso sobre la mesa
 const TELEFONO_ALTURA: float = 0.06
 
 # Donde queda el telefono respecto de la camara cuando lo levantas.
-const TELEFONO_EN_MANO := Vector3(0.045, -0.035, -0.26)
+# A la IZQUIERDA del centro de la camara (la x negativa), para que no
+# quede tapando el monitor: el jugador tiene que poder leer el codigo y
+# ver la pantalla al mismo tiempo, igual que cuando mirás el celular al
+# costado del teclado.
+const TELEFONO_EN_MANO := Vector3(-0.105, -0.045, -0.235)
 
 # El telefono NO avisa una sola vez: insiste cada TELEFONO_REPIQUE
 # segundos hasta que lo mirás. Un unico aviso se pierde entre seis
@@ -464,6 +472,13 @@ func _sentarse() -> void:
 	escritorio.show()
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	_habilitar_exploracion(false)
+
+	# LA COMPUTADORA ARRANCA. Hasta que termine el encendido el drenaje
+	# no corre: esos segundos son gratis a proposito, el juego todavia
+	# no empezo. Sentarse y que el escritorio YA ESTE ahi se siente como
+	# abrir un menu; verlo prenderse se siente como una maquina.
+	await escritorio.arrancar()
+
 	GameManager.iniciar_sesion_pc()
 
 
@@ -472,9 +487,9 @@ func _sentarse() -> void:
 # ============================================================
 
 func _al_colapsar() -> void:
-	# Si la partida termina en plena animacion del celular, el alivio de
-	# drenaje quedaria puesto para siempre.
-	GameManager.mult_drenaje_celular = 1.0
+	# Si la partida termina en plena animacion del celular, la barra
+	# quedaria congelada para siempre.
+	GameManager.dopamina_congelada = false
 	_telefono_activo = false
 	_encender_telefono(false, true)
 
@@ -1197,10 +1212,7 @@ func _mirar_telefono() -> void:
 	_codigo_visto = true
 	indicador_celular.hide()
 
-	# El drenaje baja al 60% durante toda la secuencia. Son 3 segundos en
-	# los que el jugador no puede tocar nada: cobrarselos enteros cuando
-	# la app lo obligo a mirar el telefono se siente injusto.
-	GameManager.mult_drenaje_celular = TELEFONO_ALIVIO
+	GameManager.dopamina_congelada = true
 
 	var camara: Camera3D = jugador.camara
 	var destino := jugador.global_transform.affine_inverse() * punto_telefono.global_transform
@@ -1239,7 +1251,7 @@ func _mirar_telefono() -> void:
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	await t2.finished
 
-	GameManager.mult_drenaje_celular = 1.0
+	GameManager.dopamina_congelada = false
 	_mirando_telefono = false
 
 

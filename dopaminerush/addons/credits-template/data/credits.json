@@ -47,7 +47,7 @@
 		},
 		{
 			"type": "space",
-			"height": 100.0
+			"height": 30
 		},
 		{
 			"type": "category",
@@ -62,18 +62,36 @@
 		},
 		{
 			"type": "space",
-			"height": 100.0
+			"height": 30
 		},
 		{
 			"type": "category",
-			"text": "Image Not Found Author"
+			"text": "Narrativa"
 		},
 		{
 			"type": "actor",
 			"actors": [
-				"Jordan Irwin (AntumDeluge)",
-				"From: https://opengameart.org/content/failsafe-image"
+				"Ignacio Oviedo",
+				"Manuel Martinez",
 			]
-		}
+		},
+		{
+			"type": "space",
+			"height": 30
+		},
+		{
+			"type": "category",
+			"text": "Programación"
+		},
+		{
+			"type": "actor",
+			"actors": [
+				"Salvador Matos",
+			]
+		},
+		{
+			"type": "space",
+			"height": 30
+		},
 	]
 }

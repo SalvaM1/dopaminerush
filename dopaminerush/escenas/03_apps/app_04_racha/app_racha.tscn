@@ -2,143 +2,195 @@
 
 [ext_resource type="Script" uid="uid://c0usb3vikqf8d" path="res://escenas/03_apps/app_04_racha/app_racha.gd" id="1_racha"]
 
-[sub_resource type="StyleBoxFlat" id="Style_fondo"]
-bg_color = Color(0.105882, 0.133333, 0.2, 1)
+[sub_resource type="Gradient" id="Grad_fondo"]
+offsets = PackedFloat32Array(0, 1)
+colors = PackedColorArray(0.109804, 0.133333, 0.223529, 1, 0.0470588, 0.054902, 0.105882, 1)
+
+[sub_resource type="GradientTexture2D" id="Tex_fondo"]
+gradient = SubResource("Grad_fondo")
+width = 32
+height = 256
+fill_to = Vector2(0, 1)
 
 [sub_resource type="StyleBoxFlat" id="Style_barra_sup"]
-bg_color = Color(0.0784314, 0.101961, 0.156863, 1)
-corner_radius_bottom_right = 18
-corner_radius_bottom_left = 18
-shadow_color = Color(0, 0, 0, 0.35)
-shadow_size = 8
+bg_color = Color(0.0627451, 0.0784314, 0.137255, 0.92)
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.45)
+shadow_size = 10
 shadow_offset = Vector2(0, 3)
 
 [sub_resource type="StyleBoxFlat" id="Style_racha_fondo"]
-bg_color = Color(0.164706, 0.2, 0.290196, 1)
-corner_radius_top_left = 11
-corner_radius_top_right = 11
-corner_radius_bottom_right = 11
-corner_radius_bottom_left = 11
+bg_color = Color(0.164706, 0.196078, 0.286275, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
 
 [sub_resource type="StyleBoxFlat" id="Style_racha_fill"]
+bg_color = Color(1, 0.670588, 0.219608, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+
+[sub_resource type="StyleBoxFlat" id="Style_pill_mult"]
+bg_color = Color(0.141176, 0.172549, 0.254902, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.670588, 0.219608, 0.55)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="Style_tarjeta"]
+bg_color = Color(0.141176, 0.172549, 0.266667, 0.95)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.4)
+shadow_size = 10
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="Style_tiempo_fondo"]
+bg_color = Color(0.113725, 0.137255, 0.215686, 1)
+corner_radius_top_left = 11
+corner_radius_top_right = 11
+corner_radius_bottom_right = 11
+corner_radius_bottom_left = 11
+
+[sub_resource type="StyleBoxFlat" id="Style_tiempo_fill"]
 bg_color = Color(0.301961, 0.831373, 0.415686, 1)
 corner_radius_top_left = 11
 corner_radius_top_right = 11
 corner_radius_bottom_right = 11
 corner_radius_bottom_left = 11
 
-[sub_resource type="StyleBoxFlat" id="Style_tiempo_fondo"]
-bg_color = Color(0.164706, 0.2, 0.290196, 1)
-corner_radius_top_left = 7
-corner_radius_top_right = 7
-corner_radius_bottom_right = 7
-corner_radius_bottom_left = 7
+[sub_resource type="StyleBoxFlat" id="Style_opcion_a"]
+content_margin_left = 56.0
+content_margin_right = 12.0
+bg_color = Color(0.203922, 0.454902, 0.898039, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0, 0, 0, 0.35)
+shadow_size = 6
+shadow_offset = Vector2(0, 3)
 
-[sub_resource type="StyleBoxFlat" id="Style_tiempo_fill"]
-bg_color = Color(1, 0.760784, 0.301961, 1)
-corner_radius_top_left = 7
-corner_radius_top_right = 7
-corner_radius_bottom_right = 7
-corner_radius_bottom_left = 7
+[sub_resource type="StyleBoxFlat" id="Style_opcion_b"]
+content_margin_left = 56.0
+content_margin_right = 12.0
+bg_color = Color(0.498039, 0.321569, 0.898039, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0, 0, 0, 0.35)
+shadow_size = 6
+shadow_offset = Vector2(0, 3)
 
-[sub_resource type="StyleBoxFlat" id="Style_btn_normal"]
-content_margin_left = 14.0
-content_margin_top = 10.0
-content_margin_right = 14.0
-content_margin_bottom = 14.0
-bg_color = Color(0.164706, 0.203922, 0.301961, 1)
-border_width_bottom = 6
-border_color = Color(0.0862745, 0.109804, 0.176471, 1)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
+[sub_resource type="StyleBoxFlat" id="Style_opcion_c"]
+content_margin_left = 56.0
+content_margin_right = 12.0
+bg_color = Color(0.839216, 0.478431, 0.054902, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0, 0, 0, 0.35)
+shadow_size = 6
+shadow_offset = Vector2(0, 3)
 
-[sub_resource type="StyleBoxFlat" id="Style_btn_pressed"]
-content_margin_left = 14.0
-content_margin_top = 15.0
-content_margin_right = 14.0
-content_margin_bottom = 9.0
-bg_color = Color(0.164706, 0.203922, 0.301961, 1)
-border_width_bottom = 1
-border_color = Color(0.0862745, 0.109804, 0.176471, 1)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
+[sub_resource type="StyleBoxFlat" id="Style_opcion_d"]
+content_margin_left = 56.0
+content_margin_right = 12.0
+bg_color = Color(0.0352941, 0.607843, 0.705882, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0, 0, 0, 0.35)
+shadow_size = 6
+shadow_offset = Vector2(0, 3)
 
-[sub_resource type="StyleBoxFlat" id="Style_btn_hover"]
-content_margin_left = 14.0
-content_margin_top = 10.0
-content_margin_right = 14.0
-content_margin_bottom = 14.0
-bg_color = Color(0.223529, 0.278431, 0.415686, 1)
-border_width_bottom = 6
-border_color = Color(0.113725, 0.145098, 0.223529, 1)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
+[sub_resource type="StyleBoxFlat" id="Style_insignia"]
+bg_color = Color(1, 1, 1, 0.22)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxFlat" id="Style_alerta"]
-bg_color = Color(1, 0.65, 0.2, 0)
-border_width_left = 6
-border_width_top = 6
-border_width_right = 6
-border_width_bottom = 6
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
 border_color = Color(1, 0.65, 0.2, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="Style_resultado"]
+bg_color = Color(0.0470588, 0.054902, 0.105882, 0.9)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.5)
+shadow_size = 12
+
+[sub_resource type="StyleBoxFlat" id="Style_logo"]
+bg_color = Color(1, 0.670588, 0.219608, 1)
+corner_radius_top_left = 22
+corner_radius_top_right = 22
+corner_radius_bottom_right = 22
+corner_radius_bottom_left = 22
+shadow_color = Color(0.498039, 0.286275, 0.0470588, 0.6)
+shadow_size = 0
+shadow_offset = Vector2(0, 6)
 
 [sub_resource type="StyleBoxFlat" id="Style_bienvenida"]
-bg_color = Color(0.0627451, 0.0784314, 0.117647, 0.980392)
+bg_color = Color(0.0745098, 0.0941176, 0.164706, 1)
 
 [sub_resource type="StyleBoxFlat" id="Style_btn_ok_normal"]
-content_margin_left = 16.0
-content_margin_top = 10.0
-content_margin_right = 16.0
-content_margin_bottom = 16.0
-bg_color = Color(0.301961, 0.831373, 0.415686, 1)
-border_width_bottom = 6
-border_color = Color(0.164706, 0.588235, 0.258824, 1)
+bg_color = Color(0.254902, 0.780392, 0.4, 1)
 corner_radius_top_left = 16
 corner_radius_top_right = 16
 corner_radius_bottom_right = 16
 corner_radius_bottom_left = 16
-
-[sub_resource type="StyleBoxFlat" id="Style_btn_ok_pressed"]
-content_margin_left = 16.0
-content_margin_top = 16.0
-content_margin_right = 16.0
-content_margin_bottom = 10.0
-bg_color = Color(0.301961, 0.831373, 0.415686, 1)
-border_width_bottom = 1
-border_color = Color(0.164706, 0.588235, 0.258824, 1)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
+shadow_color = Color(0.113725, 0.396078, 0.2, 1)
+shadow_size = 0
+shadow_offset = Vector2(0, 5)
 
 [sub_resource type="StyleBoxFlat" id="Style_btn_ok_hover"]
-content_margin_left = 16.0
-content_margin_top = 10.0
-content_margin_right = 16.0
-content_margin_bottom = 16.0
-bg_color = Color(0.360784, 0.898039, 0.478431, 1)
-border_width_bottom = 6
-border_color = Color(0.164706, 0.588235, 0.258824, 1)
+bg_color = Color(0.317647, 0.858824, 0.470588, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0.113725, 0.396078, 0.2, 1)
+shadow_size = 0
+shadow_offset = Vector2(0, 5)
+
+[sub_resource type="StyleBoxFlat" id="Style_btn_ok_pressed"]
+bg_color = Color(0.2, 0.654902, 0.329412, 1)
 corner_radius_top_left = 16
 corner_radius_top_right = 16
 corner_radius_bottom_right = 16
 corner_radius_bottom_left = 16
 
-[node name="AppRacha" type="Control" unique_id=1137741779]
+[node name="AppRacha" type="Control"]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 700.0
-offset_bottom = 450.0
+offset_bottom = 412.0
 script = ExtResource("1_racha")
 id_app = "racha"
 nombre_app = "Preguntados"
@@ -146,7 +198,7 @@ tamano_ventana = Vector2(700, 450)
 posicion_ventana = Vector2(1120, 580)
 dopamina_por_interaccion = 20.0
 
-[node name="Fondo" type="Panel" parent="." unique_id=1288596802]
+[node name="Fondo" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -154,228 +206,378 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme_override_styles/panel = SubResource("Style_fondo")
+texture = SubResource("Tex_fondo")
+expand_mode = 1
 
-[node name="BarraSuperior" type="Panel" parent="." unique_id=892665799]
+[node name="BarraSuperior" type="Panel" parent="."]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 72.0
+offset_bottom = 58.0
 grow_horizontal = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("Style_barra_sup")
 
-[node name="Dias" type="Label" parent="BarraSuperior" unique_id=272758719]
+[node name="Dias" type="Label" parent="BarraSuperior"]
 layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_left = 24.0
-offset_top = 8.0
-offset_right = -200.0
-offset_bottom = 28.0
-grow_horizontal = 2
-theme_override_colors/font_color = Color(0.501961, 0.556863, 0.65098, 1)
-theme_override_font_sizes/font_size = 13
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 16.0
+offset_top = -20.0
+offset_right = 206.0
+offset_bottom = -2.0
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.74, 0.8, 0.88, 1)
+theme_override_font_sizes/font_size = 15
 text = "0 días de racha"
+vertical_alignment = 1
 
-[node name="BarraRacha" type="ProgressBar" parent="BarraSuperior" unique_id=1747124867]
+[node name="BarraRacha" type="ProgressBar" parent="BarraSuperior"]
 layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_left = 24.0
-offset_top = 34.0
-offset_right = -200.0
-offset_bottom = 56.0
-grow_horizontal = 2
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 16.0
+offset_top = 1.0
+offset_right = 206.0
+offset_bottom = 15.0
+grow_vertical = 2
+mouse_filter = 2
 theme_override_styles/background = SubResource("Style_racha_fondo")
 theme_override_styles/fill = SubResource("Style_racha_fill")
 max_value = 10.0
+value = 0.0
 show_percentage = false
 
-[node name="Fuego" type="GPUParticles2D" parent="BarraSuperior" unique_id=1523994087]
-position = Vector2(260, 40)
+[node name="Fuego" type="GPUParticles2D" parent="BarraSuperior"]
+position = Vector2(216, 29)
 emitting = false
+amount = 24
 
-[node name="Multiplicador" type="Label" parent="BarraSuperior" unique_id=1995061571]
+[node name="Multiplicador" type="Label" parent="BarraSuperior"]
 layout_mode = 1
-anchors_preset = 11
+anchors_preset = 6
 anchor_left = 1.0
+anchor_top = 0.5
 anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -184.0
-offset_top = 6.0
-offset_right = -22.0
-offset_bottom = -10.0
+anchor_bottom = 0.5
+offset_left = -104.0
+offset_top = -17.0
+offset_right = -14.0
+offset_bottom = 17.0
 grow_horizontal = 0
 grow_vertical = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 34
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 0.843137, 0.411765, 1)
+theme_override_font_sizes/font_size = 21
+theme_override_styles/normal = SubResource("Style_pill_mult")
 text = "1.0x"
-horizontal_alignment = 2
+horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Pregunta" type="Label" parent="." unique_id=793524377]
+[node name="TarjetaPregunta" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 16.0
+offset_top = 70.0
+offset_right = -16.0
+offset_bottom = 166.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_tarjeta")
+
+[node name="Pregunta" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_left = 34.0
-offset_top = 86.0
+offset_top = 74.0
 offset_right = -34.0
-offset_bottom = 152.0
+offset_bottom = 162.0
 grow_horizontal = 2
-theme_override_colors/font_color = Color(0.964706, 0.976471, 1, 1)
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.968627, 0.976471, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.5)
+theme_override_constants/shadow_offset_y = 2
 theme_override_font_sizes/font_size = 25
-text = "Pregunta"
+text = "¿Pregunta?"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="TiempoBarra" type="ProgressBar" parent="." unique_id=1874788898]
+[node name="TiempoBarra" type="ProgressBar" parent="."]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_left = 34.0
-offset_top = 158.0
-offset_right = -34.0
-offset_bottom = 172.0
+offset_left = 16.0
+offset_top = 176.0
+offset_right = -16.0
+offset_bottom = 198.0
 grow_horizontal = 2
+mouse_filter = 2
 theme_override_styles/background = SubResource("Style_tiempo_fondo")
 theme_override_styles/fill = SubResource("Style_tiempo_fill")
+max_value = 100.0
 value = 100.0
 show_percentage = false
 
-[node name="TiempoTexto" type="Label" parent="." unique_id=1473488432]
+[node name="TiempoTexto" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_left = 34.0
-offset_top = 174.0
-offset_right = -34.0
-offset_bottom = 196.0
+offset_left = 16.0
+offset_top = 176.0
+offset_right = -16.0
+offset_bottom = 198.0
 grow_horizontal = 2
-theme_override_colors/font_color = Color(1, 0.760784, 0.301961, 1)
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.7)
+theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 15
 text = "15.0 s"
 horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="Opciones" type="GridContainer" parent="." unique_id=1659260226]
+[node name="Opciones" type="GridContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 34.0
-offset_top = 204.0
-offset_right = -34.0
-offset_bottom = -22.0
+offset_left = 16.0
+offset_top = 208.0
+offset_right = -16.0
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/h_separation = 18
-theme_override_constants/v_separation = 18
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 10
 columns = 2
 
-[node name="Opcion0" type="Button" parent="Opciones" unique_id=1065573525]
+[node name="Opcion0" type="Button" parent="Opciones"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_colors/font_color = Color(0.937255, 0.956863, 1, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 20
-theme_override_styles/normal = SubResource("Style_btn_normal")
-theme_override_styles/pressed = SubResource("Style_btn_pressed")
-theme_override_styles/hover = SubResource("Style_btn_hover")
-theme_override_styles/disabled = SubResource("Style_btn_normal")
-text = "Opción 1"
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.45)
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 19
+theme_override_styles/normal = SubResource("Style_opcion_a")
+text = "Opción A"
+alignment = 0
 autowrap_mode = 2
 
-[node name="Opcion1" type="Button" parent="Opciones" unique_id=2096428089]
+[node name="Insignia" type="Panel" parent="Opciones/Opcion0"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 13.0
+offset_top = -17.0
+offset_right = 47.0
+offset_bottom = 17.0
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_insignia")
+
+[node name="Letra" type="Label" parent="Opciones/Opcion0/Insignia"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.95)
+theme_override_font_sizes/font_size = 19
+text = "A"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Opcion1" type="Button" parent="Opciones"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_colors/font_color = Color(0.937255, 0.956863, 1, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 20
-theme_override_styles/normal = SubResource("Style_btn_normal")
-theme_override_styles/pressed = SubResource("Style_btn_pressed")
-theme_override_styles/hover = SubResource("Style_btn_hover")
-theme_override_styles/disabled = SubResource("Style_btn_normal")
-text = "Opción 2"
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.45)
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 19
+theme_override_styles/normal = SubResource("Style_opcion_b")
+text = "Opción B"
+alignment = 0
 autowrap_mode = 2
 
-[node name="Opcion2" type="Button" parent="Opciones" unique_id=1785626483]
+[node name="Insignia" type="Panel" parent="Opciones/Opcion1"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 13.0
+offset_top = -17.0
+offset_right = 47.0
+offset_bottom = 17.0
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_insignia")
+
+[node name="Letra" type="Label" parent="Opciones/Opcion1/Insignia"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.95)
+theme_override_font_sizes/font_size = 19
+text = "B"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Opcion2" type="Button" parent="Opciones"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_colors/font_color = Color(0.937255, 0.956863, 1, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 20
-theme_override_styles/normal = SubResource("Style_btn_normal")
-theme_override_styles/pressed = SubResource("Style_btn_pressed")
-theme_override_styles/hover = SubResource("Style_btn_hover")
-theme_override_styles/disabled = SubResource("Style_btn_normal")
-text = "Opción 3"
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.45)
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 19
+theme_override_styles/normal = SubResource("Style_opcion_c")
+text = "Opción C"
+alignment = 0
 autowrap_mode = 2
 
-[node name="Opcion3" type="Button" parent="Opciones" unique_id=1713134945]
+[node name="Insignia" type="Panel" parent="Opciones/Opcion2"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 13.0
+offset_top = -17.0
+offset_right = 47.0
+offset_bottom = 17.0
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_insignia")
+
+[node name="Letra" type="Label" parent="Opciones/Opcion2/Insignia"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.95)
+theme_override_font_sizes/font_size = 19
+text = "C"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Opcion3" type="Button" parent="Opciones"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_colors/font_color = Color(0.937255, 0.956863, 1, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 20
-theme_override_styles/normal = SubResource("Style_btn_normal")
-theme_override_styles/pressed = SubResource("Style_btn_pressed")
-theme_override_styles/hover = SubResource("Style_btn_hover")
-theme_override_styles/disabled = SubResource("Style_btn_normal")
-text = "Opción 4"
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.45)
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 19
+theme_override_styles/normal = SubResource("Style_opcion_d")
+text = "Opción D"
+alignment = 0
 autowrap_mode = 2
 
-[node name="Resultado" type="Label" parent="." unique_id=1910934915]
-visible = false
+[node name="Insignia" type="Panel" parent="Opciones/Opcion3"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 13.0
+offset_top = -17.0
+offset_right = 47.0
+offset_bottom = 17.0
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_insignia")
+
+[node name="Letra" type="Label" parent="Opciones/Opcion3/Insignia"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.95)
+theme_override_font_sizes/font_size = 19
+text = "D"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Resultado" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 60.0
+offset_top = 78.0
+offset_right = -60.0
+offset_bottom = 158.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.6)
+theme_override_constants/shadow_offset_y = 3
+theme_override_font_sizes/font_size = 34
+theme_override_styles/normal = SubResource("Style_resultado")
+text = "¡Muy bien!"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Espera" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -330.0
-offset_top = -44.0
-offset_right = 330.0
-offset_bottom = 44.0
+offset_left = -200.0
+offset_top = 10.0
+offset_right = 200.0
+offset_bottom = 60.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 36
-text = "¡Increíble!"
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 2
-
-[node name="Espera" type="Label" parent="." unique_id=307679806]
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -330.0
-offset_top = -32.0
-offset_right = 330.0
-offset_bottom = 32.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.552941, 0.603922, 0.694118, 1)
-theme_override_font_sizes/font_size = 26
-text = "Siguiente pregunta en: 10"
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.682353, 0.729412, 0.839216, 1)
+theme_override_font_sizes/font_size = 20
+text = "Siguiente pregunta en: 5"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Chispas" type="GPUParticles2D" parent="." unique_id=1489294921]
+[node name="Chispas" type="GPUParticles2D" parent="."]
 emitting = false
+amount = 14
 
-[node name="Confeti" type="GPUParticles2D" parent="." unique_id=1293785123]
+[node name="Confeti" type="GPUParticles2D" parent="."]
 emitting = false
+amount = 32
 
-[node name="Alerta" type="Panel" parent="." unique_id=739303144]
+[node name="Alerta" type="Panel" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -385,7 +587,7 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("Style_alerta")
 
-[node name="Bienvenida" type="Panel" parent="." unique_id=1987885709]
+[node name="Bienvenida" type="Panel" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -394,70 +596,114 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("Style_bienvenida")
 
-[node name="TextoBienvenida" type="Label" parent="Bienvenida" unique_id=976206666]
+[node name="Logo" type="Panel" parent="Bienvenida"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 0.0
+anchor_right = 0.5
+anchor_bottom = 0.0
+offset_left = -40.0
+offset_top = 26.0
+offset_right = 40.0
+offset_bottom = 106.0
+grow_horizontal = 2
+grow_vertical = 1
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_logo")
+
+[node name="Signo" type="Label" parent="Bienvenida/Logo"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.231373, 0.145098, 0.027451, 1)
+theme_override_font_sizes/font_size = 52
+text = "?"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Titulo" type="Label" parent="Bienvenida"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_left = 55.0
-offset_top = 80.0
-offset_right = -55.0
-offset_bottom = 240.0
+offset_top = 114.0
+offset_bottom = 162.0
 grow_horizontal = 2
-theme_override_colors/font_color = Color(0.964706, 0.976471, 1, 1)
-theme_override_font_sizes/font_size = 28
-text = "¡Respondé preguntas de cultura general y ganá!
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 0.843137, 0.411765, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.5)
+theme_override_constants/shadow_offset_y = 3
+theme_override_font_sizes/font_size = 40
+text = "Preguntados"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-Mantené tu racha para multiplicar tus recompensas."
+[node name="TextoBienvenida" type="Label" parent="Bienvenida"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 70.0
+offset_top = 172.0
+offset_right = -70.0
+offset_bottom = 238.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.772549, 0.811765, 0.886275, 1)
+theme_override_font_sizes/font_size = 19
+text = "Respondé bien y sumá racha.
+Cuanta más racha, más te llevás."
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="BotonOk" type="Button" parent="Bienvenida" unique_id=186081218]
+[node name="BotonOk" type="Button" parent="Bienvenida"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -110.0
-offset_top = -120.0
-offset_right = 110.0
-offset_bottom = -50.0
+offset_left = -130.0
+offset_top = -112.0
+offset_right = 130.0
+offset_bottom = -44.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_colors/font_color = Color(0.0627451, 0.0784314, 0.117647, 1)
-theme_override_colors/font_hover_color = Color(0.0627451, 0.0784314, 0.117647, 1)
+theme_override_colors/font_color = Color(0.0588235, 0.172549, 0.0941176, 1)
+theme_override_colors/font_hover_color = Color(0.0588235, 0.172549, 0.0941176, 1)
+theme_override_colors/font_pressed_color = Color(0.0588235, 0.172549, 0.0941176, 1)
 theme_override_font_sizes/font_size = 26
 theme_override_styles/normal = SubResource("Style_btn_ok_normal")
 theme_override_styles/pressed = SubResource("Style_btn_ok_pressed")
 theme_override_styles/hover = SubResource("Style_btn_ok_hover")
 text = "¡EMPEZAR!"
 
-[node name="Sonidos" type="Node" parent="." unique_id=1684948751]
+[node name="Sonidos" type="Node" parent="."]
 
-[node name="Pregunta" type="AudioStreamPlayer" parent="Sonidos" unique_id=119957698]
-bus = &"UI"
+[node name="Pregunta" type="AudioStreamPlayer" parent="Sonidos"]
+bus = &"Apps"
 
-[node name="Acierto" type="AudioStreamPlayer" parent="Sonidos" unique_id=601124001]
-bus = &"UI"
+[node name="Acierto" type="AudioStreamPlayer" parent="Sonidos"]
+bus = &"Apps"
 
-[node name="Error" type="AudioStreamPlayer" parent="Sonidos" unique_id=1253563097]
-bus = &"UI"
+[node name="Error" type="AudioStreamPlayer" parent="Sonidos"]
+bus = &"Apps"
 
-[node name="RachaRota" type="AudioStreamPlayer" parent="Sonidos" unique_id=1333062036]
-bus = &"UI"
+[node name="RachaRota" type="AudioStreamPlayer" parent="Sonidos"]
+bus = &"Apps"
 
-[node name="Hito" type="AudioStreamPlayer" parent="Sonidos" unique_id=1251347812]
-bus = &"UI"
+[node name="Hito" type="AudioStreamPlayer" parent="Sonidos"]
+bus = &"Apps"
 
-[node name="Hover" type="AudioStreamPlayer" parent="Sonidos" unique_id=2071301847]
-volume_db = -12.0
-bus = &"UI"
+[node name="Hover" type="AudioStreamPlayer" parent="Sonidos"]
+bus = &"Apps"
 
-[node name="Click" type="AudioStreamPlayer" parent="Sonidos" unique_id=1575742516]
-volume_db = -6.0
-bus = &"UI"
+[node name="Click" type="AudioStreamPlayer" parent="Sonidos"]
+bus = &"Apps"
 
-[node name="Tic" type="AudioStreamPlayer" parent="Sonidos" unique_id=1492821415]
-volume_db = -9.0
-bus = &"UI"
+[node name="Tic" type="AudioStreamPlayer" parent="Sonidos"]
+bus = &"Apps"

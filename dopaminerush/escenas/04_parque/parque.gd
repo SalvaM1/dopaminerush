@@ -7,22 +7,51 @@ extends Node3D
 # Es la resolucion de la obra. Todo el juego existe para que este
 # momento contraste.
 #
-# REGLA QUE NO SE ROMPE: aca no hay nada que hacer. Sin barra, sin
-# objetivos, sin coleccionables. La unica accion posible es sentarse
-# en el banco, y despues de un rato, respirar.
+# REGLA QUE NO SE ROMPE: aca no hay nada que HACER. Sin objetivos, sin
+# coleccionables, sin nada que apretar. La unica accion posible es
+# sentarse en el banco, y despues de un rato, respirar.
+#
+# LA BARRA DE DOPAMINA SI ESTA, Y ES LA MISMA DEL ESCRITORIO.
+# Llegas con ella en CERO y sube sola, lentisima, mientras caminas sin
+# hacer nada. Es el unico lugar del juego donde sube sin que toques
+# nada: ninguna app, ningun gesto, ninguna recompensa variable. Solo
+# estar afuera.
+#
+# Que sea la MISMA barra es lo importante. Durante toda la partida fue
+# el medidor de cuanto te queda antes de caerte; aca, sin cambiar de
+# forma ni de color, pasa a medir cuanto te vas recuperando. El juego no
+# necesita decirlo: lo dice la barra que ya aprendiste a leer.
 #
 # FLUJO:
-#   1. El jugador camina libre. El banco dice "Descansar".
-#   2. Al usarlo, la camara viaja al banco. Se puede mirar alrededor,
-#      pero no caminar. Nada mas responde.
-#   3. Despues de ESPERA_RESPIRAR segundos, aparece el cartel de
-#      respirar. No antes: hay que quedarse sentado un rato primero.
-#   4. Al respirar: sonido de suspiro, fundido a negro, creditos.
+#   1. Llegas con la barra en 0. El jugador camina libre y la barra sube
+#      de a RECUPERACION_LENTA por segundo, hasta TOPE_CAMINANDO.
+#   2. El banco dice "Descansar". Al usarlo, la camara viaja ahi.
+#   3. Despues de ESPERA_RESPIRAR segundos aparece el cartel de respirar.
+#      No antes: hay que quedarse sentado un rato primero.
+#   4. Al respirar, la barra sube hasta 100 en DURACION_RESPIRO.
+#   5. Llena, se queda ESPERA_FINAL segundos en silencio.
+#   6. Recien ahi funde a negro y arrancan los creditos.
 
 const DURACION_SENTARSE: float = 2.2      # mas lento que en la habitacion
 const ESPERA_RESPIRAR: float = 8.0        # cuanto tarda en aparecer el cartel
 const DURACION_SUSPIRO: float = 2.5       # el fundido final
 const LIMITE_GIRO_BANCO: float = 90.0     # se puede mirar mas que en la silla
+
+# ---- LA RECUPERACION ----
+# Lentisima a proposito. Despues de una partida entera donde la barra
+# subia de a 20 por click, verla moverse asi cuesta: es justamente la
+# diferencia de escala entre lo que te daban las apps y lo que da estar
+# afuera. Y el punto es que lo de afuera no se agota.
+const RECUPERACION_LENTA: float = 0.7     # por segundo, caminando
+
+# El mundo solo te devuelve una parte. El resto lo pone la respiracion,
+# que es lo unico que el jugador elige hacer. Sin este tope, alguien que
+# se quedara diez minutos dando vueltas llegaria al banco con la barra
+# llena y el gesto final no tendria nada que completar.
+const TOPE_CAMINANDO: float = 45.0
+
+const DURACION_RESPIRO: float = 4.5       # lo que tarda en llegar a 100
+const ESPERA_FINAL: float = 6.0           # el silencio con la barra llena
 
 @onready var jugador: CharacterBody3D = $Jugador
 @onready var banco: Interactuable = $Banco
@@ -35,10 +64,17 @@ const LIMITE_GIRO_BANCO: float = 90.0     # se puede mirar mas que en la silla
 var _sentado: bool = false
 var _puede_respirar: bool = false
 var _terminando: bool = false
+var _dopamina: float = 0.0
+var _respirando: bool = false
 
 
 func _ready() -> void:
 	cartel_respirar.hide()
+
+	# Llega vacia. GameManager.activo quedo en false despues del colapso,
+	# asi que nada la drena: desde aca la manejamos nosotros.
+	_dopamina = 0.0
+	_empujar_dopamina()
 
 	# En el parque se camina mas lento. El cuerpo se siente distinto.
 	# El camino mide ~82 m, asi que a 2.4 m/s la caminata dura ~35 s.
@@ -54,9 +90,22 @@ func _ready() -> void:
 	await SceneLoader.fundir_desde(2.0)
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	# Sube sola mientras no estes respirando. No hace falta caminar ni
+	# mirar nada: sube por estar.
+	if not _respirando and _dopamina < TOPE_CAMINANDO:
+		_dopamina = min(TOPE_CAMINANDO, _dopamina + RECUPERACION_LENTA * delta)
+		_empujar_dopamina()
+
 	if _puede_respirar and not _terminando and Input.is_action_just_pressed("interactuar"):
 		_respirar()
+
+
+# La barra del escritorio escucha a GameManager, asi que no hay que
+# tocarla: alcanza con mover el numero y avisar.
+func _empujar_dopamina() -> void:
+	GameManager.dopamina = _dopamina
+	GameManager.dopamina_cambio.emit(_dopamina, GameManager.DOPAMINA_MAX)
 
 
 # ============================================================
@@ -118,6 +167,7 @@ func _sentarse() -> void:
 
 func _respirar() -> void:
 	_terminando = true
+	_respirando = true
 	_puede_respirar = false
 	jugador.puede_mirar = false
 
@@ -126,6 +176,24 @@ func _respirar() -> void:
 
 	if sonido_suspiro and sonido_suspiro.stream:
 		sonido_suspiro.play()
+
+	# La barra termina de llenarse. Mas rapido que caminando, pero
+	# todavia lento: es una respiracion, no un premio.
+	var llenado := create_tween()
+	llenado.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	llenado.tween_method(
+		func(v: float) -> void:
+			_dopamina = v
+			_empujar_dopamina(),
+		_dopamina, GameManager.DOPAMINA_MAX, DURACION_RESPIRO
+	)
+	await llenado.finished
+
+	# Y recien ahi, el silencio. Seis segundos con la barra llena y nada
+	# que hacer: es la primera vez en toda la partida que el jugador
+	# tiene la barra al tope y ninguna app pidiendole algo. Ese vacio es
+	# el final de la obra, no el fundido.
+	await get_tree().create_timer(ESPERA_FINAL).timeout
 
 	await SceneLoader.cambiar_escena("res://escenas/05_creditos/creditos.tscn", Color.BLACK, DURACION_SUSPIRO)
 

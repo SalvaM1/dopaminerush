@@ -1,44 +1,106 @@
 {
 	"_comentario": "Para agregar preguntas: copiá un bloque y editalo. 'correcta' es el número de la opción correcta EMPEZANDO DESDE 0 (la primera opción es 0, la segunda 1, y así). Podés poner de 2 a 4 opciones. No hace falta tocar nada de código.",
+
+	"_regla_de_oro": "EL CHISTE VA EN UNA OPCIÓN INCORRECTA, NUNCA EN LA PREGUNTA. Si la pregunta es graciosa deja de ser trivia y se nota el guiño; si la pregunta es legítima y una de las distractoras es absurda, funciona como Preguntados de verdad: jugable y con carácter.",
+
+	"_variar_la_correcta": "IMPORTANTE: la app baraja el orden de las PREGUNTAS pero no el de las OPCIONES. Si todas tuvieran la respuesta correcta en la misma posición, el jugador aprenderia a apretar siempre el mismo boton y la app dejaria de pedir atencion. Repartí el valor de 'correcta' entre 0, 1, 2 y 3.",
+
+	"_largo": "La pregunta entra cómoda hasta ~95 caracteres y cada opción hasta ~26. Más largo no rompe nada (el texto se parte solo en varios renglones), pero conviene mirarlo en el juego.",
+
 	"preguntas": [
 		{
-			"texto": "Pregunta 1",
-			"opciones": ["Opción 1", "Opción 2", "Opción 3", "Opción 4"],
+			"texto": "¿Qué se celebra el 25 de mayo de 1810?",
+			"opciones": ["La Revolución de Mayo", "La independencia", "La fundación de Bs. As.", "El primer asado"],
 			"correcta": 0
 		},
 		{
-			"texto": "Pregunta 2",
-			"opciones": ["Opción 1", "Opción 2", "Opción 3", "Opción 4"],
+			"texto": "¿Cuál es el río más ancho del mundo?",
+			"opciones": ["Amazonas", "El Riachuelo", "Nilo", "Río de la Plata"],
+			"correcta": 3
+		},
+		{
+			"texto": "¿Qué neurotransmisor se asocia al sistema de recompensa?",
+			"opciones": ["Serotonina", "Adrenalina", "Dopamina", "Cafeína"],
+			"correcta": 2
+		},
+		{
+			"texto": "77 + 33 = ?",
+			"opciones": ["100", "110", "99", "1244556"],
+			"correcta": 1
+		},
+		{
+			"texto": "¿En qué año cayó el Muro de Berlín?",
+			"opciones": ["1945", "1991", "2001", "1989"],
+			"correcta": 3
+		},
+		{
+			"texto": "¿Qué pasó en 1492?",
+			"opciones": ["Se inventó la imprenta", "Colón llegó a América", "Cayó Roma", "Nace Mirtha Legrand"],
+			"correcta": 1
+		},
+		{
+			"texto": "¿Qué pesa más: un kilo de plomo o un kilo de plumas?",
+			"opciones": ["El plomo", "Las plumas", "Pesan igual", "El peso no existe, es un invento del gobierno"],
+			"correcta": 2
+		},
+		{
+			"texto": "Si pasás al segundo en una carrera, ¿en qué puesto quedás?",
+			"opciones": ["Primero", "Segundo", "Tercero", "Ganaste"],
+			"correcta": 1
+		},
+		{
+			"texto": "¿Cuántos meses tienen al menos 28 días?",
+			"opciones": ["Uno", "Dos", "Ninguno", "Todos"],
+			"correcta": 3
+		},
+		{
+			"texto": "¿De qué color es la caja negra de los aviones?",
+			"opciones": ["Naranja", "Negra", "Roja", "Transparente"],
 			"correcta": 0
 		},
 		{
-			"texto": "Pregunta 3",
-			"opciones": ["Opción 1", "Opción 2", "Opción 3", "Opción 4"],
+			"texto": "¿Cuál es el país más chico del mundo?",
+			"opciones": ["Mónaco", "San Marino", "El Vaticano", "Malta"],
+			"correcta": 2
+		},
+		{
+			"texto": "¿Qué pintor se cortó una oreja?",
+			"opciones": ["Van Gogh", "Picasso", "Dalí", "Monet"],
 			"correcta": 0
 		},
 		{
-			"texto": "Pregunta 4",
-			"opciones": ["Opción 1", "Opción 2", "Opción 3", "Opción 4"],
+			"texto": "¿Quién cantaba en Soda Stereo?",
+			"opciones": ["Fito Páez", "Charly García", "Gustavo Cerati", "Zeta Bosio"],
+			"correcta": 2
+		},
+		{
+			"texto": "¿Quién canta el tema \"Thriller\"?",
+			"opciones": ["Michael Jackson", "Prince", "Lionel Richie", "Un zombi"],
 			"correcta": 0
 		},
 		{
-			"texto": "Pregunta 5",
-			"opciones": ["Opción 1", "Opción 2", "Opción 3"],
-			"correcta": 0
+			"texto": "¿De qué color es el sable de luz de Darth Vader?",
+			"opciones": ["Azul", "Verde", "Rojo", "Violeta"],
+			"correcta": 2
 		},
 		{
-			"texto": "Pregunta 6",
-			"opciones": ["Opción 1", "Opción 2"],
-			"correcta": 0
+			"texto": "¿En qué ciudad vive Spider-Man?",
+			"opciones": ["Chicago", "Nueva York", "Los Ángeles", "Rosario"],
+			"correcta": 1
 		},
 		{
-			"texto": "Pregunta 7",
-			"opciones": ["Opción 1", "Opción 2", "Opción 3", "Opción 4"],
-			"correcta": 0
+			"texto": "¿Cuál es la capital de Brasil?",
+			"opciones": ["Río de Janeiro", "Brasilia", "San Pablo", "Copacabana"],
+			"correcta": 1
 		},
 		{
-			"texto": "Pregunta 8",
-			"opciones": ["Opción 1", "Opción 2", "Opción 3", "Opción 4"],
+			"texto": "¿Cuál es la provincia más grande de Argentina?",
+			"opciones": ["Santa Cruz", "Córdoba", "Chubut", "Buenos Aires"],
+			"correcta": 3
+		},
+		{
+			"texto": "¿Quién pintó la Mona Lisa?",
+			"opciones": ["Leonardo da Vinci", "Miguel Ángel", "Rafael", "Donatello"],
 			"correcta": 0
 		}
 	]
