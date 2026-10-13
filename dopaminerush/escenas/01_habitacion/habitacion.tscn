@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://ck2c7q06fx04h"]
 
+[ext_resource type="PackedScene" path="res://escenas/01_habitacion/iluminacion/ciclo_dia.tscn" id="19_ciclo_dia"]
+
 [ext_resource type="Script" uid="uid://cs3r3dts1fqxg" path="res://escenas/01_habitacion/habitacion.gd" id="1_asbsv"]
 [ext_resource type="PackedScene" uid="uid://bb1hqxv1ucvya" path="res://escenas/01_habitacion/jugador.tscn" id="1_omcwt"]
 [ext_resource type="Script" uid="uid://cwk0cvinu70ri" path="res://escenas/01_habitacion/interactuable.gd" id="2_85pyb"]
@@ -16,6 +18,8 @@
 [ext_resource type="PackedScene" path="res://escenas/01_habitacion/objetos/libreta.tscn" id="14_libreta"]
 [ext_resource type="PackedScene" path="res://escenas/01_habitacion/objetos/cajon.tscn" id="15_cajon"]
 [ext_resource type="PackedScene" path="res://escenas/01_habitacion/objetos/ropa.tscn" id="16_ropa"]
+[ext_resource type="PackedScene" path="res://escenas/01_habitacion/netflox/netflox.tscn" id="17_netflox"]
+[ext_resource type="PackedScene" path="res://escenas/01_habitacion/netflox/indicador_netflox.tscn" id="18_indtv"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v2hei"]
 albedo_color = Color(0.70019305, 0.5339784, 0, 1)
@@ -134,6 +138,10 @@ script = ExtResource("1_asbsv")
 
 [node name="HabitacionVisual" parent="." unique_id=2114173738 instance=ExtResource("8_visual")]
 
+[node name="Netflox" parent="." instance=ExtResource("17_netflox")]
+
+[node name="CicloDia" parent="." instance=ExtResource("19_ciclo_dia")]
+
 [node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=302719860]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6135254, -0.087385714, 0.6942749)
 use_collision = true
@@ -247,6 +255,8 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="IndicadorVape" parent="UI" unique_id=1033753755 instance=ExtResource("7_lag50")]
+
+[node name="IndicadorNetflox" parent="UI" instance=ExtResource("18_indtv")]
 
 [node name="IndicadorCelular" parent="UI" unique_id=771203483 instance=ExtResource("10_indcel")]
 

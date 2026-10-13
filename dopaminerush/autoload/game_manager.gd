@@ -152,6 +152,9 @@ var drenaje_pausado: bool = false
 # mas lento. Cada app que lo toca tiene que devolverlo a 1.0 al cerrarse.
 var mult_drenaje_externo: float = 1.0
 
+# Netflox es una fuente fisica independiente de LinkedOut y del vape.
+var mult_drenaje_netflox: float = 1.0
+
 # CONGELAR LA BARRA ENTERA. No es lo mismo que drenaje_pausado:
 #
 #   drenaje_pausado  deja de PERDER, pero las apps siguen produciendo.
@@ -247,6 +250,7 @@ func drenaje_actual() -> float:
 
 	# Y una app abierta puede aliviarlo tambien (LinkedOut).
 	d *= mult_drenaje_externo
+	d *= mult_drenaje_netflox
 
 	return d
 
@@ -368,6 +372,7 @@ func reiniciar() -> void:
 	_oferta_pendiente = false
 	drenaje_pausado = false
 	mult_drenaje_externo = 1.0
+	mult_drenaje_netflox = 1.0
 	dopamina_congelada = false
 	produccion_por_segundo = 0.0
 	_produccion_acumulada = 0.0

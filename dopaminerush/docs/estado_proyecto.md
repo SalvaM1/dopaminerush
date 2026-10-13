@@ -15,6 +15,13 @@ código tiene razón y este documento está viejo: corregilo.
 **El juego es jugable de punta a punta.** Menú → despertar → sentarse → usar las
 apps → colapso → parque → créditos.
 
+El parque incluye un **perrito compañero** al llegar: sigue la caminata y se
+puede acariciar con E de forma opcional. Integración: `perrito_parque.md`.
+
+La habitación tiene **ciclo de mañana a noche** sincronizado con el reloj de
+la computadora: cielo y luz por la ventana cambian gradualmente. Integración:
+`ciclo_dia.md`.
+
 De las **6 apps del catálogo, 5 están implementadas**. Falta **Loopify**, que hoy
 abre un placeholder. Lo que más falta no es código: es **audio**.
 
@@ -51,6 +58,9 @@ Viven todos en `game_manager.gd` salvo los de cada app, que están en su `.tscn`
 - `DRENAJE_INICIAL` **3.5** por segundo
 - `DRENAJE_POR_APP` **+3.2** por cada app desbloqueada
 - El vape se desbloquea con la **3ª app** (`habitacion.gd` → `APPS_PARA_VAPE`)
+- **Netflox** se habilita con la **4ª app**: T enciende la TV (-10% de drenaje)
+  y permite mirarla (+15, 3 s de animación, 25 s de cooldown). Portada provisional;
+  falta elegir la película y su audio espacial. Integración: `netflox.md`.
 
 **Subway Slop** es la única que da dopamina continua, así que tiene su propia curva:
 
@@ -167,7 +177,8 @@ operativo del resto del escritorio.
 3. **Bajar antes de empezar, subir al terminar.**
 4. **Ninguna app puede pedir atención continua.** Todas piden en ráfagas y te dejan ir.
 5. **Ninguna app puede ser demasiado divertida.** Apenas entretenidas y completamente vacías.
-6. **El parque no tiene nada que hacer.** Ese vacío es el punto.
+6. **El parque no tiene tareas ni premios.** El perrito acompaña y permite una
+   caricia opcional; la recuperación sigue siendo pasiva y el cierre, respirar.
 7. **Cerrar Godot antes de copiar assets** desde el explorador de archivos.
 
 ---

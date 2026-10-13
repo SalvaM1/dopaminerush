@@ -1,5 +1,8 @@
 extends CanvasLayer
 
+# Una sola hora para la barra de tareas y la luz natural de la habitacion.
+signal hora_cambio(minutos: float)
+
 # El "sistema operativo" falso. Maneja:
 #   - la barra de iconos y que se desbloqueen
 #   - abrir / cerrar / traer al frente las ventanas
@@ -107,7 +110,9 @@ const POSICION_INICIAL := Vector2(80, 70)
 
 # Cuantos minutos del juego pasan por cada segundo real
 const VELOCIDAD_RELOJ: float = 12.0
+const FIN_DEL_DIA: float = 23 * 60.0 + 59.0
 var _minutos: float = 8 * 60.0   # arranca a las 08:00
+var _hora_notificada: float = -1.0
 
 # indice de app -> ventana abierta
 var _ventanas: Dictionary = {}
@@ -167,6 +172,7 @@ func _ready() -> void:
 	arranque_estado.text = ""
 
 	_crear_panel_debug()
+	_actualizar_reloj()
 
 	# Si esta escena se corre SOLA (F6), arrancamos el juego nosotros.
 	# Dentro de la habitacion esto no pasa: lo dispara el sentarse.
@@ -176,10 +182,8 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	_minutos += delta * VELOCIDAD_RELOJ
-	var h := int(_minutos / 60.0) % 24
-	var m := int(_minutos) % 60
-	reloj.text = "%02d:%02d" % [h, m]
+	_minutos = minf(FIN_DEL_DIA, _minutos + delta * VELOCIDAD_RELOJ)
+	_actualizar_reloj()
 
 	# La fecha no avanza nunca. Es el mismo dia siempre, y es a proposito.
 	fecha.text = "lun 3"
@@ -219,6 +223,19 @@ func _process(delta: float) -> void:
 
 	if _panel_debug.visible:
 		_actualizar_debug()
+
+
+func obtener_minutos_del_dia() -> float:
+	return _minutos
+
+
+func _actualizar_reloj() -> void:
+	var h := int(_minutos / 60.0) % 24
+	var m := int(_minutos) % 60
+	reloj.text = "%02d:%02d" % [h, m]
+	if _minutos != _hora_notificada:
+		_hora_notificada = _minutos
+		hora_cambio.emit(_minutos)
 
 
 func _conectar_iconos() -> void:
@@ -452,6 +469,7 @@ func _al_empezar_nuevo_dia() -> void:
 
 	_abiertas_historicas = 0
 	_minutos = 8 * 60.0
+	_actualizar_reloj()
 	_reiniciar_linkedout()
 	GameManager.iniciar_sesion_pc()
 

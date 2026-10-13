@@ -1,0 +1,21 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://escenas/01_habitacion/iluminacion/ciclo_dia.gd" id="1_ciclo"]
+
+[node name="CicloDia" type="Node3D"]
+script = ExtResource("1_ciclo")
+
+[node name="LuzVentana" type="SpotLight3D" parent="."]
+light_energy = 5.0
+shadow_enabled = true
+shadow_bias = 0.03
+shadow_normal_bias = 0.3
+spot_range = 23.0
+spot_attenuation = 0.6
+spot_angle = 55.0
+spot_angle_attenuation = 0.5
+
+[node name="ReboteVentana" type="OmniLight3D" parent="."]
+light_energy = 1.4
+omni_range = 22.0
+omni_attenuation = 0.8

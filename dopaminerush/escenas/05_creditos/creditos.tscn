@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c2a3y015qo5w6" path="res://escenas/05_creditos/creditos.gd" id="1_vxtgs"]
 [ext_resource type="PackedScene" uid="uid://c2jaag5vu5uu1" path="res://addons/credits-template/scenes/credits-example.tscn" id="2_vxtgs"]
+[ext_resource type="Texture2D" path="res://addons/credits-template/sprites/credits_template.png" id="3_ilustracion"]
 
 [node name="Creditos" type="Control" unique_id=1633636482]
 layout_mode = 3
@@ -12,7 +13,51 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_vxtgs")
 
+[node name="Fondo" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.012, 0.023, 0.058, 1)
+
+[node name="Ilustracion" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("3_ilustracion")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Velo" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.28)
+
 [node name="CreditsRoll" parent="." unique_id=265725771 instance=ExtResource("2_vxtgs")]
+
+[node name="Background" parent="CreditsRoll"]
+visible = false
+
+[node name="Logo" parent="CreditsRoll"]
+visible = false
+
+[node name="CreditsRoll" parent="CreditsRoll/Control"]
+anchor_left = 0.18
+anchor_right = 0.82
+offset_left = 0.0
+offset_right = 0.0
 
 [node name="AvisoSalir" type="Label" parent="." unique_id=1385626154]
 layout_mode = 1
@@ -28,3 +73,6 @@ offset_bottom = -107.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "[ESC] para volver al menú"
+
+[editable path="CreditsRoll"]
+[editable path="CreditsRoll/Control/CreditsRoll"]

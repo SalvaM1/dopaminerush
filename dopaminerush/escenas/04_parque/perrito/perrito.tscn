@@ -1,0 +1,302 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://escenas/04_parque/perrito/perrito.gd" id="1_perrito"]
+[ext_resource type="Script" path="res://escenas/01_habitacion/interactuable.gd" id="2_interaccion"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_Pelaje"]
+albedo_color = Color(0.66, 0.36, 0.14, 1)
+roughness = 0.85
+
+[sub_resource type="StandardMaterial3D" id="Mat_Crema"]
+albedo_color = Color(0.94, 0.78, 0.51, 1)
+roughness = 0.85
+
+[sub_resource type="StandardMaterial3D" id="Mat_Orejas"]
+albedo_color = Color(0.33, 0.16, 0.075, 1)
+roughness = 0.85
+
+[sub_resource type="StandardMaterial3D" id="Mat_Negro"]
+albedo_color = Color(0.025, 0.02, 0.018, 1)
+roughness = 0.3
+
+[sub_resource type="StandardMaterial3D" id="Mat_Blanco"]
+albedo_color = Color(1, 0.98, 0.89, 1)
+roughness = 0.85
+
+[sub_resource type="StandardMaterial3D" id="Mat_Collar"]
+albedo_color = Color(0.12, 0.38, 0.3, 1)
+roughness = 0.85
+
+[sub_resource type="StandardMaterial3D" id="Mat_Piel"]
+albedo_color = Color(0.82, 0.57, 0.4, 1)
+roughness = 0.85
+
+[sub_resource type="StandardMaterial3D" id="Mat_Manga"]
+albedo_color = Color(0.16, 0.23, 0.27, 1)
+roughness = 0.85
+
+[sub_resource type="SphereMesh" id="Esfera"]
+radius = 0.5
+height = 1.0
+radial_segments = 16
+rings = 8
+
+[sub_resource type="CapsuleMesh" id="Capsula"]
+radius = 0.08
+height = 0.45
+radial_segments = 12
+rings = 4
+
+[sub_resource type="CylinderMesh" id="Collar"]
+top_radius = 0.18
+bottom_radius = 0.18
+height = 0.065
+radial_segments = 16
+
+[sub_resource type="CapsuleShape3D" id="FormaCuerpo"]
+radius = 0.24
+height = 0.8
+
+[sub_resource type="BoxShape3D" id="FormaInteraccion"]
+size = Vector3(0.64, 0.96, 1.08)
+
+[node name="Perrito" type="CharacterBody3D"]
+collision_layer = 2
+collision_mask = 1
+floor_snap_length = 0.25
+script = ExtResource("1_perrito")
+
+[node name="Colision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.4, 0)
+shape = SubResource("FormaCuerpo")
+
+[node name="Interaccion" type="StaticBody3D" parent="."]
+collision_mask = 0
+script = ExtResource("2_interaccion")
+texto_interaccion = "Acariciar"
+
+[node name="Forma" type="CollisionShape3D" parent="Interaccion"]
+position = Vector3(0, 0.5, -0.04)
+shape = SubResource("FormaInteraccion")
+
+[node name="Modelo" type="Node3D" parent="."]
+
+[node name="Cuerpo" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(0, 0.57, 0.03)
+scale = Vector3(0.46, 0.49, 0.82)
+mesh = SubResource("Esfera")
+material_override = SubResource("Mat_Pelaje")
+
+[node name="Pecho" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(0, 0.59, -0.29)
+scale = Vector3(0.33, 0.4, 0.26)
+mesh = SubResource("Esfera")
+material_override = SubResource("Mat_Crema")
+
+[node name="Patas" type="Node3D" parent="Modelo"]
+
+[node name="DelanteraIzq" type="Node3D" parent="Modelo/Patas"]
+position = Vector3(-0.18, 0.5, -0.24)
+
+[node name="Pierna" type="MeshInstance3D" parent="Modelo/Patas/DelanteraIzq"]
+position = Vector3(0, -0.2, 0)
+scale = Vector3(0.85, 0.9, 0.85)
+mesh = SubResource("Capsula")
+material_override = SubResource("Mat_Pelaje")
+
+[node name="Patita" type="MeshInstance3D" parent="Modelo/Patas/DelanteraIzq"]
+position = Vector3(0, -0.42, -0.035)
+scale = Vector3(0.18, 0.13, 0.24)
+mesh = SubResource("Esfera")
+material_override = SubResource("Mat_Crema")
+
+[node name="DelanteraDer" type="Node3D" parent="Modelo/Patas"]
+position = Vector3(0.18, 0.5, -0.24)
+
+[node name="Pierna" type="MeshInstance3D" parent="Modelo/Patas/DelanteraDer"]
+position = Vector3(0, -0.2, 0)
+scale = Vector3(0.85, 0.9, 0.85)
+mesh = SubResource("Capsula")
+material_override = SubResource("Mat_Pelaje")
+
+[node name="Patita" type="MeshInstance3D" parent="Modelo/Patas/DelanteraDer"]
+position = Vector3(0, -0.42, -0.035)
+scale = Vector3(0.18, 0.13, 0.24)
+mesh = SubResource("Esfera")
+material_override = SubResource("Mat_Crema")
+
+[node name="TraseraIzq" type="Node3D" parent="Modelo/Patas"]
+position = Vector3(-0.18, 0.5, 0.28)
+
+[node name="Pierna" type="MeshInstance3D" parent="Modelo/Patas/TraseraIzq"]
+position = Vector3(0, -0.2, 0)
+scale = Vector3(0.85, 0.9, 0.85)
+mesh = SubResource("Capsula")
+material_override = SubResource("Mat_Pelaje")
+
+[node name="Patita" type="MeshInstance3D" parent="Modelo/Patas/TraseraIzq"]
+position = Vector3(0, -0.42, -0.035)
+scale = Vector3(0.18, 0.13, 0.24)
+mesh = SubResource("Esfera")
+material_override = SubResource("Mat_Crema")
+
+[node name="TraseraDer" type="Node3D" parent="Modelo/Patas"]
+position = Vector3(0.18, 0.5, 0.28)
+
+[node name="Pierna" type="MeshInstance3D" parent="Modelo/Patas/TraseraDer"]
+position = Vector3(0, -0.2, 0)
+scale = Vector3(0.85, 0.9, 0.85)
+mesh = SubResource("Capsula")
+material_override = SubResource("Mat_Pelaje")
+
+[node name="Patita" type="MeshInstance3D" parent="Modelo/Patas/TraseraDer"]
+position = Vector3(0, -0.42, -0.035)
+scale = Vector3(0.18, 0.13, 0.24)
+mesh = SubResource("Esfera")
+material_override = SubResource("Mat_Crema")
+
+[node name="Cabeza" type="Node3D" parent="Modelo"]
+position = Vector3(0, 0.83, -0.36)
+
+[node name="Cara" type="MeshInstance3D" parent="Modelo/Cabeza"]
+position = Vector3(0, 0, 0)
+scale = Vector3(0.44, 0.44, 0.42)
+mesh = SubResource("Esfera")
+material_override = SubResource("Mat_Pelaje")
+
+[node name="Hocico" type="MeshInstance3D" parent="Modelo/Cabeza"]
+position = Vector3(0, -0.085, -0.2)
+scale = Vector3(0.29, 0.2, 0.28)
+mesh = SubResource("Esfera")
+material_override = SubResource("Mat_Crema")
+
+[node name="Nariz" type="MeshInstance3D" parent="Modelo/Cabeza"]
+position = Vector3(0, -0.055, -0.333)
+scale = Vector3(0.13, 0.085, 0.075)
+mesh = SubResource("Esfera")
+material_override = SubResource("Mat_Negro")
+
+[node name="Boca" type="MeshInstance3D" parent="Modelo/Cabeza"]
+position = Vector3(0, -0.144, -0.31)
+scale = Vector3(0.105, 0.018, 0.022)
+mesh = SubResource("Esfera")
+material_override = SubResource("Mat_Orejas")
+
+[node name="OjoIzq" type="MeshInstance3D" parent="Modelo/Cabeza"]
+position = Vector3(-0.131, 0.055, -0.168)
+scale = Vector3(0.068, 0.078, 0.045)
+mesh = SubResource("Esfera")
+material_override = SubResource("Mat_Negro")
+
+[node name="BrilloIzq" type="MeshInstance3D" parent="Modelo/Cabeza"]
+position = Vector3(-0.14300000000000002, 0.074, -0.193)
+scale = Vector3(0.019, 0.024, 0.012)
+mesh = SubResource("Esfera")
+material_override = SubResource("Mat_Blanco")
+
+[node name="OrejaIzq" type="MeshInstance3D" parent="Modelo/Cabeza"]
+position = Vector3(-0.22925, -0.09, 0)
+rotation = Vector3(0.15, 0, -0.24)
+scale = Vector3(0.15, 0.36, 0.2)
+mesh = SubResource("Esfera")
+material_override = SubResource("Mat_Orejas")
+
+[node name="OjoDer" type="MeshInstance3D" parent="Modelo/Cabeza"]
+position = Vector3(0.131, 0.055, -0.168)
+scale = Vector3(0.068, 0.078, 0.045)
+mesh = SubResource("Esfera")
+material_override = SubResource("Mat_Negro")
+
+[node name="BrilloDer" type="MeshInstance3D" parent="Modelo/Cabeza"]
+position = Vector3(0.11900000000000001, 0.074, -0.193)
+scale = Vector3(0.019, 0.024, 0.012)
+mesh = SubResource("Esfera")
+material_override = SubResource("Mat_Blanco")
+
+[node name="OrejaDer" type="MeshInstance3D" parent="Modelo/Cabeza"]
+position = Vector3(0.22925, -0.09, 0)
+rotation = Vector3(0.15, 0, 0.24)
+scale = Vector3(0.15, 0.36, 0.2)
+mesh = SubResource("Esfera")
+material_override = SubResource("Mat_Orejas")
+
+[node name="Collar" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(0, 0.685, -0.32)
+mesh = SubResource("Collar")
+material_override = SubResource("Mat_Collar")
+
+[node name="Chapita" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(0, 0.67, -0.5)
+scale = Vector3(0.07, 0.09, 0.022)
+mesh = SubResource("Esfera")
+material_override = SubResource("Mat_Crema")
+
+[node name="Cola" type="Node3D" parent="Modelo"]
+position = Vector3(0, 0.66, 0.39)
+rotation = Vector3(0.65, 0, 0)
+
+[node name="Pelaje" type="MeshInstance3D" parent="Modelo/Cola"]
+position = Vector3(0, 0.16, 0)
+scale = Vector3(0.7, 0.9, 0.7)
+mesh = SubResource("Capsula")
+material_override = SubResource("Mat_Pelaje")
+
+[node name="Punta" type="MeshInstance3D" parent="Modelo/Cola"]
+position = Vector3(0, 0.34, 0)
+scale = Vector3(0.105, 0.13, 0.105)
+mesh = SubResource("Esfera")
+material_override = SubResource("Mat_Crema")
+
+[node name="ManoCaricia" type="Node3D" parent="Modelo"]
+position = Vector3(0, 1.03, -0.37)
+visible = false
+
+[node name="Palma" type="MeshInstance3D" parent="Modelo/ManoCaricia"]
+position = Vector3(0, 0, 0)
+scale = Vector3(0.18, 0.07, 0.21)
+mesh = SubResource("Esfera")
+material_override = SubResource("Mat_Piel")
+
+[node name="Dedo0" type="MeshInstance3D" parent="Modelo/ManoCaricia"]
+position = Vector3(-0.063, 0, 0.12)
+scale = Vector3(0.038, 0.055, 0.16)
+mesh = SubResource("Esfera")
+material_override = SubResource("Mat_Piel")
+
+[node name="Dedo1" type="MeshInstance3D" parent="Modelo/ManoCaricia"]
+position = Vector3(-0.021, 0, 0.12)
+scale = Vector3(0.038, 0.055, 0.16)
+mesh = SubResource("Esfera")
+material_override = SubResource("Mat_Piel")
+
+[node name="Dedo2" type="MeshInstance3D" parent="Modelo/ManoCaricia"]
+position = Vector3(0.021, 0, 0.12)
+scale = Vector3(0.038, 0.055, 0.16)
+mesh = SubResource("Esfera")
+material_override = SubResource("Mat_Piel")
+
+[node name="Dedo3" type="MeshInstance3D" parent="Modelo/ManoCaricia"]
+position = Vector3(0.063, 0, 0.12)
+scale = Vector3(0.038, 0.055, 0.16)
+mesh = SubResource("Esfera")
+material_override = SubResource("Mat_Piel")
+
+[node name="Pulgar" type="MeshInstance3D" parent="Modelo/ManoCaricia"]
+position = Vector3(-0.093, 0, 0.02)
+rotation = Vector3(0, 0.55, 0)
+scale = Vector3(0.07, 0.065, 0.12)
+mesh = SubResource("Esfera")
+material_override = SubResource("Mat_Piel")
+
+[node name="Brazo" type="MeshInstance3D" parent="Modelo/ManoCaricia"]
+position = Vector3(0, 0.035, -0.22)
+scale = Vector3(0.12, 0.12, 0.38)
+mesh = SubResource("Esfera")
+material_override = SubResource("Mat_Piel")
+
+[node name="Manga" type="MeshInstance3D" parent="Modelo/ManoCaricia"]
+position = Vector3(0, 0.09, -0.47)
+scale = Vector3(0.17, 0.17, 0.36)
+mesh = SubResource("Esfera")
+material_override = SubResource("Mat_Manga")
+

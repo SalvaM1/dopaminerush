@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://dqsc5uq1lq7to"]
 
+[ext_resource type="PackedScene" path="res://escenas/04_parque/perrito/perrito.tscn" id="51_perrito"]
+
 [ext_resource type="PackedScene" uid="uid://bb1hqxv1ucvya" path="res://escenas/01_habitacion/jugador.tscn" id="1_g0q15"]
 [ext_resource type="Script" uid="uid://bor6cmc3yis1" path="res://escenas/04_parque/parque.gd" id="2_parque"]
 [ext_resource type="Texture2D" uid="uid://bp8fx74n5pi35" path="res://assets/texturas/Grass005_1K-JPG_Color.jpg" id="2_u80m8"]
@@ -606,6 +608,8 @@ size = Vector3(1.9, 1, 0.7)
 
 [node name="Node3D" type="Node3D" unique_id=548859582]
 script = ExtResource("2_parque")
+
+[node name="Perrito" parent="." instance=ExtResource("51_perrito")]
 
 [node name="Terreno" type="CSGCombiner3D" parent="." unique_id=2021045390]
 

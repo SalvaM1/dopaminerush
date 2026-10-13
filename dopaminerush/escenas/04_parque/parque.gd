@@ -7,9 +7,9 @@ extends Node3D
 # Es la resolucion de la obra. Todo el juego existe para que este
 # momento contraste.
 #
-# REGLA QUE NO SE ROMPE: aca no hay nada que HACER. Sin objetivos, sin
-# coleccionables, sin nada que apretar. La unica accion posible es
-# sentarse en el banco, y despues de un rato, respirar.
+# Sin objetivos ni coleccionables: el perrito acompana el paseo y se
+# puede acariciar de forma opcional. No da premios ni acelera la barra.
+# El cierre sigue siendo sentarse en el banco y despues respirar.
 #
 # LA BARRA DE DOPAMINA SI ESTA, Y ES LA MISMA DEL ESCRITORIO.
 # Llegas con ella en CERO y sube sola, lentisima, mientras caminas sin
@@ -57,6 +57,7 @@ const ESPERA_FINAL: float = 6.0           # el silencio con la barra llena
 @onready var banco: Interactuable = $Banco
 @onready var punto_banco: Marker3D = $Banco/PuntoBanco
 @onready var cartel_respirar: Label = $UI/CartelRespirar
+@onready var perrito: CharacterBody3D = $Perrito
 
 # Opcional: si no existe el nodo, funciona igual en silencio.
 @onready var sonido_suspiro: AudioStreamPlayer = get_node_or_null("SonidoSuspiro")
@@ -84,6 +85,7 @@ func _ready() -> void:
 	jugador.set("LIMITE_GIRO_SENTADO", LIMITE_GIRO_BANCO)
 
 	banco.usado.connect(_sentarse)
+	perrito.configurar(jugador)
 	_arrancar_ambiente()
 
 	# Venimos de un fundido a blanco desde la habitacion
@@ -117,6 +119,11 @@ func _sentarse() -> void:
 		return
 	_sentado = true
 	banco.activo = false
+	# Cancelar cualquier caricia antes de que el banco tome la camara.
+	var lugar_perrito := punto_banco.global_position \
+		+ punto_banco.global_basis.x.normalized() * 2.3 \
+		- punto_banco.global_basis.z.normalized() * 1.3
+	perrito.descansar(lugar_perrito)
 
 	var camara: Camera3D = jugador.camara
 

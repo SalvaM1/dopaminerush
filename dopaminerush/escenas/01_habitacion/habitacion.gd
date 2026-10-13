@@ -150,6 +150,7 @@ const SONIDOS_TELEFONO := [
 @onready var apagada: ColorRect = $PantallaViewport/Apagada
 @onready var escritorio: CanvasLayer = $PantallaViewport/Escritorio
 @onready var cartel_levantarse: Label = $UI/CartelLevantarse
+@onready var netflox: Node3D = $Netflox
 
 # --- explorar la habitacion ---
 @onready var dialogo: CanvasLayer = $Dialogo
@@ -294,6 +295,8 @@ func _ready() -> void:
 		_tirador_cajon.visible = false
 
 	_preparar_exploracion()
+	netflox.configurar(self)
+	$CicloDia.configurar(self)
 
 	_preparar_telefono()
 	GameManager.codigo_pedido.connect(_al_llegar_codigo)
@@ -361,7 +364,7 @@ func _apagar_despertador() -> void:
 # ============================================================
 
 func _input(event: InputEvent) -> void:
-	if not _sentado or _puede_levantarse or _vapeando or _mirando_telefono:
+	if not _sentado or _puede_levantarse or _vapeando or _mirando_telefono or netflox.esta_mirando():
 		return
 
 	if event is InputEventKey:
@@ -487,6 +490,7 @@ func _sentarse() -> void:
 # ============================================================
 
 func _al_colapsar() -> void:
+	netflox.apagar()
 	# Si la partida termina en plena animacion del celular, la barra
 	# quedaria congelada para siempre.
 	GameManager.dopamina_congelada = false
@@ -591,7 +595,7 @@ func _salir_al_parque() -> void:
 func _actualizar_vape(delta: float) -> void:
 	# Solo existe mientras esta sentado frente a la compu, y despues
 	# de que el juego lo haya ofrecido.
-	if not _sentado or _puede_levantarse or not _vape_anunciado or _mirando_telefono:
+	if not _sentado or _puede_levantarse or not _vape_anunciado or _mirando_telefono or netflox.esta_mirando():
 		indicador_vape.hide()
 		return
 
@@ -1149,7 +1153,7 @@ func _pulso_pantalla() -> void:
 
 
 func _actualizar_telefono(delta: float) -> void:
-	if not _sentado or _puede_levantarse or _vapeando:
+	if not _sentado or _puede_levantarse or _vapeando or netflox.esta_mirando():
 		indicador_celular.hide()
 		return
 
@@ -1170,6 +1174,24 @@ func _actualizar_telefono(delta: float) -> void:
 
 	if Input.is_action_just_pressed("mirar_celular"):
 		_mirar_telefono()
+
+
+# Contrato de Netflox: solo puede usar la camara durante la sesion de PC,
+# sin pisar el celular, el vape, el arranque ni las secuencias de perdida.
+func puede_usar_television() -> bool:
+	return _sentado and GameManager.activo and not _puede_levantarse \
+		and not _puede_salir and not _vapeando and not _mirando_telefono
+
+
+# Soltar antes de bloquear el input: si el jugador suelta el mouse mirando
+# la TV, ese evento ya no llega al viewport y dejaria una app arrastrando.
+func soltar_mouse_del_monitor() -> void:
+	var soltar := InputEventMouseButton.new()
+	soltar.button_index = MOUSE_BUTTON_LEFT
+	soltar.pressed = false
+	soltar.position = _ultima_pos_viewport
+	soltar.global_position = _ultima_pos_viewport
+	pantalla_viewport.push_input(soltar)
 
 
 # Suena y VIBRA. La vibracion es un temblor del propio telefono sobre la
