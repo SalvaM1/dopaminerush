@@ -13,7 +13,7 @@ max_distance = 25.0
 panning_strength = 1.5
 
 [node name="PantallaViewport" type="SubViewport" parent="."]
-size = Vector2i(1280, 720)
+size = Vector2i(640, 360)
 disable_3d = true
 render_target_update_mode = 0
 
@@ -60,60 +60,70 @@ mouse_filter = 2
 
 [node name="Acento" type="ColorRect" parent="PantallaViewport/Pantalla/Portada"]
 layout_mode = 0
-offset_left = 85.0
-offset_top = 210.0
-offset_right = 93.0
-offset_bottom = 535.0
+offset_left = 42.5
+offset_top = 105.0
+offset_right = 46.5
+offset_bottom = 267.5
 mouse_filter = 2
 color = Color(0.898, 0.035, 0.078, 1)
 
 [node name="Marca" type="Label" parent="PantallaViewport/Pantalla/Portada"]
 layout_mode = 0
-offset_left = 80.0
-offset_top = 45.0
-offset_right = 680.0
-offset_bottom = 130.0
+offset_left = 40.0
+offset_top = 22.5
+offset_right = 340.0
+offset_bottom = 65.0
 theme_override_colors/font_color = Color(0.898, 0.035, 0.078, 1)
-theme_override_font_sizes/font_size = 62
+theme_override_font_sizes/font_size = 31
 text = "NETFLOX"
 
 [node name="Categoria" type="Label" parent="PantallaViewport/Pantalla/Portada"]
 layout_mode = 0
-offset_left = 125.0
-offset_top = 230.0
-offset_right = 900.0
-offset_bottom = 280.0
+offset_left = 62.5
+offset_top = 115.0
+offset_right = 450.0
+offset_bottom = 140.0
 theme_override_colors/font_color = Color(0.6, 0.6, 0.65, 1)
-theme_override_font_sizes/font_size = 25
+theme_override_font_sizes/font_size = 12
 text = "RECOMENDADO PARA VOS"
 
 [node name="Titulo" type="Label" parent="PantallaViewport/Pantalla/Portada"]
 layout_mode = 0
-offset_left = 125.0
-offset_top = 290.0
-offset_right = 1190.0
-offset_bottom = 450.0
+offset_left = 62.5
+offset_top = 145.0
+offset_right = 595.0
+offset_bottom = 225.0
 theme_override_colors/font_color = Color(0.97, 0.97, 0.98, 1)
-theme_override_font_sizes/font_size = 68
+theme_override_font_sizes/font_size = 34
 text = "Una película más."
 vertical_alignment = 1
 
 [node name="Subtitulo" type="Label" parent="PantallaViewport/Pantalla/Portada"]
 layout_mode = 0
-offset_left = 130.0
-offset_top = 470.0
-offset_right = 1050.0
-offset_bottom = 520.0
+offset_left = 65.0
+offset_top = 235.0
+offset_right = 525.0
+offset_bottom = 260.0
 theme_override_colors/font_color = Color(0.7, 0.7, 0.74, 1)
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 15
 text = "Solo un rato más."
 
 [node name="Pie" type="Label" parent="PantallaViewport/Pantalla/Portada"]
 layout_mode = 0
-offset_left = 85.0
-offset_top = 625.0
-offset_right = 1190.0
-offset_bottom = 675.0
+offset_left = 42.5
+offset_top = 312.5
+offset_right = 595.0
+offset_bottom = 337.5
 theme_override_colors/font_color = Color(0.4, 0.4, 0.45, 1)
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 11
 text = "HECHO PARA SEGUIR MIRANDO"
+
+[node name="Destello" type="ColorRect" parent="PantallaViewport/Pantalla"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 0)

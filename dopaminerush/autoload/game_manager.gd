@@ -98,6 +98,32 @@ const DRENAJE_INICIAL: float = 3.5        # dopamina perdida por segundo al empe
 const RAMPA: float = 0.008                # cuanto sube el drenaje por cada segundo
 const DRENAJE_POR_APP: float = 3.2        # salto extra al desbloquear cada app
 
+# ---- LA MESETA DEL TELEVISOR ----
+# Hasta la 4ta app el drenaje es el de siempre y NO SE TOCA: hasta ahi el
+# juego esta balanceado y no necesita ayuda. La meseta arranca con la
+# QUINTA, que es cuando aparece el televisor y cuando la atencion ya no
+# alcanza para sostener la barra.
+#
+# Antes el salto de 3.2 seguia siendo lineal y a las 6 apps el drenaje
+# llegaba a 19.5/s, mas del doble de lo que todas las apps juntas pueden
+# producir. Lo que termina la partida es RAMPA_FINAL, no esta curva.
+#
+# OJO: la meseta tiene que arrancar JUNTO con el televisor. Como aca se
+# compara con <=, APPS_HASTA_LA_MESETA (4) es uno menos que el
+# apps_para_desbloquear del nodo Netflox (5). Si se mueve uno, mover el
+# otro, o el drenaje baja antes de que haya con que aprovecharlo.
+const APPS_HASTA_LA_MESETA: int = 4       # la ultima app con la curva original
+# Con 5.7 el drenaje se derrumbaba: Subway Slop sola, sin tocar nada,
+# daba mas de lo que se perdia y la barra SUBIA. Un canal fresco da 7/s
+# (no 3.5: eso es el promedio mientras se quema), asi que el piso tiene
+# que quedar bien por encima de eso.
+# 12.5 es apenas menos que el valor de la 4ta app (13.1): con la quinta
+# la escalada se DETIENE en vez de derrumbarse. La ayuda de verdad la da
+# el televisor, que produce aparte y encima baja el drenaje un 10%.
+const DRENAJE_MESETA: float = 12.5        # el piso al que baja con el televisor
+const DRENAJE_POR_APP_MESETA: float = 0.15 # lo poco que suma cada app de ahi en mas
+const RAMPA_MESETA: float = 0.005         # la rampa temporal tambien afloja
+
 const UMBRAL_OFERTA: float = 0.35         # se ofrece app nueva bajo este % de dopamina
 const TIEMPO_MIN_ENTRE_OFERTAS: float = 25.0   # para no encadenar carteles
 const TIEMPO_MAX_SIN_OFERTA: float = 100.0     # tope: se ofrece igual aunque juegue bien
@@ -155,6 +181,10 @@ var mult_drenaje_externo: float = 1.0
 # Netflox es una fuente fisica independiente de LinkedOut y del vape.
 var mult_drenaje_netflox: float = 1.0
 
+# _tiempo_total del momento en que aparecio el televisor, o -1 si todavia
+# no aparecio. Marca donde la rampa temporal cambia de pendiente.
+var _tiempo_meseta: float = -1.0
+
 # CONGELAR LA BARRA ENTERA. No es lo mismo que drenaje_pausado:
 #
 #   drenaje_pausado  deja de PERDER, pero las apps siguen produciendo.
@@ -196,6 +226,13 @@ func _process(delta: float) -> void:
 
 	_tiempo_total += delta
 
+	# El instante en que aparece el televisor se marca ACA y no al aceptar
+	# la oferta, porque apps_desbloqueadas tambien se escribe a mano: el
+	# atajo U del escritorio y los tests lo hacen. Marcandolo en _process
+	# lo agarran todos los caminos y no solo el del cartel.
+	if _tiempo_meseta < 0.0 and apps_desbloqueadas > APPS_HASTA_LA_MESETA:
+		_tiempo_meseta = _tiempo_total
+
 	# La luna de miel se va agotando sola
 	if _luna_miel > 0.0:
 		_luna_miel = max(0.0, _luna_miel - delta)
@@ -232,8 +269,22 @@ func _process(delta: float) -> void:
 # Cuanta dopamina se pierde por segundo AHORA MISMO.
 func drenaje_actual() -> float:
 	var d := DRENAJE_INICIAL
-	d += _tiempo_total * RAMPA                          # rampa continua
-	d += (apps_desbloqueadas - 1) * DRENAJE_POR_APP     # cada app sube el piso
+
+	# Rampa temporal. Antes del televisor es la de siempre. Desde que
+	# aparece sigue subiendo pero mucho mas despacio, anclada al instante
+	# del desbloqueo para que el drenaje no pegue un salto al cambiar.
+	if _tiempo_meseta < 0.0:
+		d += _tiempo_total * RAMPA
+	else:
+		d += _tiempo_meseta * RAMPA
+		d += (_tiempo_total - _tiempo_meseta) * RAMPA_MESETA
+
+	# El piso por apps.
+	if apps_desbloqueadas <= APPS_HASTA_LA_MESETA:
+		d += (apps_desbloqueadas - 1) * DRENAJE_POR_APP      # intacto
+	else:
+		d += DRENAJE_MESETA - DRENAJE_INICIAL
+		d += (apps_desbloqueadas - APPS_HASTA_LA_MESETA - 1) * DRENAJE_POR_APP_MESETA
 	if etapa_final:
 		d += _tiempo_en_final * RAMPA_FINAL             # ya no hay vuelta
 
@@ -364,6 +415,7 @@ func reiniciar() -> void:
 	etapa_final = false
 	tropiezos = 0
 	_tiempo_total = 0.0
+	_tiempo_meseta = -1.0
 	_tiempo_desde_oferta = 0.0
 	_tiempo_sin_apps_nuevas = 0.0
 	_tiempo_en_final = 0.0

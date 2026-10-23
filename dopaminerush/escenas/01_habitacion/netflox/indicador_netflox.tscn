@@ -10,7 +10,7 @@ border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.898, 0.035, 0.078, 0.75)
+border_color = Color(0.898039, 0.145098, 0.192157, 0.6)
 
 [node name="IndicadorNetflox" type="Control"]
 visible = false
@@ -38,17 +38,21 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("Style_fondo")
 
-[node name="Marca" type="Label" parent="."]
+[node name="Icono" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = 15.0
-offset_bottom = 48.0
+offset_top = 8.0
+offset_bottom = 52.0
 grow_horizontal = 2
-theme_override_colors/font_color = Color(0.95, 0.12, 0.18, 1)
-theme_override_font_sizes/font_size = 23
-text = "NETFLOX"
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.898039, 0.145098, 0.192157, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.6)
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 34
+text = "N"
 horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Contador" type="Label" parent="."]
 layout_mode = 1
@@ -60,9 +64,10 @@ offset_top = -60.0
 offset_bottom = -26.0
 grow_horizontal = 2
 grow_vertical = 0
+mouse_filter = 2
 theme_override_colors/font_color = Color(0.878431, 0.913725, 0.976471, 1)
-theme_override_font_sizes/font_size = 21
-text = "[T] Encender"
+theme_override_font_sizes/font_size = 26
+text = "[T]"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -76,6 +81,7 @@ offset_top = -24.0
 offset_bottom = -6.0
 grow_horizontal = 2
 grow_vertical = 0
+mouse_filter = 2
 theme_override_colors/font_color = Color(0.615686, 0.678431, 0.792157, 1)
 theme_override_font_sizes/font_size = 13
 text = "la tele de fondo"

@@ -35,23 +35,50 @@ func _probar() -> void:
 	current_scene = habitacion
 	await process_frame
 	var tv = habitacion.netflox
+	_comprobar(tv.apps_para_desbloquear == 5, "La TV llega con la quinta app")
+	_comprobar(is_equal_approx(tv.demora_aviso, 15.0), "El cartel tarda 15 s en salir")
+	# Para el resto del test no interesa esperar los 15 s reales.
+	tv.demora_aviso = 0.4
+
 	gm.apps_desbloqueadas = 3
 	gm.app_desbloqueada.emit(2)
 	tv.encender()
 	_comprobar(habitacion._vape_desbloqueado, "El vape sigue habilitado con la tercera app")
 	_comprobar(not tv._desbloqueada and not tv._encendida, "Netflox no se habilita con el vape")
+
 	gm.apps_desbloqueadas = 4
 	gm.app_desbloqueada.emit(3)
 	tv.encender()
-	_comprobar(tv._desbloqueada and not tv._encendida, "Cuarta app desbloquea TV, pero no fuera de la PC")
+	_comprobar(not tv._desbloqueada, "La cuarta app todavia NO habilita la TV")
+
+	# Las apps se desbloquean con el jugador en la PC, asi que la sesion
+	# esta activa cuando llega el cartel.
+	gm.activo = true
+	gm.apps_desbloqueadas = 5
+	gm.app_desbloqueada.emit(4)
+	_comprobar(not tv._desbloqueada, "La quinta tampoco la habilita en el acto: espera el cartel")
+	await create_timer(1.0).timeout
+	tv.encender()
+	_comprobar(tv._desbloqueada and not tv._encendida, "Tras la espera queda habilitada, pero no fuera de la PC")
+	_comprobar(tv._cartel_visible, "Al habilitarse aparece el cartel")
 	await create_timer(5.2).timeout
 	habitacion._apagar_despertador()
 	await habitacion._sentarse()
 	habitacion.escritorio._hay_linkedout = false
 	var drenaje_base: float = gm.drenaje_actual()
 	_pulsar_t(tv)
-	_comprobar(tv._encendida and not tv.esta_mirando(), "Primera T solo enciende")
+	# Ahora la primera T enciende Y mira: si solo encendiera, nadie veria
+	# la animacion de encendido.
+	_comprobar(tv._encendida and tv.esta_mirando(), "Primera T enciende y ademas mira")
+	_comprobar(not tv._cartel_visible, "Apretar T cierra el cartel")
+	_comprobar(tv.marco.scale.y < 0.5, "El tubo arranca cerrado: hay animacion de encendido")
 	_comprobar(is_equal_approx(gm.drenaje_actual(), drenaje_base * 0.9), "TV reduce el drenaje un 10%")
+
+	# Dejar que termine esa primera mirada antes de seguir.
+	await create_timer(5.0).timeout
+	_comprobar(not tv.esta_mirando(), "La primera mirada termina sola")
+	_comprobar(tv.marco.scale.is_equal_approx(Vector2.ONE), "El tubo queda abierto del todo")
+	tv._cooldown_restante = 0.0
 	_comprobar(tv.portada.visible and tv.pelicula.stream == null, "Sin pelicula se muestra la portada")
 	_comprobar(tv.sonido.global_position.is_equal_approx(tv._pantalla.global_position), "Audio ubicado en la TV")
 	var audio_local: Vector3 = habitacion.jugador.camara.to_local(tv.sonido.global_position)
@@ -76,12 +103,12 @@ func _probar() -> void:
 	tv.mirar()
 	_comprobar(not tv.esta_mirando(), "No permite mirar TV durante el celular")
 	habitacion._mirando_telefono = false
-	gm.dopamina = 40.0
+	gm.dopamina = 20.0
 	var camara_base: Transform3D = habitacion.jugador.camara.transform
 	var fov_base: float = habitacion.jugador.camara.fov
 	Input.action_press("mirar_television")
 	tv._process(0.0)
-	_comprobar(tv.esta_mirando(), "Segunda T inicia la mirada")
+	_comprobar(tv.esta_mirando(), "La siguiente T vuelve a mirar")
 	_comprobar(not gm.drenaje_pausado and not gm.dopamina_congelada, "TV no congela la barra")
 	Input.action_press("vapear")
 	habitacion._actualizar_vape(0.0)
@@ -92,20 +119,20 @@ func _probar() -> void:
 	Input.action_release("mirar_celular")
 	habitacion._telefono_activo = false
 	_comprobar(not habitacion._vapeando and not habitacion._mirando_telefono, "TV bloquea vape y celular durante la mirada")
-	await create_timer(0.8).timeout
+	await create_timer(1.15).timeout
 	var camara: Camera3D = habitacion.jugador.camara
 	var hacia_tv: Vector3 = (tv._pantalla.global_position - camara.global_position).normalized()
 	_comprobar((-camara.global_basis.z).dot(hacia_tv) > 0.999, "Camara mira la television desde la silla")
 	_comprobar(is_equal_approx(camara.fov, tv.fov_television), "Zoom acerca el encuadre de la TV")
-	await create_timer(2.5).timeout
+	await create_timer(3.45).timeout
 	_comprobar(not tv.esta_mirando() and camara.transform.is_equal_approx(camara_base), "Camara vuelve al monitor")
 	_comprobar(is_equal_approx(camara.fov, fov_base), "Al volver se restaura el encuadre de la PC")
-	_comprobar(is_equal_approx(gm.dopamina, 55.0), "Mirada completa entrega exactamente 15")
-	_comprobar(tv._cooldown_restante > 23.0, "Cooldown de 25 segundos empieza al terminar")
+	_comprobar(is_equal_approx(gm.dopamina, 90.0), "Mirada completa entrega exactamente 70")
+	_comprobar(tv._cooldown_restante > 28.0, "Cooldown de 30 segundos empieza al terminar")
 	tv.mirar()
 	_comprobar(not tv.esta_mirando(), "Cooldown impide repetir")
-	await create_timer(26.0).timeout
-	_comprobar(not tv.esta_mirando() and is_equal_approx(gm.dopamina, 55.0), "Mantener T no repite tras el cooldown")
+	await create_timer(32.0).timeout
+	_comprobar(not tv.esta_mirando() and is_equal_approx(gm.dopamina, 90.0), "Mantener T no repite tras el cooldown")
 	Input.action_release("mirar_television")
 	await process_frame
 
@@ -132,13 +159,15 @@ func _probar() -> void:
 	tv = habitacion.get_node("Netflox")
 	tv.ruta_video = "res://assets/video/subway/subway.ogv"
 	tv.ruta_audio = "res://assets/audio/ambiente/zumbido.ogg"
+	tv.demora_aviso = 0.4
 	root.add_child(habitacion)
 	current_scene = habitacion
 	await create_timer(5.2).timeout
 	habitacion._apagar_despertador()
 	await habitacion._sentarse()
-	gm.apps_desbloqueadas = 4
-	gm.app_desbloqueada.emit(3)
+	gm.apps_desbloqueadas = 5
+	gm.app_desbloqueada.emit(4)
+	await create_timer(1.0).timeout
 	_comprobar(not tv._encendida and tv._cooldown_restante == 0.0, "Habitacion nueva arranca con TV apagada")
 	tv.encender()
 	await process_frame

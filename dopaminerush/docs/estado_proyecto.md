@@ -56,11 +56,59 @@ abierta. No la vuelvas a meter en `APPS`.
 Viven todos en `game_manager.gd` salvo los de cada app, que están en su `.tscn`.
 
 - `DRENAJE_INICIAL` **3.5** por segundo
-- `DRENAJE_POR_APP` **+3.2** por cada app desbloqueada
+- `DRENAJE_POR_APP` **+3.2** por app, y `RAMPA` **0.008** por segundo de juego.
+  **Estos dos no se tocan**: rigen hasta la 3ª app y ahí el juego ya está bien.
+- Desde la **5ª app** empieza la meseta: `DRENAJE_MESETA` **12.5**,
+  `DRENAJE_POR_APP_MESETA` **0.15** y `RAMPA_MESETA` **0.005**.
 - El vape se desbloquea con la **3ª app** (`habitacion.gd` → `APPS_PARA_VAPE`)
-- **Netflox** se habilita con la **4ª app**: T enciende la TV (-10% de drenaje)
-  y permite mirarla (+15, 3 s de animación, 25 s de cooldown). Portada provisional;
-  falta elegir la película y su audio espacial. Integración: `netflox.md`.
+- **Netflox** se habilita con la **5ª app**, y aparece **15 s después** con su
+  propio cartel. T prende la tele (-10% de drenaje) y la mira (**+70**, 4,2 s de
+  animación, 30 s de cooldown). Portada provisional; falta elegir la película y
+  su audio espacial. Ver `netflox.md`.
+
+### La meseta del televisor
+
+Hasta la **3ª app** el drenaje es exactamente el de siempre:
+`3.5 + segundos*0.008 + (apps-1)*3.2`. Esa parte está balanceada y **no se toca**.
+
+Desde la **5ª app** el piso **baja** a la meseta y de ahí en más casi no sube. La
+rampa temporal también afloja desde ese instante, anclada al momento del
+desbloqueo para que el drenaje no pegue un salto al cambiar de pendiente.
+
+Antes el salto de 3.2 seguía siendo lineal y a las 6 apps el drenaje llegaba a
+**19,5/s**, más del doble de lo que todas las apps juntas pueden producir.
+
+A los 5,5 min, con la tele prendida:
+
+| apps | original | ahora | con la TV |
+|---|---|---|---|
+| 1-4 | — | **sin cambios** | — |
+| 5 | 18,94 | 15,14 | 13,63 |
+| 6 | 22,14 | 15,29 | 13,76 |
+
+**La meseta no es un derrumbe: la escalada se detiene.** Con la 5ª app el piso
+queda apenas por debajo del de la 4ª (12,5 contra 13,1) en vez de caer en picada.
+La ayuda real la da el televisor, que produce aparte y encima baja el drenaje
+un 10%.
+
+⚠ **No bajar `DRENAJE_MESETA` sin medir.** Con 5,7 el drenaje quedaba en 7,51 y
+un canal fresco de Subway Slop (que da **7/s**, no 3,5 — eso es el promedio
+mientras se quema) más la tele ya daban 9,05: la barra **subía sola sin tocar
+nada**. Hoy faltan 4,58/s, así que hay que trabajar las otras apps.
+
+Al calcular "produce" se cuenta **una sola app activa a la vez**, porque el mouse
+es uno solo, más todo lo pasivo (Subway Slop 3,5/s y la TV 2,05/s). Es una
+estimación conservadora: alternando apps se produce más. Lo que termina la
+partida es `RAMPA_FINAL` (0,8/s en la etapa final), no esta curva.
+
+⚠ La meseta y el televisor arrancan **juntos**, con la 5ª app. Como la
+comparación es `apps_desbloqueadas <= APPS_HASTA_LA_MESETA`, ese número (**4**)
+es uno menos que el `apps_para_desbloquear` de Netflox (**5**). Si se mueve uno,
+mover el otro.
+
+Hasta la 4ª app inclusive —o sea **con Subway Slop ya abierto**— el drenaje es
+exactamente el de siempre. Que la barra empiece a bajar más despacio al abrir
+Slop era un error: la ayuda tiene que llegar con el televisor, no antes.
 
 **Subway Slop** es la única que da dopamina continua, así que tiene su propia curva:
 
