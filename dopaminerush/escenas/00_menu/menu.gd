@@ -12,6 +12,9 @@ func _ready() -> void:
 	# y el estado del juego tiene que arrancar limpio.
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	GameManager.reiniciar()
+	# Partida nueva de verdad: los tutoriales vuelven a salir. El dia nuevo
+	# tambien llama a reiniciar(), pero ese NO los repite.
+	GameManager.tutoriales_vistos.clear()
 
 	boton_comenzar.pressed.connect(_comenzar)
 	boton_salir.pressed.connect(_salir)

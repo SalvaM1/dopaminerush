@@ -40,6 +40,13 @@ func _probar() -> void:
 	_comprobar(ciclo._entorno != original and is_equal_approx(original.ambient_light_energy, 0.4), "Los cambios no alteran el recurso original")
 	_comprobar(habitacion.get_node("HabitacionVisual/Ventana/Vidrio").cast_shadow == GeometryInstance3D.SHADOW_CASTING_SETTING_OFF, "El vidrio deja entrar la luz")
 	var energia_manana: float = ciclo.luz_ventana.light_energy
+	# Sin sesion en la PC el reloj NO corre: explorar la pieza no hace de noche.
+	escritorio._process(1.0)
+	_comprobar(escritorio.reloj.text == "08:00", "Sin sentarse a la PC el reloj no avanza")
+	# Con sesion si. LinkedOut se apaga para que el salto de tiempo no la abra.
+	var linkedout_previo: bool = escritorio._hay_linkedout
+	escritorio._hay_linkedout = false
+	gm.activo = true
 	escritorio._process(1.0)
 	_comprobar(escritorio.reloj.text == "08:12" and ciclo.luz_ventana.light_energy > energia_manana, "Avance del reloj actualiza la luz en el mismo paso")
 	_hora(escritorio, 12.0)
@@ -56,6 +63,8 @@ func _probar() -> void:
 	_comprobar(ciclo._sol.light_energy == 0.0 and ciclo._cielo.sky_top_color.v < 0.15, "Sol apagado y cielo nocturno")
 	escritorio._process(600.0)
 	_comprobar(escritorio.reloj.text == "23:59" and escritorio.obtener_minutos_del_dia() == escritorio.FIN_DEL_DIA, "Una partida larga no vuelve de golpe a la manana")
+	gm.activo = false
+	escritorio._hay_linkedout = linkedout_previo
 	await create_timer(5.2).timeout
 	habitacion._apagar_despertador()
 	habitacion._al_usar_interruptor()

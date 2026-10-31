@@ -81,6 +81,10 @@ func _ready() -> void:
 	# El camino mide ~82 m, asi que a 2.4 m/s la caminata dura ~35 s.
 	# Para alargarla, bajar este numero (a 1.5 son ~55 s).
 	jugador.velocidad = 2.4
+	# Afuera no hay pasos sueltos: suena una grabacion de alguien caminando
+	# en ripio, en loop, mientras el jugador camina. Es el camino de piedra.
+	jugador.carpeta_pasos = ""
+	jugador.caminata_continua = "res://assets/audio/pasos/parque/caminata_ripio.ogg"
 	# Se puede girar la cabeza casi entera estando sentado
 	jugador.set("LIMITE_GIRO_SENTADO", LIMITE_GIRO_BANCO)
 

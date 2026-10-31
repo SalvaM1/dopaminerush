@@ -1,0 +1,15 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://escenas/03_apps/app_06_musica/app_musica.gd" id="1_musica"]
+
+[node name="AppMusica" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 560.0
+offset_bottom = 282.0
+script = ExtResource("1_musica")
+id_app = "musica"
+nombre_app = "Loopify"
+tamano_ventana = Vector2(560, 320)
+posicion_ventana = Vector2(560, 40)
+dopamina_por_interaccion = 0.0

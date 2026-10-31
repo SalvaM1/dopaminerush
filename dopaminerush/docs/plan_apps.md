@@ -181,11 +181,11 @@ Y crea la decisión real de la app: **¿me meto en el trámite ahora, o dejo pas
 
 **Qué aporta:** decisión estratégica.
 
-**No da dopamina propia: multiplica la de las otras** (×1.3) mientras suena. La canción se termina cada ~40 segundos y hay que elegir otra de una lista.
+**HECHA.** No da dopamina propia: mientras suena un tema fresco, las otras apps rinden ×1.3. **A los 7,5 segundos el tema aburre**: se apaga un poco, se va el multiplicador, y hay que apretar "Siguiente". Detalle en `estado_proyecto.md`.
 
-Genera una decisión real cuando estás ahogado: ¿gastás dos segundos en poner música, o los usás en producir?
+Genera una decisión real cuando estás ahogado: ¿gastás un click en cambiar de tema, o lo usás en producir?
 
-⚠ **Es la única app que necesita tocar `app_base.gd`**: el multiplicador se aplica en `recompensar()`. Coordinar antes de hacerlo.
+El multiplicador terminó en `GameManager.sumar_dopamina()`, no en `app_base.gd`: así también alcanza a Subway Slop, que suma por segundo sin pasar por `recompensar()`.
 
 ---
 

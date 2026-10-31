@@ -21,8 +21,8 @@ extends Node3D
 @export_range(0.0, 1.0) var factor_drenaje: float = 0.9
 
 # La mirada es el respiro del juego: da MUCHA dopamina de una, pero no se
-# puede repetir seguido. El drenaje sigue corriendo durante la mirada, asi
-# que lo que importa es el neto.
+# puede repetir seguido. Durante la mirada la barra queda congelada (ver
+# mirar()), asi que estos 70 entran enteros al volver al monitor.
 @export var dopamina_por_mirada: float = 70.0
 @export var cooldown: float = 30.0
 
@@ -228,6 +228,14 @@ func mirar() -> void:
 	if not _encendida or _mirando or _cooldown_restante > 0.0 or not _puede_usar():
 		return
 	_mirando = true
+
+	# LA BARRA SE CONGELA mientras se mira, igual que con el celular: no
+	# pierde ni gana. El jugador no controla la pantalla en ese rato, asi
+	# que no puede perder (ni terminar la partida) por algo que no ve.
+	# Congelada tampoco corren la caida, el colapso ni la etapa final:
+	# el GameManager corta todo eso antes de llegar.
+	GameManager.dopamina_congelada = true
+
 	# El cartel esta justo en el centro y taparia la tele, o sea la cosa
 	# que el cartel vino a anunciar.
 	_cerrar_cartel(0.22)
@@ -257,8 +265,11 @@ func mirar() -> void:
 
 func _terminar_mirada() -> void:
 	_mirando = false
-	# El drenaje sigue corriendo mientras se mira. Si hubo una caida, no
-	# se entrega una recompensa tardia ni se mueve la camara del colapso.
+	# Se suelta la barra ANTES de premiar: sumar_dopamina no suma nada
+	# mientras esta congelada, y el premio se perderia en silencio.
+	GameManager.dopamina_congelada = false
+	# Si hubo una caida, no se entrega una recompensa tardia ni se mueve
+	# la camara del colapso.
 	if not _encendida or not GameManager.activo:
 		return
 	_cooldown_restante = cooldown
@@ -271,9 +282,15 @@ func _terminar_mirada() -> void:
 func _cancelar_mirada() -> void:
 	if _tween_mirada and _tween_mirada.is_valid():
 		_tween_mirada.kill()
-	if _mirando and is_instance_valid(_camara):
-		_camara.transform = _camara_base
-		_camara.fov = _fov_base
+	if _mirando:
+		# Por aca pasan el tropiezo, el fin del dia, el colapso y el cambio
+		# de escena. Si la mirada se corta sin soltar la barra, queda
+		# congelada para siempre. Solo se suelta si la congelo la TV: el
+		# celular usa la misma bandera, pero nunca se superponen.
+		GameManager.dopamina_congelada = false
+		if is_instance_valid(_camara):
+			_camara.transform = _camara_base
+			_camara.fov = _fov_base
 	_mirando = false
 
 

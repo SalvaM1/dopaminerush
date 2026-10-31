@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://c7c2fki7k8e8d"
+path="res://.godot/imported/Nirvana - Smells Like Teen Spirit.ogg-35e2d12e1d2ff3116fd91a881de4dd21.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/audio/loopify/Nirvana - Smells Like Teen Spirit.ogg"
+dest_files=["res://.godot/imported/Nirvana - Smells Like Teen Spirit.ogg-35e2d12e1d2ff3116fd91a881de4dd21.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

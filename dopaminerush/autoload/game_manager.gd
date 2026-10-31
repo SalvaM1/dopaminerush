@@ -185,6 +185,18 @@ var mult_drenaje_netflox: float = 1.0
 # no aparecio. Marca donde la rampa temporal cambia de pendiente.
 var _tiempo_meseta: float = -1.0
 
+# Loopify: mientras suena un tema fresco, lo que dan las OTRAS apps del
+# catalogo rinde mas (lo maneja app_musica.gd). La TV, el vape y LinkedOut
+# no se multiplican: no son apps de la barra.
+var mult_dopamina_musica: float = 1.0
+
+# ---- TUTORIALES ----
+# Cuales ya vio el jugador. reiniciar() NO los borra, a proposito: un dia
+# nuevo no tiene que volver a explicar lo mismo. Los borra el menu, que es
+# donde empieza una partida nueva de verdad (en una muestra, la proxima
+# persona que juegue en la misma compu los tiene que ver).
+var tutoriales_vistos: Dictionary = {}
+
 # CONGELAR LA BARRA ENTERA. No es lo mismo que drenaje_pausado:
 #
 #   drenaje_pausado  deja de PERDER, pero las apps siguen produciendo.
@@ -371,6 +383,9 @@ func sumar_dopamina(cantidad: float, id_app: String = "") -> void:
 	if USAR_TOLERANCIA and id_app != "":
 		real *= _consumir_tolerancia(id_app)
 
+	if real > 0.0 and mult_dopamina_musica != 1.0 and id_app != "musica" and _es_app_del_catalogo(id_app):
+		real *= mult_dopamina_musica
+
 	if real > 0.0:
 		_produccion_acumulada += real
 
@@ -385,6 +400,21 @@ func _consumir_tolerancia(id_app: String) -> float:
 	var factor: float = _tolerancia[id_app]
 	_tolerancia[id_app] = max(TOLERANCIA_MINIMA, factor - TOLERANCIA_CAIDA)
 	return factor
+
+
+func _es_app_del_catalogo(id_app: String) -> bool:
+	for app in APPS:
+		if app["id"] == id_app:
+			return true
+	return false
+
+
+func tutorial_pendiente(clave: String) -> bool:
+	return not tutoriales_vistos.has(clave)
+
+
+func marcar_tutorial(clave: String) -> void:
+	tutoriales_vistos[clave] = true
 
 
 func esta_desbloqueada(indice: int) -> bool:
@@ -425,6 +455,7 @@ func reiniciar() -> void:
 	drenaje_pausado = false
 	mult_drenaje_externo = 1.0
 	mult_drenaje_netflox = 1.0
+	mult_dopamina_musica = 1.0
 	dopamina_congelada = false
 	produccion_por_segundo = 0.0
 	_produccion_acumulada = 0.0

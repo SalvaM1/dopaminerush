@@ -18,10 +18,14 @@ extends CanvasLayer
 #     dialogo.mostrar("La mochila de la facultad.")
 #     await dialogo.cerrado
 #
-# El jugador queda quieto mientras hay texto en pantalla. No se congela
-# nada del juego porque esto solo pasa ANTES de sentarse a la computadora,
-# cuando el drenaje todavia no arranco: explorar la habitacion es gratis,
-# y tiene que serlo.
+# El jugador queda quieto mientras hay texto en pantalla. Explorando la
+# habitacion no hace falta congelar nada: el drenaje todavia no arranco.
+#
+# Pero un pensamiento tambien puede aparecer SENTADO en la compu (la
+# primera vez que se abre TikBrainRot). Ahi se pasa pausar = true y el
+# juego entero se frena hasta que el jugador aprieta E: ni drenaje, ni
+# video, ni clicks a lo que hay atras. Por eso este nodo procesa siempre,
+# incluso con el arbol en pausa: es lo unico que tiene que seguir andando.
 
 signal cerrado()
 
@@ -65,8 +69,21 @@ var _tween_flecha: Tween = null
 # Quien pidio el dialogo, para devolverle el control al cerrar.
 var _jugador: Node = null
 
+# Como estaba el jugador ANTES de abrir. Al cerrar se devuelve eso y no
+# "true": sentado en la compu puede_mover ya estaba en false, y ponerlo en
+# true lo dejaba caminando con la silla puesta.
+var _prev_mover: bool = true
+var _prev_interactuar: bool = true
+
+# Si este dialogo puso el juego en pausa, la saca el mismo al cerrar.
+var _pauso: bool = false
+
 
 func _ready() -> void:
+	# Tiene que andar con el juego en pausa: si no, la pausa que pone el
+	# propio dialogo lo congelaria a el tambien, y no habria forma de salir.
+	process_mode = Node.PROCESS_MODE_ALWAYS
+
 	caja.modulate.a = 0.0
 	caja.visible = false
 	avance.visible = false
@@ -93,15 +110,22 @@ func esta_abierto() -> bool:
 
 
 # Muestra un pensamiento. Si le pasas el jugador, le saca el control
-# mientras dura y se lo devuelve al cerrar.
-func mostrar(pensamiento: String, jugador: Node = null) -> void:
+# mientras dura y se lo devuelve al cerrar. Con pausar = true el juego
+# entero queda congelado hasta que el jugador lo cierra con E.
+func mostrar(pensamiento: String, jugador: Node = null, pausar: bool = false) -> void:
 	if _fase != Fase.CERRADO:
 		return
 
 	_jugador = jugador
 	if _jugador:
+		_prev_mover = _jugador.puede_mover
+		_prev_interactuar = _jugador.puede_interactuar
 		_jugador.puede_mover = false
 		_jugador.puede_interactuar = false
+
+	_pauso = pausar
+	if _pauso:
+		get_tree().paused = true
 
 	_completo = pensamiento
 	texto.text = pensamiento
@@ -217,8 +241,22 @@ func _cerrar() -> void:
 	_fase = Fase.CERRADO
 
 	if _jugador:
-		_jugador.puede_mover = true
-		_jugador.puede_interactuar = true
+		_jugador.puede_mover = _prev_mover
+		_jugador.puede_interactuar = _prev_interactuar
 		_jugador = null
 
+	# Recien aca, con la caja ya afuera. Si se sacara la pausa en el mismo
+	# frame de la E, esa misma tecla le llegaria tambien al juego.
+	if _pauso:
+		_pauso = false
+		get_tree().paused = false
+
 	cerrado.emit()
+
+
+func _exit_tree() -> void:
+	# Si la escena se va con un pensamiento abierto, que no se lleve el
+	# juego en pausa con ella.
+	if _pauso and is_inside_tree():
+		_pauso = false
+		get_tree().paused = false

@@ -1,54 +1,135 @@
 [gd_scene format=3 uid="uid://dv1sl6ryeko40"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3qowm"]
-bg_color = Color(0.9850206, 0.35376412, 0.35936245, 1)
+[ext_resource type="Script" path="res://escenas/02_computadora/cartel_oferta.gd" id="1_cartel"]
 
-[node name="CartelOferta" type="Panel" unique_id=1949186763]
+[sub_resource type="StyleBoxFlat" id="Style_tarjeta"]
+bg_color = Color(0.121569, 0.133333, 0.164706, 0.97)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.09)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0, 0, 0, 0.5)
+shadow_size = 18
+shadow_offset = Vector2(0, 6)
+
+[sub_resource type="StyleBoxFlat" id="Style_icono"]
+bg_color = Color(0.4, 0.45, 0.55, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="Style_boton"]
+bg_color = Color(0.231373, 0.509804, 0.964706, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="Style_boton_hover"]
+bg_color = Color(0.341176, 0.6, 1, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="Style_boton_apretado"]
+bg_color = Color(0.180392, 0.4, 0.8, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="CartelOferta" type="Panel"]
 visible = false
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 139.0
-offset_top = -21.0
-offset_right = 559.0
-offset_bottom = 199.0
+offset_right = 470.0
+offset_bottom = 170.0
+mouse_filter = 1
+theme_override_styles/panel = SubResource("Style_tarjeta")
+script = ExtResource("1_cartel")
+
+[node name="Icono" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 22.0
+offset_right = 72.0
+offset_bottom = 76.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_icono")
+
+[node name="Letra" type="Label" parent="Icono"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_3qowm")
-
-[node name="Titulo" type="Label" parent="." unique_id=2024596248]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 35.0
-grow_horizontal = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 28
+text = "A"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="Texto" type="Label" parent="." unique_id=964161174]
-custom_minimum_size = Vector2(360, 0)
-layout_mode = 1
-anchors_preset = 14
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_top = -70.0
-offset_bottom = 75.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="Encabezado" type="Label" parent="."]
+layout_mode = 0
+offset_left = 88.0
+offset_top = 14.0
+offset_right = 452.0
+offset_bottom = 34.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.6, 0.64, 0.72, 1)
+theme_override_font_sizes/font_size = 14
+text = "Se terminó de instalar  ·  ahora"
+
+[node name="Titulo" type="Label" parent="."]
+layout_mode = 0
+offset_left = 88.0
+offset_top = 32.0
+offset_right = 452.0
+offset_bottom = 64.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "Nombre de la app"
+text_overrun_behavior = 3
+
+[node name="Texto" type="Label" parent="."]
+layout_mode = 0
+offset_left = 88.0
+offset_top = 66.0
+offset_right = 452.0
+offset_bottom = 116.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.82, 0.85, 0.9, 1)
+theme_override_font_sizes/font_size = 16
+text = "Texto de la oferta."
 autowrap_mode = 2
+text_overrun_behavior = 3
 
-[node name="BotonAceptar" type="Button" parent="." unique_id=2110368145]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.50200003
-anchor_top = 0.9250001
-anchor_right = 0.50200003
-anchor_bottom = 0.9250001
-offset_left = -74.84001
-offset_top = -14.500015
-offset_right = 77.15999
-offset_bottom = 16.499985
-grow_horizontal = 2
-grow_vertical = 2
+[node name="BotonAceptar" type="Button" parent="."]
+layout_mode = 0
+offset_left = 292.0
+offset_top = 122.0
+offset_right = 452.0
+offset_bottom = 156.0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.6)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("Style_boton")
+theme_override_styles/hover = SubResource("Style_boton_hover")
+theme_override_styles/pressed = SubResource("Style_boton_apretado")
+theme_override_styles/disabled = SubResource("Style_boton")
+theme_override_styles/focus = SubResource("Style_boton")
+text = "Abrir"
+
+[node name="Sonido" type="AudioStreamPlayer" parent="."]
+bus = &"UI"

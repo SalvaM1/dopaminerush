@@ -3,6 +3,16 @@
 
 	"_formato": "Cada clave puede ser un texto suelto o una lista. Si es lista, se va mostrando uno por vez en cada interaccion y se queda en el ultimo: asi insistir sobre el mismo objeto dice algo nuevo en vez de repetir.",
 
+	"_primeras_veces": "Lo que piensa el personaje la PRIMERA vez que se abre cada app (primera_vez_ + el id de la app). Frenan el juego hasta que se aprieta E. Una app sin clave no dice nada.",
+
+	"primera_vez_scroll": "Un ratito de tiktoks no le hace mal a nadie...",
+	"primera_vez_slots": "Una sola tirada y la cierro. Es plata de mentira...",
+	"primera_vez_racha": "Esto por lo menos es educativo.",
+	"primera_vez_subway": "Lo dejo de fondo y sigo con lo mío.",
+	"primera_vez_ofertas": "Solo miro. No voy a comprar nada.",
+	"primera_vez_musica": "Con música me concentro mejor.",
+	"primera_vez_linkedout": "Uf... qué miedo estos virus que te abren pestañas raras.",
+
 	"mochila": [
 		"La mochila de la facultad. No la abro desde marzo.",
 		"Adentro deben estar los apuntes de la primera semana.",

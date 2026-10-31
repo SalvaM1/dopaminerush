@@ -54,6 +54,51 @@ const SONIDOS := {
 # id -> reproductor de la capa que esta sonando
 var _capas: Dictionary = {}
 
+# ---- AGACHE (ducking) ----
+# Mientras suena la musica de Loopify, las apps (con sus videos) y el
+# ambiente bajan, para que el tema se escuche si o si. La interfaz no:
+# una notificacion se tiene que escuchar igual.
+#
+# Se vuelve SIEMPRE al volumen original de cada bus (el del layout, leido
+# al arrancar) y no al que tuviera en ese momento: asi un "soltar" de mas,
+# o uno que llega a mitad de un fundido, nunca deja un bus desfasado.
+const BUSES_AGACHABLES := ["Apps", "Ambiente"]
+const AGACHE_DB: float = 10.0
+const FUNDIDO_AGACHE: float = 0.4
+
+var _volumen_original: Dictionary = {}
+var _agachado: bool = false
+var _tween_agache: Tween = null
+
+
+func _ready() -> void:
+	for bus in BUSES_AGACHABLES:
+		var i := AudioServer.get_bus_index(bus)
+		if i >= 0:
+			_volumen_original[bus] = AudioServer.get_bus_volume_db(i)
+
+
+# true: el resto baja AGACHE_DB. false: vuelve a su volumen original.
+func agachar(activo: bool) -> void:
+	if activo == _agachado:
+		return
+	_agachado = activo
+	if _tween_agache and _tween_agache.is_valid():
+		_tween_agache.kill()
+	_tween_agache = create_tween().set_parallel(true)
+	for bus in _volumen_original:
+		var i := AudioServer.get_bus_index(bus)
+		if i < 0:
+			continue
+		var destino: float = _volumen_original[bus] - (AGACHE_DB if activo else 0.0)
+		_tween_agache.tween_method(
+			func(db: float) -> void: AudioServer.set_bus_volume_db(i, db),
+			AudioServer.get_bus_volume_db(i), destino, FUNDIDO_AGACHE)
+
+
+func esta_agachado() -> bool:
+	return _agachado
+
 
 # ============================================================
 #  Capas (loop): las apps

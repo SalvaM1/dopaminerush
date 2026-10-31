@@ -2,6 +2,9 @@ extends CanvasLayer
 
 # Una sola hora para la barra de tareas y la luz natural de la habitacion.
 signal hora_cambio(minutos: float)
+# Se abrio una app. Lleva el id y no el indice porque LinkedOut tambien
+# la usa, y LinkedOut no esta en el catalogo.
+signal app_abierta(id_app: String)
 
 # El "sistema operativo" falso. Maneja:
 #   - la barra de iconos y que se desbloqueen
@@ -20,7 +23,7 @@ const ESCENAS_APPS := [
 	"res://escenas/03_apps/app_04_racha/app_racha.tscn",    # 2 - Preguntados (racha)
 	"res://escenas/03_apps/app_03_subway/app_subway.tscn",  # 3 - Subway Slop
 	"res://escenas/03_apps/app_05_ofertas/app_ofertas.tscn",  # 4 - Mercado Libre
-	"",  # 5 - Loopify      (musica)
+	"res://escenas/03_apps/app_06_musica/app_musica.tscn",  # 5 - Loopify
 ]
 
 # ---- LINKEDOUT: LA QUE SE ABRE SOLA ----
@@ -182,7 +185,11 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	_minutos = minf(FIN_DEL_DIA, _minutos + delta * VELOCIDAD_RELOJ)
+	# El reloj solo corre con la sesion de la PC en marcha. Antes corria
+	# desde que cargaba la habitacion: un minuto explorando la pieza eran
+	# doce horas de juego, y se hacia de noche antes de sentarse.
+	if GameManager.activo:
+		_minutos = minf(FIN_DEL_DIA, _minutos + delta * VELOCIDAD_RELOJ)
 	_actualizar_reloj()
 
 	# La fecha no avanza nunca. Es el mismo dia siempre, y es a proposito.
@@ -319,6 +326,8 @@ func _abrir_linkedout() -> void:
 	if ventana.app.has_method("mostrar_aparicion"):
 		ventana.app.mostrar_aparicion(_apariciones_linkedout, GameManager.etapa_final)
 
+	app_abierta.emit("linkedout")
+
 
 # Cuanto falta para la proxima aparicion. Arranca en 30 s y se acorta
 # hasta 15 a medida que el jugador desbloquea apps: la app aparece mas
@@ -381,6 +390,7 @@ func _abrir_app(indice: int) -> void:
 	_ventanas[indice] = ventana
 	ventana.cerrada.connect(_al_cerrar_ventana.bind(indice))
 	ventana.traida_al_frente.connect(_al_traer_al_frente)
+	app_abierta.emit(GameManager.APPS[indice]["id"])
 
 	_actualizar_puntos()
 	_actualizar_foco()
@@ -399,16 +409,22 @@ func _al_traer_al_frente(_ventana) -> void:
 # --- Cartel de oferta ---
 # El juego no te esta ayudando: te esta vendiendo algo.
 
-func _al_ofrecer_app(_indice: int, titulo: String, texto: String, boton: String) -> void:
-	cartel.get_node("Titulo").text = titulo
-	cartel.get_node("Texto").text = texto
-	cartel.get_node("BotonAceptar").text = boton
-	cartel.show()
+# Ya no es un cartel rojo en el medio: es la notificacion del sistema de
+# que algo "se termino de instalar". Toda la logica de mostrarse, sonar e
+# insistir esta en cartel_oferta.gd.
+func _al_ofrecer_app(indice: int, titulo: String, texto: String, boton: String) -> void:
+	var datos: Dictionary = GameManager.APPS[indice]
+	cartel.mostrar(datos["id"], datos["nombre"], titulo, texto, boton)
 
 
 func _al_aceptar_oferta() -> void:
-	cartel.hide()
+	cartel.cerrar()
+	var indice: int = GameManager.apps_desbloqueadas
 	GameManager.aceptar_oferta()
+	# "Se termino de instalar" + "Jugar ahora": lo natural es que la abra.
+	# Antes solo la desbloqueaba, y el boton prometia algo que no hacia.
+	if GameManager.esta_desbloqueada(indice):
+		_abrir_app(indice)
 
 
 # --- Perder ---
@@ -594,6 +610,164 @@ func arrancar() -> void:
 		if boton == null:
 			continue
 		Juice.entrar(boton, 14.0, 0.26, 0.06 * i)
+
+	# 6. La primera vez, el tutorial de la barra. arrancar() no devuelve
+	#    hasta que el jugador lo cierra, y la sesion (el drenaje, el reloj)
+	#    recien empieza despues: no hace falta congelar nada a la fuerza.
+	await _tutorial_barra()
+
+
+# ============================================================
+#  Tutorial: la barra de dopamina
+# ============================================================
+# La unica cosa que hay que entender para jugar, y la unica que el juego
+# no explicaba: hay una barra, baja sola, y las apps la suben.
+#
+# Es un "coach mark" como el de cualquier app: se oscurece todo menos la
+# barra, una flecha le apunta, y un cartel dice que es. Sale una sola vez
+# por partida (ver GameManager.tutoriales_vistos).
+
+const COLOR_TUTORIAL := Color(1.0, 0.72, 0.25)
+const BLOQUEO_TUTORIAL: float = 0.45
+
+
+func _tutorial_barra() -> void:
+	if not GameManager.tutorial_pendiente("barra_dopamina"):
+		return
+	var barra := get_node_or_null("BarraDopamina") as Control
+	if barra == null:
+		return
+	GameManager.marcar_tutorial("barra_dopamina")
+
+	# Que termine de entrar la barra de tareas antes de taparlo todo.
+	await get_tree().create_timer(0.5).timeout
+
+	var capa := Control.new()
+	capa.name = "TutorialBarra"
+	capa.set_anchors_preset(Control.PRESET_FULL_RECT)
+	# Bloquea el mouse: mientras se explica no se clickea lo de atras.
+	capa.mouse_filter = Control.MOUSE_FILTER_STOP
+	capa.z_index = 50
+	capa.modulate.a = 0.0
+	add_child(capa)
+
+	var sombra := ColorRect.new()
+	sombra.color = Color(0, 0, 0, 0.62)
+	sombra.set_anchors_preset(Control.PRESET_FULL_RECT)
+	sombra.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	capa.add_child(sombra)
+
+	# La barra queda POR ENCIMA de la sombra: es lo unico iluminado.
+	var z_previo := barra.z_index
+	barra.z_index = 60
+
+	var rect := barra.get_global_rect()
+	var origen := capa.get_global_rect().position
+	var arriba := rect.position - origen
+	var centro_x := rect.get_center().x - origen.x
+	var abajo := rect.end.y - origen.y
+
+	# Un aro alrededor de la barra, que late.
+	var aro := Panel.new()
+	var estilo_aro := StyleBoxFlat.new()
+	estilo_aro.bg_color = Color(0, 0, 0, 0)
+	estilo_aro.set_border_width_all(4)
+	estilo_aro.border_color = COLOR_TUTORIAL
+	estilo_aro.set_corner_radius_all(12)
+	aro.add_theme_stylebox_override("panel", estilo_aro)
+	aro.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	aro.position = arriba - Vector2(12, 10)
+	aro.size = rect.size + Vector2(24, 20)
+	aro.z_index = 20
+	capa.add_child(aro)
+
+	# La flecha se dibuja: Open Sans no tiene glifos de flechas.
+	var flecha := Polygon2D.new()
+	flecha.color = COLOR_TUTORIAL
+	flecha.polygon = PackedVector2Array([
+		Vector2(0, 0), Vector2(-30, 38), Vector2(-11, 38),
+		Vector2(-11, 84), Vector2(11, 84), Vector2(11, 38), Vector2(30, 38),
+	])
+	var punta := Vector2(centro_x, abajo + 22.0)
+	flecha.position = punta
+	flecha.z_index = 20
+	capa.add_child(flecha)
+
+	# --- el cartel ---
+	var tarjeta := Panel.new()
+	var estilo := StyleBoxFlat.new()
+	estilo.bg_color = Color(0.08, 0.1, 0.15, 0.97)
+	estilo.set_border_width_all(3)
+	estilo.border_color = COLOR_TUTORIAL
+	estilo.set_corner_radius_all(22)
+	estilo.shadow_color = Color(0, 0, 0, 0.5)
+	estilo.shadow_size = 20
+	estilo.shadow_offset = Vector2(0, 8)
+	tarjeta.add_theme_stylebox_override("panel", estilo)
+	tarjeta.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	tarjeta.size = Vector2(700, 250)
+	tarjeta.position = Vector2(centro_x - 350.0, punta.y + 104.0)
+	tarjeta.z_index = 20
+	capa.add_child(tarjeta)
+
+	tarjeta.add_child(_texto_tutorial("TU DOPAMINA", 20, COLOR_TUTORIAL, 26.0, 52.0))
+	tarjeta.add_child(_texto_tutorial("Baja sola, todo el tiempo.", 40, Color(1, 1, 1), 60.0, 116.0))
+	tarjeta.add_child(_texto_tutorial(
+		"Usá las apps para que vuelva a subir.", 26, Color(0.78, 0.82, 0.9), 118.0, 158.0))
+	var pie := _texto_tutorial("[E]  Entendido", 24, COLOR_TUTORIAL, 192.0, 228.0)
+	tarjeta.add_child(pie)
+
+	# --- entrada ---
+	tarjeta.pivot_offset = tarjeta.size * 0.5
+	tarjeta.scale = Vector2(0.85, 0.85)
+	var entrada := capa.create_tween()
+	entrada.set_parallel(true)
+	entrada.tween_property(capa, "modulate:a", 1.0, 0.3)
+	entrada.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	entrada.tween_property(tarjeta, "scale", Vector2.ONE, 0.45)
+
+	# La flecha va y viene hacia la barra, y el aro y el pie laten.
+	var vaiven := capa.create_tween().set_loops()
+	vaiven.set_trans(Tween.TRANS_SINE)
+	vaiven.tween_property(flecha, "position:y", punta.y + 16.0, 0.5)
+	vaiven.tween_property(flecha, "position:y", punta.y, 0.5)
+
+	var latido := capa.create_tween().set_loops()
+	latido.set_trans(Tween.TRANS_SINE)
+	latido.tween_property(aro, "modulate:a", 0.35, 0.6)
+	latido.parallel().tween_property(pie, "modulate:a", 0.45, 0.6)
+	latido.tween_property(aro, "modulate:a", 1.0, 0.6)
+	latido.parallel().tween_property(pie, "modulate:a", 1.0, 0.6)
+
+	# Una ventana muerta: la misma E (o el click) que salteo el arranque no
+	# tiene que cerrar el cartel en el mismo instante en que aparece.
+	await get_tree().create_timer(BLOQUEO_TUTORIAL).timeout
+	while true:
+		await get_tree().process_frame
+		if Input.is_action_just_pressed("interactuar"):
+			break
+
+	# --- salida ---
+	var salida := capa.create_tween()
+	salida.tween_property(capa, "modulate:a", 0.0, 0.25)
+	await salida.finished
+	barra.z_index = z_previo
+	capa.queue_free()
+
+
+func _texto_tutorial(texto: String, tamano: int, color: Color,
+		arriba: float, abajo: float) -> Label:
+	var etiqueta := Label.new()
+	etiqueta.text = texto
+	etiqueta.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	etiqueta.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	etiqueta.add_theme_font_size_override("font_size", tamano)
+	etiqueta.add_theme_color_override("font_color", color)
+	etiqueta.set_anchors_preset(Control.PRESET_TOP_WIDE)
+	etiqueta.offset_top = arriba
+	etiqueta.offset_bottom = abajo
+	etiqueta.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	return etiqueta
 
 
 # La rueda de carga: el mismo arco que gira de cualquier arranque.

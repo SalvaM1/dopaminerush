@@ -296,6 +296,7 @@ func _ready() -> void:
 
 	_preparar_exploracion()
 	netflox.configurar(self)
+	escritorio.app_abierta.connect(_al_abrir_app)
 	$CicloDia.configurar(self)
 
 	_preparar_telefono()
@@ -790,7 +791,7 @@ func _cargar_pensamientos() -> void:
 # varias lineas, avanza una por vez y se queda en la ultima: insistir
 # sobre el mismo objeto dice algo nuevo en lugar de repetir, que es lo
 # que hace que valga la pena volver a mirar.
-func _decir(clave: String) -> void:
+func _decir(clave: String, pausar: bool = false) -> void:
 	if dialogo.esta_abierto():
 		return
 
@@ -809,7 +810,33 @@ func _decir(clave: String) -> void:
 	if linea == "":
 		return
 
-	dialogo.mostrar(linea, jugador)
+	dialogo.mostrar(linea, jugador, pausar)
+
+
+# La primera vez que se abre cada app, el personaje se justifica: la voz
+# de alguien que sabe lo que esta haciendo y se convence de que no. Frena
+# el juego, porque es lo unico que tiene que escucharse en ese momento.
+#
+# El texto sale de pensamientos.json con la clave "primera_vez_<id>". Una
+# app sin esa clave no dice nada (y no gasta su "primera vez").
+func _al_abrir_app(id_app: String) -> void:
+	var clave := "primera_vez_" + id_app
+	if not _pensamientos.has(clave):
+		return
+	if not GameManager.tutorial_pendiente(clave):
+		return
+	GameManager.marcar_tutorial(clave)
+
+	# Primero se deja ver la ventana abriendose, y recien ahi se frena.
+	await get_tree().create_timer(0.3).timeout
+
+	# Si ya hay un pensamiento en pantalla (dos apps casi juntas), este
+	# espera su turno en vez de perderse.
+	while is_inside_tree() and dialogo.esta_abierto():
+		await dialogo.cerrado
+	if not is_inside_tree() or not GameManager.activo:
+		return
+	_decir(clave, true)
 
 
 # ------------------------------------------------------------

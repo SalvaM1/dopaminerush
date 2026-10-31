@@ -27,6 +27,11 @@ func _probar() -> void:
 	create_timer(120.0).timeout.connect(func(): quit(2))
 	var gm = root.get_node("GameManager")
 	gm.reiniciar()
+	# Este test no es sobre los tutoriales: se dan por vistos, o sentarse
+	# a la PC esperaria una E que nadie aprieta.
+	gm.marcar_tutorial("barra_dopamina")
+	for id_app in ["scroll", "slots", "racha", "subway", "ofertas", "musica", "linkedout"]:
+		gm.marcar_tutorial("primera_vez_" + id_app)
 	# Medir recompensas exactamente, sin interferencia del drenaje real.
 	gm.set_process(false)
 	var escena = load("res://escenas/01_habitacion/habitacion.tscn")
@@ -112,7 +117,7 @@ func _probar() -> void:
 	Input.action_press("mirar_television")
 	tv._process(0.0)
 	_comprobar(tv.esta_mirando(), "La siguiente T vuelve a mirar")
-	_comprobar(not gm.drenaje_pausado and not gm.dopamina_congelada, "TV no congela la barra")
+	_comprobar(gm.dopamina_congelada, "Mirar la TV congela la barra, como el celular")
 	Input.action_press("vapear")
 	habitacion._actualizar_vape(0.0)
 	Input.action_release("vapear")
@@ -130,6 +135,7 @@ func _probar() -> void:
 	await create_timer(3.45).timeout
 	_comprobar(not tv.esta_mirando() and camara.transform.is_equal_approx(camara_base), "Camara vuelve al monitor")
 	_comprobar(is_equal_approx(camara.fov, fov_base), "Al volver se restaura el encuadre de la PC")
+	_comprobar(not gm.dopamina_congelada, "Al volver se suelta la barra")
 	_comprobar(is_equal_approx(gm.dopamina, 90.0), "Mirada completa entrega exactamente 70")
 	_comprobar(tv._cooldown_restante > 28.0, "Cooldown de 30 segundos empieza al terminar")
 	tv.mirar()
@@ -146,6 +152,7 @@ func _probar() -> void:
 	gm.fallo_temprano.emit()
 	_comprobar(not tv.esta_mirando() and camara.transform.is_equal_approx(camara_base), "Tropiezo cancela el giro")
 	_comprobar(is_equal_approx(camara.fov, fov_base), "Tropiezo tambien cancela el zoom")
+	_comprobar(not gm.dopamina_congelada, "Tropiezo no deja la barra congelada")
 	await create_timer(3.5).timeout
 	_comprobar(is_equal_approx(gm.dopamina, 30.0) and tv._encendida, "Tropiezo revive sin premio tardio y conserva TV")
 	tv.mirar()
@@ -183,6 +190,7 @@ func _probar() -> void:
 	gm.activo = false
 	gm.colapso.emit()
 	_comprobar(not tv.esta_mirando() and not tv.pelicula.is_playing() and not tv.sonido.playing, "Colapso corta imagen, audio y giro")
+	_comprobar(not gm.dopamina_congelada, "Colapso no deja la barra congelada")
 	_comprobar(is_equal_approx(habitacion.jugador.camara.fov, tv._fov_base), "Colapso restaura el encuadre")
 	_comprobar(is_equal_approx(gm.mult_drenaje_netflox, 1.0), "Colapso restaura el multiplicador")
 	tv.pelicula.finished.emit()

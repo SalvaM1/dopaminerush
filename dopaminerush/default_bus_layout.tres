@@ -7,6 +7,9 @@ release = 0.08
 [sub_resource type="AudioEffectPitchShift" id="CorrectorTono"]
 pitch_scale = 0.5
 
+[sub_resource type="AudioEffectLowPassFilter" id="ApagadoLoopify"]
+cutoff_hz = 20500.0
+
 [resource]
 bus/0/effect/0/effect = SubResource("Limitador")
 bus/0/effect/0/enabled = true
@@ -42,3 +45,11 @@ bus/5/volume_db = 0.0
 bus/5/send = &"Apps"
 bus/5/effect/0/effect = SubResource("CorrectorTono")
 bus/5/effect/0/enabled = false
+bus/6/name = &"Loopify"
+bus/6/solo = false
+bus/6/mute = false
+bus/6/bypass_fx = false
+bus/6/volume_db = 0.0
+bus/6/send = &"Musica"
+bus/6/effect/0/effect = SubResource("ApagadoLoopify")
+bus/6/effect/0/enabled = true

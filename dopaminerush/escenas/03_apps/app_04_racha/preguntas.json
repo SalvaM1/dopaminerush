@@ -102,6 +102,146 @@
 			"texto": "¿Quién pintó la Mona Lisa?",
 			"opciones": ["Leonardo da Vinci", "Miguel Ángel", "Rafael", "Donatello"],
 			"correcta": 0
+		},
+		{
+			"texto": "¿Cuál es el primer juego de \"El juego del calamar\"?",
+			"opciones": ["La mancha", "Luz roja, luz verde", "Las escondidas", "El truco"],
+			"correcta": 1
+		},
+		{
+			"texto": "¿Qué máscara usan en \"La casa de papel\"?",
+			"opciones": ["La de V de Vendetta", "La de Scream", "La de Dalí", "La del Chavo"],
+			"correcta": 2
+		},
+		{
+			"texto": "¿En qué serie aparece el Demogorgon?",
+			"opciones": ["Stranger Things", "Dark", "Black Mirror", "Los Simuladores"],
+			"correcta": 0
+		},
+		{
+			"texto": "¿Quién conducía \"Bailando por un sueño\"?",
+			"opciones": ["Guido Kaczka", "Santiago del Moro", "Susana Giménez", "Marcelo Tinelli"],
+			"correcta": 3
+		},
+		{
+			"texto": "¿Quién es Bruce Wayne?",
+			"opciones": ["Superman", "Batman", "Iron Man", "Robin"],
+			"correcta": 1
+		},
+		{
+			"texto": "¿De qué planeta viene Superman?",
+			"opciones": ["Marte", "Asgard", "Kriptón", "Saturno"],
+			"correcta": 2
+		},
+		{
+			"texto": "¿Qué pastilla toma Neo en \"Matrix\"?",
+			"opciones": ["La azul", "La roja", "La verde", "Un ibuprofeno"],
+			"correcta": 1
+		},
+		{
+			"texto": "¿De dónde es Bad Bunny?",
+			"opciones": ["Colombia", "República Dominicana", "México", "Puerto Rico"],
+			"correcta": 3
+		},
+		{
+			"texto": "¿Cómo le dicen a Carlos Solari?",
+			"opciones": ["El Indio", "El Flaco", "El Salmón", "El Pelado"],
+			"correcta": 0
+		},
+		{
+			"texto": "¿Qué come Popeye para ponerse fuerte?",
+			"opciones": ["Brócoli", "Acelga", "Espinaca", "Proteína en polvo"],
+			"correcta": 2
+		},
+		{
+			"texto": "¿En qué ciudad viven Los Simpson?",
+			"opciones": ["Shelbyville", "Quahog", "South Park", "Springfield"],
+			"correcta": 3
+		},
+		{
+			"texto": "¿Qué hay que juntar en \"Dragon Ball\" para pedir un deseo?",
+			"opciones": ["Las 7 esferas", "5 anillos", "3 cristales", "Las figuritas del Mundial"],
+			"correcta": 0
+		},
+		{
+			"texto": "¿Quién creó a Mafalda?",
+			"opciones": ["Fontanarrosa", "Quino", "Caloi", "Liniers"],
+			"correcta": 1
+		},
+		{
+			"texto": "¿Cómo se llama el hermano de Mario?",
+			"opciones": ["Wario", "Toad", "Luigi", "Yoshi"],
+			"correcta": 2
+		},
+		{
+			"texto": "¿En qué club debutó Messi en primera?",
+			"opciones": ["Newell's", "River", "PSG", "Barcelona"],
+			"correcta": 3
+		},
+		{
+			"texto": "¿Qué deporte juegan Las Leonas?",
+			"opciones": ["Hockey", "Rugby", "Vóley", "Handball"],
+			"correcta": 0
+		},
+		{
+			"texto": "¿Dónde trabaja Bob Esponja?",
+			"opciones": ["El Balde de Carnada", "Fondo de Bikini", "Mostaza", "El Crustáceo Cascarudo"],
+			"correcta": 3
+		},
+		{
+			"texto": "¿En qué viajan en el tiempo en \"Volver al futuro\"?",
+			"opciones": ["Una cabina telefónica", "Un DeLorean", "Un Ford Falcon", "Un bondi"],
+			"correcta": 1
+		},
+		{
+			"texto": "¿En qué equipo de la NBA jugó Manu Ginóbili?",
+			"opciones": ["San Antonio Spurs", "Chicago Bulls", "Los Angeles Lakers", "Boston Celtics"],
+			"correcta": 0
+		},
+		{
+			"texto": "¿Qué tenista argentino ganó el US Open 2009?",
+			"opciones": ["David Nalbandian", "Gastón Gaudio", "Juan Martín del Potro", "Guillermo Vilas"],
+			"correcta": 2
+		},
+		{
+			"texto": "¿Qué piloto argentino fue 5 veces campeón de Fórmula 1?",
+			"opciones": ["Carlos Reutemann", "Juan Manuel Fangio", "Franco Colapinto", "Ricardo Fort"],
+			"correcta": 1
+		},
+		{
+			"texto": "¿En qué escudería debutó Franco Colapinto en la F1?",
+			"opciones": ["Alpine", "Ferrari", "Red Bull", "Williams"],
+			"correcta": 3
+		},
+		{
+			"texto": "¿Cuál de estas ganó el Oscar a mejor película?",
+			"opciones": ["Avatar", "Star Wars", "Titanic", "Jurassic Park"],
+			"correcta": 2
+		},
+		{
+			"texto": "¿Cuál de estas películas argentinas ganó el Oscar?",
+			"opciones": ["Relatos salvajes", "Argentina, 1985", "Nueve reinas", "El secreto de sus ojos"],
+			"correcta": 3
+		},
+		{
+			"texto": "¿Qué actriz ganó el Oscar por \"La La Land\"?",
+			"opciones": ["Emma Stone", "Natalie Portman", "Jennifer Lawrence", "Scarlett Johansson"],
+			"correcta": 0
+		},
+		{
+			"texto": "¿Quién dirigió \"Pulp Fiction\"?",
+			"opciones": ["Martin Scorsese", "Quentin Tarantino", "Guy Ritchie", "Steven Spielberg"],
+			"correcta": 1
+		},
+		{
+			"texto": "¿En qué casa de Hogwarts está Harry Potter?",
+			"opciones": ["Slytherin", "Ravenclaw", "Gryffindor", "Hufflepuff"],
+			"correcta": 2
+		},
+		{
+			"texto": "¿Cómo se llama la reina de hielo de \"Frozen\"?",
+			"opciones": ["Elsa", "Anna", "Olaf", "Ariel"],
+			"correcta": 0
 		}
 	]
 }

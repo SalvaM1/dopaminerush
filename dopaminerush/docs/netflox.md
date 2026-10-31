@@ -30,9 +30,15 @@ Agregado el 2026-10-12. Es una función del mundo 3D, fuera del catálogo de app
   en 1,0000, mientras que un lerp crudo de la matriz la achataría a 0,707).
 - La secuencia completa dura **4,2 segundos** y al terminar da **70 de dopamina**.
 - Luego hay **30 segundos de cooldown**. Mantener T no repite la acción.
-- El drenaje sigue corriendo durante la mirada; no se congela la barra. Por eso
-  lo que importa es el **neto**: con un drenaje de ~8,5 se pierden unos 36
-  durante la mirada, así que los 70 dejan un saldo de **+34** sobre 100.
+- **Durante la mirada la barra queda congelada**, igual que con el celular
+  (`GameManager.dopamina_congelada`): no pierde ni gana. El jugador no controla
+  la pantalla en ese rato, así que no puede perder —ni terminar la partida— por
+  algo que no está viendo. Congelada tampoco corren la caída, el colapso ni la
+  etapa final. Los **+70 entran enteros** al volver al monitor.
+- La barra se suelta **antes** de dar el premio: `sumar_dopamina` no suma nada
+  mientras está congelada, y al revés el premio se perdería en silencio. El
+  tropiezo, el fin del día y el colapso también la sueltan, para que nunca quede
+  congelada para siempre.
   Sostenido, la TV aporta unos **2,05/s** (70 cada 34,2 s).
 - No se pueden superponer TV, celular y vape.
 - Un tropiezo cancela la mirada sin dar recompensa. El fin del día y el colapso

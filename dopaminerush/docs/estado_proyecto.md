@@ -22,8 +22,8 @@ La habitación tiene **ciclo de mañana a noche** sincronizado con el reloj de
 la computadora: cielo y luz por la ventana cambian gradualmente. Integración:
 `ciclo_dia.md`.
 
-De las **6 apps del catálogo, 5 están implementadas**. Falta **Loopify**, que hoy
-abre un placeholder. Lo que más falta no es código: es **audio**.
+**Las 6 apps del catálogo están implementadas.** Lo que más falta no es código:
+es **audio**.
 
 ---
 
@@ -39,7 +39,7 @@ El orden es el orden en que el juego las ofrece, y está decidido.
 | 3 | **Preguntados** | 20 × multiplicador de racha | ✅ 12 preguntas cargadas |
 | 4 | **Subway Slop** | 7 **por segundo**, decae a 0 | ✅ con video real |
 | 5 | **Mercado Libre** | 60 al confirmar | ✅ con el celular 3D |
-| 6 | **Loopify** | multiplica las otras ×1.3 | ❌ **falta** |
+| 6 | **Loopify** | ×1.3 a las otras mientras el tema no aburre | ✅ con 5 temas reales |
 
 **LinkedOut no es del catálogo.** Se abre sola, no se ofrece y no se desbloquea.
 Vive en `escritorio.gd` con su propia constante y su propia función de apertura,
@@ -136,14 +136,111 @@ dos direcciones.
 
 ---
 
+## 3b. Tutoriales y el reloj
+
+### El reloj solo corre sentado en la PC
+
+`escritorio.gd` avanza la hora únicamente con `GameManager.activo` (la sesión de
+la PC en marcha). Antes corría desde que cargaba la habitación, y un minuto
+explorando la pieza eran doce horas de juego: se hacía de noche antes de sentarse.
+Ahora explorar es gratis también en tiempo.
+
+### Los tutoriales
+
+Cada uno sale **una sola vez por partida**, y todos frenan el juego hasta la **E**:
+
+| Cuándo | Qué |
+|---|---|
+| Al terminar de arrancar la compu | Cartel con flecha a la barra: *"Baja sola, todo el tiempo. Usá las apps para que vuelva a subir."* (la sesión recién empieza al apretar E) |
+| La primera vez que se abre **cada app** | Un pensamiento del personaje justificándose (ver abajo) |
+| La primera vez que **LinkedOut** salta sola | *"Uf... qué miedo estos virus que te abren pestañas raras."* |
+
+Los pensamientos de primera vez, en `pensamientos.json` con la clave
+`primera_vez_<id de la app>`:
+
+| App | Pensamiento |
+|---|---|
+| TikBrainRot | *Un ratito de tiktoks no le hace mal a nadie...* |
+| Family Savings™ | *Una sola tirada y la cierro. Es plata de mentira...* |
+| Preguntados | *Esto por lo menos es educativo.* |
+| Subway Slop | *Lo dejo de fondo y sigo con lo mío.* |
+| Mercado Libre | *Solo miro. No voy a comprar nada.* |
+| Loopify | *Con música me concentro mejor.* |
+
+Una app sin clave no dice nada. Si dos piensan casi juntas (por ejemplo, salta
+LinkedOut justo al abrir una app), la segunda espera su turno en vez de perderse.
+
+Los anuncios del vape y de Netflox ya cumplen ese papel para sus mecánicas.
+
+### La notificación de "app instalada"
+
+La oferta de una app nueva ya no es el cartel rojo del medio: es una
+**notificación del sistema** que entra por la derecha, arriba de la bandeja,
+como en Windows. Dice *"Se terminó de instalar"*, el nombre de la app y su texto
+de oferta, con un ícono de color con la inicial. Vive en
+`escenas/02_computadora/CartelOferta.tscn` + `cartel_oferta.gd`.
+
+- **No se puede cerrar ni se va sola.** Es una oferta pendiente: si se fuera, el
+  GameManager esperaría una respuesta que nunca llega y no ofrecería más apps.
+- **Suena una sola vez**, al aparecer: una por app, unas seis en la partida.
+- **Se dibuja arriba de todo** (`z_index` 40). La oferta sale cuando la barra
+  está baja, así que muchas veces coincide con un tropiezo; antes la pantalla del
+  tropiezo la tapaba.
+- **El botón abre la app**, no solo la desbloquea. Antes "Jugar ahora" no jugaba.
+  Al abrirse, la app dice su pensamiento de primera vez.
+- **El sonido** se busca en `assets/audio/ui/notificacion.ogg` (o `.wav`, `.mp3`).
+  Mientras no exista usa `popup.wav` de respaldo. Anotarlo en `licencias.md`.
+
+- **Una vez por partida:** `GameManager.tutoriales_vistos`. `reiniciar()` no la
+  borra, así que un día nuevo no los repite. La borra el **menú**, para que en una
+  muestra la próxima persona que juegue en la misma compu los vuelva a ver.
+- **El texto del pensamiento** está en `pensamientos.json` (clave
+  `primer_tiktok`): se edita sin tocar código. El del cartel está en
+  `_tutorial_barra()` de `escritorio.gd`.
+- **El diálogo puede pausar:** `dialogo.mostrar(texto, jugador, pausar)`. Con
+  `pausar = true` pone el árbol en pausa y la saca solo al cerrarse; el nodo del
+  diálogo procesa siempre para poder seguir andando.
+- **El diálogo devuelve el estado previo del jugador**, no `true`. Antes, un
+  pensamiento estando sentado te dejaba caminar con la silla puesta.
+- **Tests:** `tools/tests/tutorial_test.gd` (49 comprobaciones). Para simular la E
+  hay que usar `Input.parse_input_event()`: `Input.action_press()` no la ve una
+  corrutina que espera frames.
+
 ## 4. Lo que falta
 
-### A) Loopify (la única app que queda)
+### A) Loopify: hecha
 
-No da dopamina propia: multiplica la de las otras ×1.3. La canción se termina cada
-~40 s y hay que elegir otra. ⚠ **Es la única que toca `app_base.gd`.** Hoy el
-slot 5 de `ESCENAS_APPS` es `""` y la carpeta `app_06_` está vacía. Detalle en
-`plan_apps.md`.
+### Loopify, la última app
+
+Un mini-reproductor (560×320, arriba al centro). Vive en
+`escenas/03_apps/app_06_musica/`. Test: `tools/tests/loopify_test.gd`.
+
+- **No da dopamina propia.** Mientras suena un tema **fresco**, todo lo que dan
+  las otras apps del catálogo rinde **×1.3** (`GameManager.mult_dopamina_musica`).
+  La TV, el vape y LinkedOut no se multiplican.
+- **A los 10 s el tema aburre** (`duracion_fresca`): se escucha más apagado
+  (−9 dB), se va el ×1.3 y el botón de "Siguiente" late. El tema sigue sonando,
+  pero ya no sirve.
+- **"Siguiente"** pone otro tema al azar, nunca el mismo dos veces seguidas, y
+  vuelve el ×1.3. Es la sátira del que no termina ningún tema.
+- **Vive poco y es a propósito:** la etapa final arranca 30 s después de
+  desbloquearla. Es la banda sonora del colapso, y en el colapso el juego corta
+  todo el audio de golpe: de la música al silencio, y de ahí al parque.
+
+**Los temas:** cualquier `.mp3`, `.ogg` o `.wav` en `assets/audio/loopify/`. Lo
+que muestra la app sale del **nombre del archivo**: `Artista - Tema.ogg`. Si hay
+una imagen con el **mismo nombre** (`.png`, `.jpg`, `.webp`), es la tapa del
+disco, y su color tiñe la app; si no, sale un cuadrado de color con iniciales.
+
+Hoy hay 5 temas reales (ver `licencias.md`), recortados a **sus primeros 30 s** y con el volumen igualado: así arrancan en la parte que se reconoce
+y pesan 2,6 MB en total. Un recorte de menos de un minuto se reproduce desde el
+principio; un tema entero arranca en un punto al azar de la mitad. El volumen se
+ajusta con `volumen_temas` en el Inspector (bus Música).
+
+**Mientras suena, las apps y el ambiente bajan 10 dB** (`AudioManager.agachar`) para que la música se escuche sí o sí; aburrido, el tema suena apagado (filtro del bus Loopify), no más bajo.
+
+**Para agregar uno:** recortar los primeros 30 s, igualarlo a -14 LUFS y
+convertirlo a .ogg (como los que están), y dejar la tapa con el mismo nombre.
 
 ### B) Audio — la tarea de mayor retorno
 
@@ -161,6 +258,24 @@ Lo que **falta**:
 | **Celular** | notificación / vibración | `assets/audio/ambiente/` |
 | **Mercado Libre** | el sonido de compra | `assets/audio/apps/` |
 | Parque | `pajaros`, `viento`, `agua` | `assets/audio/ambiente/` |
+
+**Ya están** (ver `licencias.md`): la **notificación** de app instalada, el
+**paso** de la pieza y la **caminata en ripio** del parque.
+
+**Los pasos suenan de dos formas** (`jugador.gd`, test: `tools/tests/pasos_test.gd`):
+
+- **Pieza — pasos sueltos.** Un sonido por tranco, por distancia recorrida (casi 3
+  por segundo a 5 m/s). Toma todos los sonidos de `assets/audio/pasos/pieza/` y
+  nunca repite la misma variante dos veces seguidas: hoy hay una sola, así que
+  agregar 3 o 4 más la haría sonar más natural. Cada paso varía un poco el tono.
+- **Parque — caminata continua.** La grabación de ripio suena **en loop mientras
+  se camina**, se apaga en 0,25 s al parar y queda **pausada**: al volver a caminar
+  sigue desde donde quedó, así no arranca siempre con el mismo paso. Se calla
+  también sentado en el banco. Se elige con `caminata_continua` (en `parque.gd`).
+
+El volumen de los dos se ajusta con `volumen_pasos` en el Inspector del Jugador
+(bus Ambiente). Los archivos se subieron de volumen al convertirlos, porque los
+originales eran muy bajos (el paso tenía el pico en -30 dB).
 | Canales de Slop | el audio sale del video; solo si querés pistas aparte | `assets/audio/apps/canales/` |
 
 Los de slots se buscan con `.mp3`, `.ogg` y `.wav`, en ese orden: no importa el
@@ -185,7 +300,7 @@ agregás archivos a la carpeta de origen, los corrés y saltean lo ya convertido
 
 - **Preguntados**: 12 preguntas. Se agregan editando `preguntas.json`, sin tocar código.
 - **Mercado Libre**: más productos.
-- **Loopify**: canciones (cuando exista).
+- **Loopify**: temas en `assets/audio/loopify/`, con nombre `Artista - Tema.mp3`.
 
 ### E) Balanceo
 
