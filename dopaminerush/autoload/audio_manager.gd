@@ -63,7 +63,11 @@ var _capas: Dictionary = {}
 # al arrancar) y no al que tuviera en ese momento: asi un "soltar" de mas,
 # o uno que llega a mitad de un fundido, nunca deja un bus desfasado.
 const BUSES_AGACHABLES := ["Apps", "Ambiente"]
-const AGACHE_DB: float = 10.0
+# En 0 a proposito: en los ultimos 30 s TODO tiene que sonar a la vez, y
+# la musica se separa por frecuencias y estereo (ver default_bus_layout),
+# no bajando lo demas. Con 10 dB solo se escuchaba la musica. Si en algun
+# momento no se entiende, subir a 2 o 3 como mucho.
+const AGACHE_DB: float = 0.0
 const FUNDIDO_AGACHE: float = 0.4
 
 var _volumen_original: Dictionary = {}

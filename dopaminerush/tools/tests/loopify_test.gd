@@ -8,8 +8,8 @@ extends SceneTree
 #   - vienen 5 temas reales, cada uno con su tapa y su artista
 #   - "Siguiente" pone otro tema (nunca el mismo) y vuelve el x1.3
 #   - la TV, el vape y la propia Loopify no se multiplican
-#   - mientras suena, las apps y el ambiente bajan (la UI no): la musica
-#     se escucha si o si. Aburrido suena apagado, no mas bajo
+#   - mientras suena, NADA baja: todo se escucha a la vez (la mezcla la
+#     prueba mezcla_test). Aburrido suena apagado, no mas bajo
 #   - al cerrarla se calla, se apaga el multiplicador y todo vuelve a su
 #     volumen
 #   - sin temas en la carpeta no se rompe nada
@@ -76,8 +76,9 @@ func _probar() -> void:
 			AudioServer.get_bus_volume_db(AudioServer.get_bus_index(bus)))
 	await create_timer(0.8).timeout
 	var vol := func(bus: String) -> float: return AudioServer.get_bus_volume_db(AudioServer.get_bus_index(bus))
-	_comprobar(absf(vol.call("Apps") - (originales["Apps"] - 10.0)) < 0.5, "Las apps bajan 10 dB (%.1f)" % vol.call("Apps"))
-	_comprobar(absf(vol.call("Ambiente") - (originales["Ambiente"] - 10.0)) < 0.5, "El ambiente baja 10 dB")
+	# Ya no se agacha nada: en el final TODO suena a la vez (ver mezcla_test).
+	_comprobar(absf(vol.call("Apps") - originales["Apps"]) < 0.1, "Con la musica sonando, las apps NO bajan (%.1f)" % vol.call("Apps"))
+	_comprobar(absf(vol.call("Ambiente") - originales["Ambiente"]) < 0.1, "Ni el ambiente")
 	_comprobar(absf(vol.call("UI") - originales["UI"]) < 0.1, "La interfaz no baja: las notificaciones se escuchan")
 	_comprobar(is_equal_approx(gm.mult_dopamina_musica, 1.3), "Con el tema fresco, las otras apps rinden x1.3")
 	var primero: int = app._actual
@@ -105,7 +106,7 @@ func _probar() -> void:
 	await create_timer(1.2).timeout
 	_comprobar(app._filtro().cutoff_hz < 2000.0, "Aburrido, suena apagado: solo pasan los graves (%.0f Hz)" % app._filtro().cutoff_hz)
 	_comprobar(app._reproductor.volume_db >= app.volumen_temas - 4.0, "Pero casi no baja de volumen: se sigue escuchando (%.1f dB)" % app._reproductor.volume_db)
-	_comprobar(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Apps")) < originales["Apps"] - 5.0, "Aburrido, el resto sigue agachado")
+	_comprobar(absf(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Apps")) - originales["Apps"]) < 0.1, "Aburrido, el resto sigue igual")
 	_comprobar(app._reproductor.playing, "Pero sigue sonando: no se corta")
 
 	# ---- siguiente ----

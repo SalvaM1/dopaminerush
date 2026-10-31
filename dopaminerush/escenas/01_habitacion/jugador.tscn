@@ -1,13 +1,11 @@
 [gd_scene format=3 uid="uid://bb1hqxv1ucvya"]
 
 [ext_resource type="Script" uid="uid://c41mipmnxqlsi" path="res://escenas/01_habitacion/jugador.gd" id="1_grv2r"]
+[ext_resource type="ArrayMesh" path="res://assets/modelos/personaje/personaje.res" id="2_cuerpo"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_v2hei"]
 radius = 0.3
 height = 1.8
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_v2hei"]
-height = 2.753418
 
 [node name="Jugador" type="CharacterBody3D" unique_id=817807663]
 script = ExtResource("1_grv2r")
@@ -23,9 +21,9 @@ fov = 80.0
 [node name="RayCast3D" type="RayCast3D" parent="Camera3D" unique_id=151659445]
 target_position = Vector3(0, 0, -3)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1164902547]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.443665, 0)
-mesh = SubResource("CapsuleMesh_v2hei")
+[node name="Cuerpo" type="MeshInstance3D" parent="." unique_id=1164902547]
+cast_shadow = 3
+mesh = ExtResource("2_cuerpo")
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1311889118]
 

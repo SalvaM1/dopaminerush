@@ -237,7 +237,37 @@ y pesan 2,6 MB en total. Un recorte de menos de un minuto se reproduce desde el
 principio; un tema entero arranca en un punto al azar de la mitad. El volumen se
 ajusta con `volumen_temas` en el Inspector (bus Música).
 
-**Mientras suena, las apps y el ambiente bajan 10 dB** (`AudioManager.agachar`) para que la música se escuche sí o sí; aburrido, el tema suena apagado (filtro del bus Loopify), no más bajo.
+**Mientras suena, NO baja nada:** aburrido, el tema suena apagado (filtro del
+bus Loopify), no más bajo.
+
+### La mezcla del final
+
+En los últimos ~30 s suena todo junto (TikToks, Subway, casino, Preguntados, la
+tele, la música) y tiene que ser **agobiante, pero con la música entendible**.
+No se logra bajando lo demás (con 10 dB de *ducking* solo se escuchaba la
+música): se logra dándole a cada fuente **su lugar**. Test: `mezcla_test.gd`.
+
+- **Estéreo, según dónde está la ventana:** TikTok a la izquierda (-0,35), Subway
+  centro-izquierda (-0,15), casino y Preguntados a la derecha (+0,35), la música
+  al centro. La tele ya suena desde la derecha porque es 3D.
+- **Frecuencias:** la música se queda con los graves y tiene un hueco en los
+  medios, donde hablan los videos. TikTok suena sin graves, como el parlante de
+  un celular. La tele, opaca y de fondo.
+- **Volúmenes:** música -16,8 · TikTok -19 · Subway -20,3 · tele -23,8 (LUFS
+  estimados). La música arriba, pero a menos de 5 dB del resto.
+- **Un compresor en el Master** pega todo en una masa densa y no deja que sature.
+  Con umbral alto: en la pieza o el parque ni se entera.
+- **Los videos están igualados:** el audio de todos los TikToks (-16 LUFS) y
+  canales de Subway (-17) se normalizó; antes variaban hasta 17 dB. Los `.bat` de
+  conversión ya igualan solos los videos nuevos.
+- **Buses nuevos:** `Slop` (el video de Subway, antes iba por Apps) y `Tele` (la
+  TV, antes iba por Ambiente). **Ambiente no se tocó**: ahí siguen los pasos, el
+  zumbido y el parque, que no tienen que sonar opacos. Apps tampoco cambió de
+  volumen (la palanca suena igual).
+- ⚠ El corrector de tono del 2x de TikTok tiene que seguir siendo el **efecto 0**
+  del bus Video: `app_scroll.gd` lo prende por índice.
+- `AudioManager.agachar()` sigue existiendo con `AGACHE_DB = 0`. Si en algún
+  momento la música no se entiende, subirlo a 2 o 3 como mucho.
 
 **Para agregar uno:** recortar los primeros 30 s, igualarlo a -14 LUFS y
 convertirlo a .ogg (como los que están), y dejar la tapa con el mismo nombre.
@@ -375,3 +405,18 @@ subiendo sola, muy despacio.
 
 **Un día nuevo tiene que sentirse igual que arrancar el juego por primera vez**:
 mismo fundido a negro antes de despertar (`SceneLoader.fundir_y_cambiar`).
+
+### El cuerpo del jugador (solo sombra)
+
+El jugador ya no es una capsula: tiene un cuerpo low poly (`assets/modelos/personaje/`)
+que **solo hace sombra** (`cast_shadow = Solo sombras`): la camara nunca lo ve,
+pero en las sombras de la pieza y el parque se ve una persona.
+
+- `Male.fbx` es el original, en T-pose (se deja asi: Mixamo lo pide en T-pose
+  para riggearlo y animarlo).
+- `personaje.res` es la malla que usa el nodo `Cuerpo` de `jugador.tscn`: parada,
+  mirando a -Z, de 2,30 m (los ojos a la altura de la camara) y con los brazos
+  bajados. La genera `tools/hornear_personaje.gd`; volver a correrlo si se cambia
+  el modelo.
+- Pendiente: sentado en la silla el cuerpo sigue parado (solo baja la camara).
+  Se arregla con animaciones (sentado, caminar, quieto).

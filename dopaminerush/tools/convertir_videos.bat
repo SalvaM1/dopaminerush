@@ -27,6 +27,9 @@ REM
 REM    scale=-2:854   baja a 480x854. La ventana mide 400 px de ancho:
 REM                   mas resolucion no se ve y cuesta CPU, porque Godot
 REM                   decodifica video por software.
+REM    loudnorm       iguala el volumen a -16 LUFS. Sin esto cada video trae
+REM                   el suyo (llegaron a variar 17 dB) y en el final, con
+REM                   todas las apps sonando juntas, unos tapan a otros.
 REM    -q:v 7         calidad de imagen (0 = peor, 10 = mejor).
 REM                   7 se ve bien a este tamano. Si lo ves feo, proba 8.
 REM    -q:a 4         calidad de audio.
@@ -80,7 +83,7 @@ for %%F in ("%ORIGEN%\*.mp4" "%ORIGEN%\*.webm" "%ORIGEN%\*.mov" "%ORIGEN%\*.mkv"
         echo   [ya estaba]  %%~nxF
     ) else (
         echo   [convierte]  %%~nxF
-        ffmpeg -nostdin -y -loglevel error -i "%%F" -vf "scale=-2:854" -q:v 7 -q:a 4 -g:v 64 -sn -dn "%DESTINO%\%%~nF.ogv"
+        ffmpeg -nostdin -y -loglevel error -i "%%F" -vf "scale=-2:854" -af "loudnorm=I=-16:TP=-1.5:LRA=11" -q:v 7 -q:a 4 -g:v 64 -sn -dn "%DESTINO%\%%~nF.ogv"
         if errorlevel 1 (
             set /a FALLOS+=1
             echo                FALLO

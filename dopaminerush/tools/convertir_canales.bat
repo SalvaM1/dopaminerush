@@ -33,6 +33,9 @@ REM    scale=-2:270   baja a 480x270. El reproductor mide 440 de ancho:
 REM                   mas resolucion no se ve y cuesta CPU, porque Godot
 REM                   decodifica video por software. Y aca puede haber
 REM                   DOS videos a la vez (este y el de TikBrainRot).
+REM    loudnorm       iguala el volumen a -17 LUFS. Sin esto cada video trae
+REM                   el suyo (llegaron a variar 17 dB) y en el final, con
+REM                   todas las apps sonando juntas, unos tapan a otros.
 REM    -q:v 7         calidad de imagen (0 = peor, 10 = mejor).
 REM    -q:a 4         calidad de audio. El audio del canal sale del
 REM                   video: si un canal tiene .ogv, su .ogg se ignora.
@@ -80,7 +83,7 @@ for %%F in ("%ORIGEN%\*.mp4" "%ORIGEN%\*.webm" "%ORIGEN%\*.mov" "%ORIGEN%\*.mkv"
         echo   [ya estaba]  %%~nxF
     ) else (
         echo   [convierte]  %%~nxF
-        ffmpeg -nostdin -y -loglevel error -i "%%F" -t 35 -vf "scale=-2:270" -q:v 7 -q:a 4 -g:v 64 -sn -dn "%DESTINO%\%%~nF.ogv"
+        ffmpeg -nostdin -y -loglevel error -i "%%F" -t 35 -vf "scale=-2:270" -af "loudnorm=I=-17:TP=-1.5:LRA=11" -q:v 7 -q:a 4 -g:v 64 -sn -dn "%DESTINO%\%%~nF.ogv"
         if errorlevel 1 (
             set /a FALLOS+=1
             echo                FALLO

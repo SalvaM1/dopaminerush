@@ -153,7 +153,7 @@ offset_bottom = 238.0
 mouse_filter = 2
 expand = true
 loop = true
-bus = &"Apps"
+bus = &"Slop"
 
 [node name="Etiqueta" type="Label" parent="Marco/Video" unique_id=978748033]
 layout_mode = 1
@@ -297,4 +297,4 @@ vertical_alignment = 1
 
 [node name="Sonido" type="AudioStreamPlayer" parent="." unique_id=2020689888]
 volume_db = -8.0
-bus = &"Apps"
+bus = &"Slop"
