@@ -75,6 +75,7 @@ func _ready() -> void:
 	GameManager.fallo_temprano.connect(_cancelar_mirada)
 	GameManager.dia_arruinado.connect(apagar)
 	GameManager.colapso.connect(apagar)
+	pelicula.finished.connect(_repetir_pelicula)
 	sonido.finished.connect(_repetir_audio)
 	pelicula.volume_db = -80.0
 	_cargar_pelicula()
@@ -342,7 +343,17 @@ func _cargar_pelicula() -> void:
 
 
 func _repetir_audio() -> void:
-	if _encendida and sonido.stream:
+	# Con video, su final manda: repetir cada pista por separado acumula
+	# desfasaje entre vueltas. Sin video se conserva el audio de fondo.
+	if _encendida and sonido.stream and pelicula.stream == null:
+		sonido.play()
+
+
+func _repetir_pelicula() -> void:
+	if not _encendida or pelicula.stream == null:
+		return
+	pelicula.play()
+	if sonido.stream:
 		sonido.play()
 
 

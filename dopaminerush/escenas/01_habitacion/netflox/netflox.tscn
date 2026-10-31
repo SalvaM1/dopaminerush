@@ -46,7 +46,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 expand = true
-loop = true
+loop = false
 volume_db = -80.0
 
 [node name="Portada" type="Control" parent="PantallaViewport/Pantalla"]

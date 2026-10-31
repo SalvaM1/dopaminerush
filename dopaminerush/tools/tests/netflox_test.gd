@@ -31,6 +31,9 @@ func _probar() -> void:
 	gm.set_process(false)
 	var escena = load("res://escenas/01_habitacion/habitacion.tscn")
 	var habitacion = escena.instantiate()
+	# Comprobar tambien el respaldo cuando falten los archivos opcionales.
+	habitacion.get_node("Netflox").ruta_video = ""
+	habitacion.get_node("Netflox").ruta_audio = ""
 	root.add_child(habitacion)
 	current_scene = habitacion
 	await process_frame
@@ -154,11 +157,9 @@ func _probar() -> void:
 	gm.reiniciar()
 	_comprobar(is_equal_approx(gm.mult_drenaje_netflox, 1.0), "Nueva partida restaura el drenaje")
 
-	# Se cargan imagen y sonido reales sin tocar sus archivos ni el modelo.
+	# Probar los recursos que se entregan con Netflox, no los de otra app.
 	habitacion = escena.instantiate()
 	tv = habitacion.get_node("Netflox")
-	tv.ruta_video = "res://assets/video/subway/subway.ogv"
-	tv.ruta_audio = "res://assets/audio/ambiente/zumbido.ogg"
 	tv.demora_aviso = 0.4
 	root.add_child(habitacion)
 	current_scene = habitacion
@@ -172,12 +173,21 @@ func _probar() -> void:
 	tv.encender()
 	await process_frame
 	_comprobar(tv.pelicula.is_playing() and tv.sonido.playing and not tv.portada.visible, "Reproduce video y audio 3D cuando hay recursos")
+	_comprobar(not tv.pelicula.loop and not tv.sonido.stream.loop, "El video controla el reinicio de ambas pistas")
+	_comprobar(is_equal_approx(tv.sonido.stream.get_length(), 180.0), "Audio recortado a tres minutos")
+	tv.sonido.play(175.0)
+	tv.pelicula.finished.emit()
+	await process_frame
+	_comprobar(tv.pelicula.is_playing() and tv.sonido.playing and tv.sonido.get_playback_position() < 1.0, "Al terminar el video ambas pistas vuelven al comienzo")
 	tv.mirar()
 	gm.activo = false
 	gm.colapso.emit()
 	_comprobar(not tv.esta_mirando() and not tv.pelicula.is_playing() and not tv.sonido.playing, "Colapso corta imagen, audio y giro")
 	_comprobar(is_equal_approx(habitacion.jugador.camara.fov, tv._fov_base), "Colapso restaura el encuadre")
 	_comprobar(is_equal_approx(gm.mult_drenaje_netflox, 1.0), "Colapso restaura el multiplicador")
+	tv.pelicula.finished.emit()
+	tv.sonido.finished.emit()
+	_comprobar(not tv.pelicula.is_playing() and not tv.sonido.playing, "Un final tardio no reinicia la TV apagada")
 	# Dejar terminar el apagon y el anuncio del vape antes de liberar la
 	# habitacion, para no dejar corutinas del juego pendientes en el test.
 	await create_timer(10.0).timeout

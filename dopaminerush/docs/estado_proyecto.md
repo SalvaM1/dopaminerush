@@ -63,8 +63,8 @@ Viven todos en `game_manager.gd` salvo los de cada app, que están en su `.tscn`
 - El vape se desbloquea con la **3ª app** (`habitacion.gd` → `APPS_PARA_VAPE`)
 - **Netflox** se habilita con la **5ª app**, y aparece **15 s después** con su
   propio cartel. T prende la tele (-10% de drenaje) y la mira (**+70**, 4,2 s de
-  animación, 30 s de cooldown). Portada provisional; falta elegir la película y
-  su audio espacial. Ver `netflox.md`.
+  animación, 30 s de cooldown). Incluye un fragmento de autos de 3 minutos y
+  su audio espacial, con reinicio conjunto. Ver `netflox.md`.
 
 ### La meseta del televisor
 

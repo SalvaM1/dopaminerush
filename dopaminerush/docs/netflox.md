@@ -73,28 +73,31 @@ gestos, tropiezo, fin del día, reproducción con recursos y colapso. Ejecutar:
 Godot --headless --path . --script res://tools/tests/netflox_test.gd
 ```
 
-## Agregar la película después
+## Video y audio incorporados
 
-Por ahora hay una portada de Netflox y silencio: no se incluyó una película.
+Netflox reproduce los primeros **3 minutos** del video de autos de
+**DutchMotorsport** aportado al proyecto, con el sonido original del mismo
+fragmento. Atribución y detalles en `licencias.md`.
 
-**Ojo con el rendimiento:** el viewport de la tele es de **640x360** y, mientras
-no haya película, se dibuja **una sola vez** (`UPDATE_ONCE`) en lugar de 60 veces
-por segundo. Antes era 1280x720 redibujado en cada cuadro para mostrar una imagen
-quieta, y con cinco apps abiertas (Godot decodifica Ogg por CPU) eso alcanzaba
-para trabar el juego entero. Al agregar la película vuelve a `UPDATE_ALWAYS`, que
-es inevitable: conviene que el .ogv sea de 640x360 o menos.
+La imagen está convertida a **640×360 y 24 fps** para limitar el costo de
+decodificación junto a las otras apps. El viewport se actualiza continuamente
+solo mientras la TV está encendida. El audio es **mono a 48 kHz**, para ubicarlo
+en el televisor con `AudioStreamPlayer3D`, con fundidos breves al comienzo y final.
 
-Rutas preparadas:
+Archivos incluidos:
 
 - Imagen: `assets/video/netflox/pelicula.ogv` (**Ogg Theora**).
 - Sonido: `assets/audio/netflox/pelicula.ogg` (también se admite WAV o MP3,
   cambiando `ruta_audio` en el Inspector).
 
-Los dos archivos deben salir del mismo clip, empezar juntos y tener la misma
-duración. La pista de audio va separada porque el sonido de VideoStreamPlayer
-es 2D; aquí se silencia y se usa el reproductor 3D para que el sonido venga
-desde la televisión a la derecha. El video y la pista se repiten al terminar.
+Los dos archivos duran **180 segundos** y empiezan juntos al encender la TV.
+El video no lleva pista de audio: todo el sonido sale del reproductor 3D a la
+derecha del jugador. Al terminar el video, ambas pistas vuelven al comienzo
+juntas para evitar que dos bucles independientes acumulen desfasaje. El colapso
+y el fin del día detienen ambas pistas.
 
 Se puede cambiar `ruta_video` y `ruta_audio` sin tocar código. Si los archivos
-no están, la portada y todas las mecánicas siguen funcionando. Agregar la
-atribución de la película y el audio a `docs/licencias.md` cuando se elijan.
+no están, la portada y todas las mecánicas siguen funcionando. En ese caso la
+portada estática se dibuja una sola vez tras el encendido (`UPDATE_ONCE`).
+Al reemplazar el contenido, conservar la misma duración y desactivar el loop
+del archivo de audio importado: el reinicio lo controla el video.
