@@ -598,6 +598,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1005231, 5.4089546, 1.00024
 light_color = Color(0.43, 0.57, 0.88, 1)
 light_energy = 2.3
 shadow_enabled = true
+shadow_bias = 0.03
+shadow_normal_bias = 0.6
 omni_range = 15.0
 
 [node name="Plafon" type="CSGCylinder3D" parent="Iluminacion" unique_id=662772839]
@@ -612,6 +614,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 2.35, -3.35)
 light_color = Color(1, 0.46, 0.18, 1)
 light_energy = 2.1
 shadow_enabled = true
+shadow_bias = 0.03
+shadow_normal_bias = 0.6
 omni_range = 2.2
 
 [node name="LamparaBase" type="CSGCylinder3D" parent="Iluminacion" unique_id=1105969818]
@@ -639,3 +643,6 @@ transform = Transform3D(0.86601907, -0.17088649, 0.469903, 0, 0.93978524, 0.3417
 light_color = Color(0.52, 0.64, 0.9, 1)
 light_energy = 0.65
 shadow_enabled = true
+shadow_bias = 0.03
+shadow_normal_bias = 0.8
+directional_shadow_max_distance = 30.0

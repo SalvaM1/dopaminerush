@@ -408,15 +408,35 @@ mismo fundido a negro antes de despertar (`SceneLoader.fundir_y_cambiar`).
 
 ### El cuerpo del jugador (solo sombra)
 
-El jugador ya no es una capsula: tiene un cuerpo low poly (`assets/modelos/personaje/`)
-que **solo hace sombra** (`cast_shadow = Solo sombras`): la camara nunca lo ve,
-pero en las sombras de la pieza y el parque se ve una persona.
+El jugador tiene un cuerpo low poly que **solo hace sombra** (`Solo sombras`): la
+camara esta adentro de la cabeza y nunca lo ve, pero en las sombras de la pieza y
+el parque se ve una persona que camina, se sienta y gira la cabeza.
+Test: `cuerpo_test.gd`.
 
-- `Male.fbx` es el original, en T-pose (se deja asi: Mixamo lo pide en T-pose
-  para riggearlo y animarlo).
-- `personaje.res` es la malla que usa el nodo `Cuerpo` de `jugador.tscn`: parada,
-  mirando a -Z, de 2,30 m (los ojos a la altura de la camara) y con los brazos
-  bajados. La genera `tools/hornear_personaje.gd`; volver a correrlo si se cambia
-  el modelo.
-- Pendiente: sentado en la silla el cuerpo sigue parado (solo baja la camara).
-  Se arregla con animaciones (sentado, caminar, quieto).
+- **El modelo:** `assets/modelos/personaje/Male.fbx` (original, en T-pose, sin
+  esqueleto). `tools/hornear_personaje.gd` lo para, lo escala a **1,80 m** (la
+  camara quedo donde estaba, un poco mas arriba que los ojos), lo "arma" (brazos
+  mas gruesos, algo mas de hombros y piernas: el modelo es flaco y en la sombra
+  los brazos se perdian), le **genera un esqueleto de 17 huesos y reparte los
+  pesos** de cada vertice (suaves en codos, rodillas, hombros y cadera). Sale
+  `personaje.res` (la malla) y `escenas/01_habitacion/cuerpo.tscn` (la escena).
+  Volver a correrlo si se cambia el modelo.
+- **Las animaciones son procedurales** (`cuerpo.gd`), sin clips:
+  - Quieto: respira, brazos separados del cuerpo (ojo: la T-pose del modelo ya
+    baja los brazos ~22 grados; `BRAZOS_ABAJO` se mide desde la horizontal).
+  - Caminando (el parque, 2,4 m/s): piernas, rodillas, brazos al reves de las
+    piernas y un poco de rebote. El paso avanza por DISTANCIA, con el largo que
+    da la pierna, asi los pies no patinan. Para atras se invierte; de costado la
+    cadera gira hacia donde va.
+  - Trotando (la pieza, 5 m/s): codos doblados, mas rodilla, mas inclinado. Ahi
+    el paso usa el mismo tranco que los sonidos de pasos: medio ciclo = un paso.
+  - Sentado: se sienta **solo cuando la camara baja** (la silla y el banco ya la
+    bajan con su tween); no hubo que tocar habitacion.gd ni parque.gd. La cadera va
+    donde da la camara y las canillas buscan el piso.
+  - La cabeza (y un poco el pecho) mira hacia donde mira la camara.
+- **Sombras:** a las luces de la pieza y al sol del parque se les bajo el *bias*
+  (estaba en los valores por defecto y despegaba la sombra de los pies). No se
+  toco ni color ni intensidad. La luz de la ventana es un parche: la sombra del
+  cuerpo solo se ve adentro del rectangulo de sol, y afuera termina recta. Es
+  correcto, no un error.
+- No tiene animacion propia para el vape ni el celular (a pedido).
