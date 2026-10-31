@@ -406,6 +406,41 @@ subiendo sola, muy despacio.
 **Un día nuevo tiene que sentirse igual que arrancar el juego por primera vez**:
 mismo fundido a negro antes de despertar (`SceneLoader.fundir_y_cambiar`).
 
+### La noche y el día siguiente (antes del parque)
+
+Antes, al apagarse la compu era de noche y la puerta llevaba a un parque al
+atardecer. Ahora hay un capítulo corto (menos de un minuto) en el medio.
+Todo está en `habitacion.gd` (sección "La noche y el dia siguiente").
+Test: `dia2_test.gd`.
+
+1. **La noche:** al levantarse después del apagón la puerta no deja salir
+   (*"Ya es re tarde... mañana salgo."*) y la cama pasa a decir **[E] Dormir**.
+   Si se llegó por un atajo de prueba antes de las 23:00, el reloj salta a la noche.
+2. **Dormir:** se apaga la luz (con el click del interruptor), la cámara se
+   acuesta en la almohada mirando el techo, y funde a negro. El cuerpo se
+   esconde mientras se acuesta: no tiene animación de acostarse.
+3. **Martes, 11:00:** el mismo despertar del lunes, con el reloj en las 11
+   (`escritorio.poner_hora()`; el ciclo del día pone el sol solo), el jugador
+   donde se despertó ayer, la luz apagada, sin el zumbido de la compu y con
+   pájaros entrando por la ventana.
+4. **La compu no prende:** el monitor dice "Prender la compu"; al tocarlo suena
+   el click del botón y nada (*"No prende. Quedó desenchufada desde el
+   apagón."*). No te sienta y la partida no arranca.
+5. **La puerta, ahora sí,** lleva al parque (que sigue al atardecer).
+
+**El cartel del día** (`escenas/comun/cartel_dia.gd`): cada despertar arranca
+con "Lunes / 08:00" (o "Martes / 11:00") abajo a la izquierda, sobre el negro.
+El día se revela de izquierda a derecha con borde difuso, se dibuja una línea
+fina y la hora entra con las letras juntándose. Se va mientras aparece la pieza.
+Fuentes: Cormorant Garamond itálica (el día) y DM Mono Light (la hora), en
+`assets/fuentes/` (OFL). El negro del despertar pasó de 3 a 6 s y el
+despertador suena con el cartel ya escrito (`DEMORA_DESPERTADOR`).
+
+⚠ **Faltan los pájaros:** `assets/audio/ambiente/pajaros.ogg` (el mismo que usa
+el parque). Con el archivo ahí, suenan solos en la pieza el martes y en el
+parque. Textos nuevos en `pensamientos.json`: `puerta_noche`,
+`compu_desenchufada`, `cama_manana`.
+
 ### El cuerpo del jugador (solo sombra)
 
 El jugador tiene un cuerpo low poly que **solo hace sombra** (`Solo sombras`): la

@@ -18,7 +18,15 @@ extends Node3D
 #   6. Queda sentado hasta que la dopamina colapsa.
 #   7. Durante el colapso: solo puede mirar. Ningun objeto responde.
 #      Solo aparece el cartel de levantarse.
-#   8. Al levantarse se habilita la puerta, y solo ahi se puede salir.
+#   8. Al levantarse es de noche: la puerta no deja salir ("ya es tarde")
+#      y la cama pasa a ser lo que hay que hacer: [E] Dormir.
+#   9. Dormir: se apaga la luz, se acuesta, negro. Pasa la noche.
+#  10. Martes, 11:00: el mismo despertar, con sol de mañana y pajaros en
+#      vez del zumbido de la compu. La compu no prende (quedo
+#      desenchufada con el apagon) y la puerta, ahora si, lleva al parque.
+#
+# Cada despertar arranca con el cartel del dia ("Lunes 08:00",
+# "Martes 11:00") sobre el negro, antes de que suene el despertador.
 #
 # CADA OBJETO SE APAGA CUANDO YA CUMPLIO SU FUNCION. Por eso nunca se
 # superponen dos carteles ni se puede hacer algo fuera de orden.
@@ -27,8 +35,31 @@ const DURACION_TRANSICION: float = 1.5
 const ALCANCE_RAYO: float = 5.0
 
 # Despertar
-const NEGRO_INICIAL: float = 3.0      # segundos de negro con el despertador sonando
+# El negro dura lo suficiente para que el cartel del dia entre entero y
+# se lea con calma; el despertador arranca recien cuando ya esta escrito.
+const NEGRO_INICIAL: float = 6.0      # segundos de negro antes de ver la pieza
+const DEMORA_CARTEL: float = 0.7      # el cartel no entra en el primer frame
+const DEMORA_DESPERTADOR: float = 2.6 # el despertador, con el cartel ya escrito
 const FUNDIDO_DESPERTAR: float = 2.0  # cuanto tarda en aparecer la imagen
+const CartelDia := preload("res://escenas/comun/cartel_dia.gd")
+const DIAS := ["Lunes", "Martes"]
+
+# La noche y el dia siguiente
+const HORA_NOCHE: float = 23 * 60.0   # la noche del lunes, despues del apagon
+const HORA_DIA_2: float = 11 * 60.0   # durmio de mas: se despierta a las 11
+const APAGAR_LUZ_AL_DORMIR: float = 0.45
+const ACOSTARSE: float = 2.4
+const QUIETO_EN_LA_CAMA: float = 1.4
+const FUNDIDO_DORMIR: float = 2.2
+const NEGRO_DORMIDO: float = 1.6
+# Los pajaros entran por la ventana la mañana siguiente. Es el mismo
+# archivo que usa el parque: con uno solo suenan los dos.
+const RUTAS_PAJAROS := [
+	"res://assets/audio/ambiente/pajaros.ogg",
+	"res://assets/audio/ambiente/pajaros.mp3",
+]
+const VOLUMEN_PAJAROS: float = -12.0
+const RUTA_BOTON_COMPU := "res://assets/audio/ui/softclick.wav"
 
 # Colapso
 const NEGRO_COLAPSO: float = 2.0
@@ -197,6 +228,18 @@ var _puede_levantarse: bool = false
 # te paras. Esta es la que dice de verdad que el dia termino y la puerta
 # ya lleva a algun lado.
 var _puede_salir: bool = false
+
+# El dia (1: lunes, 2: martes) y la noche del medio.
+var _dia: int = 1
+var _de_noche: bool = false
+var _durmiendo: bool = false
+var _cartel_dia: CanvasLayer = null
+var _pajaros: AudioStreamPlayer3D = null
+var _snd_boton_compu: AudioStreamPlayer3D = null
+var _texto_cama: String = ""
+# Donde arranca el jugador: el martes se despierta en el mismo lugar.
+var _jugador_inicio: Transform3D
+var _camara_inicio: Transform3D
 # Donde estaba la camara RESPECTO DEL CUERPO antes de sentarse.
 # Volver a esta transformacion local (y no a la global) es lo que hace
 # que al levantarse la camara quede otra vez alineada con el cuerpo,
@@ -308,6 +351,14 @@ func _ready() -> void:
 	puerta.usado.connect(_salir_al_parque)
 	GameManager.colapso.connect(_al_colapsar)
 
+	_cartel_dia = CartelDia.new()
+	add_child(_cartel_dia)
+	_jugador_inicio = jugador.global_transform
+	_camara_inicio = jugador.camara.transform
+	_texto_cama = cama.texto_interaccion
+	_crear_pajaros()
+	_crear_boton_compu()
+
 	_despertar()
 
 
@@ -331,17 +382,33 @@ func _despertar() -> void:
 	jugador.puede_mover = false
 	jugador.puede_mirar = false
 
-	# El despertador entra de a poco, junto con la conciencia
+	# Primero el cartel del dia, en silencio. Como un capitulo.
+	await get_tree().create_timer(DEMORA_CARTEL).timeout
+	_cartel_dia.mostrar(DIAS[mini(_dia, DIAS.size()) - 1], _hora_texto())
+
+	# Con el cartel ya escrito entra el despertador, de a poco, junto con
+	# la conciencia.
+	await get_tree().create_timer(DEMORA_DESPERTADOR - DEMORA_CARTEL).timeout
 	if sonido_despertador and sonido_despertador.stream:
-		AudioManager.fundir_entrada(sonido_despertador, NEGRO_INICIAL + 1.0, 0.0)
+		AudioManager.fundir_entrada(sonido_despertador, NEGRO_INICIAL - DEMORA_DESPERTADOR + 1.0, 0.0)
 
 	# Solo sonido, sin imagen
-	await get_tree().create_timer(NEGRO_INICIAL).timeout
+	await get_tree().create_timer(NEGRO_INICIAL - DEMORA_DESPERTADOR).timeout
 
-	# Aparece la habitacion. Se puede mirar, pero todavia no caminar:
-	# lo unico posible es buscar el despertador con la vista.
-	jugador.puede_mirar = true
+	# Aparece la habitacion y el cartel se va con el negro. Se puede
+	# mirar, pero todavia no caminar: lo unico posible es buscar el
+	# despertador con la vista. (Si mientras tanto ya se sento, que no le
+	# devuelva el mouse a la camara.)
+	if not _sentado:
+		jugador.puede_mirar = true
+	_cartel_dia.ocultar(FUNDIDO_DESPERTAR)
 	await SceneLoader.fundir_desde(FUNDIDO_DESPERTAR)
+
+
+# "08:00": la hora del reloj de la compu, que es la hora del juego.
+func _hora_texto() -> String:
+	var minutos := int(escritorio.obtener_minutos_del_dia())
+	return "%02d:%02d" % [minutos / 60, minutos % 60]
 
 
 func _apagar_despertador() -> void:
@@ -427,6 +494,10 @@ func _punto_en_viewport(pos_mouse: Vector2) -> Vector2:
 # ============================================================
 
 func _sentarse() -> void:
+	# El martes la compu no prende
+	if _dia >= 2:
+		_probar_compu_apagada()
+		return
 	# No se puede ir a la compu sin apagar antes el despertador
 	if _sentado or not _desperto:
 		return
@@ -572,21 +643,169 @@ func _levantarse() -> void:
 	jugador.puede_mirar = true
 	jugador.puede_interactuar = true
 
-	# Ahora si: la unica salida
+	# Es de noche. La puerta responde, pero no deja salir: ya es tarde.
+	# Lo que queda es irse a dormir.
+	_de_noche = true
 	puerta.activo = true
-	_puede_salir = true
+	cama.texto_interaccion = "Dormir"
+	# Llegando por el apagon ya es de noche (el reloj corre 12 minutos por
+	# segundo). Pero si se llego por un atajo de prueba, que tambien lo sea:
+	# "ya es re tarde" con sol en la ventana no tiene sentido.
+	if escritorio.obtener_minutos_del_dia() < HORA_NOCHE:
+		escritorio.poner_hora(HORA_NOCHE)
 
 
 func _salir_al_parque() -> void:
-	# Antes del colapso la puerta no lleva a ningun lado.
+	# Antes del colapso la puerta no lleva a ningun lado, y a la noche
+	# tampoco: ya es tarde.
 	if not _puede_salir:
-		_decir("puerta_antes")
+		_decir("puerta_noche" if _de_noche else "puerta_antes")
 		return
 
 	jugador.puede_mover = false
 	jugador.puede_mirar = false
 	jugador.puede_interactuar = false
 	await SceneLoader.cambiar_escena("res://escenas/04_parque/parque.tscn", Color.WHITE, 2.0)
+
+
+# ============================================================
+#  La noche y el dia siguiente
+# ============================================================
+#
+# Despues del apagon es de noche y salir al parque no tiene sentido. Se
+# duerme, y la mañana siguiente es la que lleva afuera: la misma pieza,
+# pero con sol, sin el zumbido de la compu y con la compu que no prende.
+
+func _al_usar_cama() -> void:
+	if _de_noche:
+		_dormir()
+	elif _dia >= 2:
+		_decir("cama_manana")
+	else:
+		_decir("cama")
+
+
+func _dormir() -> void:
+	if _durmiendo:
+		return
+	_durmiendo = true
+	_de_noche = false
+	_habilitar_exploracion(false)
+	puerta.activo = false
+	jugador.puede_mover = false
+	jugador.puede_mirar = false
+	jugador.puede_interactuar = false
+	jugador.set_physics_process(false)
+
+	# El que se va a dormir apaga la luz. Con el click de siempre.
+	if _luz_prendida:
+		_al_usar_interruptor()
+		await get_tree().create_timer(APAGAR_LUZ_AL_DORMIR).timeout
+
+	# El cuerpo no tiene animacion de acostarse: se lo esconde, ya a
+	# oscuras, para que su sombra no quede parada al lado de la cama.
+	jugador.get_node("Cuerpo").visible = false
+
+	var camara: Camera3D = jugador.camara
+	var tween := create_tween()
+	tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tween.tween_property(camara, "global_transform", _pose_acostado(), ACOSTARSE)
+	await tween.finished
+
+	# Un momento mirando el techo, y se apaga todo.
+	await get_tree().create_timer(QUIETO_EN_LA_CAMA).timeout
+	await SceneLoader.fundir_a(Color.BLACK, FUNDIDO_DORMIR)
+	await get_tree().create_timer(NEGRO_DORMIDO).timeout
+
+	_empezar_dia_2()
+	_despertar()
+
+
+# Acostado boca arriba con la cabeza en la almohada, mirando el techo. La
+# parte de arriba de la imagen apunta a la cabecera, como cuando uno esta
+# tirado en la cama.
+func _pose_acostado() -> Transform3D:
+	var almohada: Node3D = get_node_or_null("HabitacionVisual/Cama/Almohada")
+	var colchon: Node3D = get_node_or_null("HabitacionVisual/Cama/Colchon")
+	if almohada == null or colchon == null:
+		return jugador.camara.global_transform
+	var hacia_pies := colchon.global_position - almohada.global_position
+	hacia_pies.y = 0.0
+	hacia_pies = hacia_pies.normalized()
+	var ojos := almohada.global_position + Vector3.UP * 0.3 + hacia_pies * 0.25
+	var mirada := (Vector3.UP + hacia_pies * 0.18).normalized()
+	return Transform3D(Basis.looking_at(mirada, -hacia_pies), ojos)
+
+
+# Todo lo que cambia de un dia al otro, mientras esta todo negro.
+func _empezar_dia_2() -> void:
+	_dia = 2
+	_durmiendo = false
+	_puede_salir = true
+	escritorio.poner_hora(HORA_DIA_2)
+
+	# Se despierta donde se desperto ayer
+	jugador.global_transform = _jugador_inicio
+	jugador.camara.transform = _camara_inicio
+	jugador.rotacion_vertical = 0.0
+	jugador.rotacion_horizontal_sentado = 0.0
+	jugador.mirar_sentado = false
+	jugador.set_physics_process(true)
+	jugador.puede_interactuar = true
+	jugador.get_node("Cuerpo").visible = true
+
+	_desperto = false
+	despertador.activo = true
+	monitor.activo = true
+	monitor.texto_interaccion = "Prender la compu"
+	puerta.activo = true
+	cama.texto_interaccion = _texto_cama
+	_habilitar_exploracion(true)
+
+	# El silencio de la mañana: la compu esta apagada (el zumbido ya murio
+	# con el apagon; se corta igual por las dudas) y entran los pajaros
+	# por la ventana, ya en el negro.
+	if _zumbido:
+		_zumbido.stop()
+	if _pajaros and _pajaros.stream:
+		_pajaros.volume_db = -60.0
+		_pajaros.play()
+		var t := create_tween()
+		t.tween_property(_pajaros, "volume_db", VOLUMEN_PAJAROS, NEGRO_INICIAL + FUNDIDO_DESPERTAR)
+
+
+# Se aprieta el boton y no pasa nada: click, y ni una luz.
+func _probar_compu_apagada() -> void:
+	if _snd_boton_compu and _snd_boton_compu.stream:
+		Juice.sonar(_snd_boton_compu, 0.0, 0.04)
+	_decir("compu_desenchufada")
+
+
+func _crear_pajaros() -> void:
+	_pajaros = AudioStreamPlayer3D.new()
+	_pajaros.bus = "Ambiente"
+	_pajaros.unit_size = 6.0
+	add_child(_pajaros)
+	var vidrio: Node3D = get_node_or_null("HabitacionVisual/Ventana/Vidrio")
+	if vidrio:
+		_pajaros.global_position = vidrio.global_position
+	for ruta in RUTAS_PAJAROS:
+		if ResourceLoader.exists(ruta):
+			var sonido = load(ruta)
+			if sonido is AudioStreamOggVorbis or sonido is AudioStreamMP3:
+				sonido.loop = true
+			_pajaros.stream = sonido
+			return
+	print("[Habitacion] faltan los pajaros de la mañana: ", RUTAS_PAJAROS[0])
+
+
+func _crear_boton_compu() -> void:
+	_snd_boton_compu = AudioStreamPlayer3D.new()
+	_snd_boton_compu.bus = "UI"
+	_snd_boton_compu.volume_db = -4.0
+	monitor.add_child(_snd_boton_compu)
+	if ResourceLoader.exists(RUTA_BOTON_COMPU):
+		_snd_boton_compu.stream = load(RUTA_BOTON_COMPU)
 
 
 # ============================================================
@@ -749,7 +968,7 @@ func _preparar_exploracion() -> void:
 	libreta.usado.connect(_al_leer_libreta)
 	mochila.usado.connect(_decir.bind("mochila"))
 	ropa.usado.connect(_decir.bind("ropa"))
-	cama.usado.connect(_decir.bind("cama"))
+	cama.usado.connect(_al_usar_cama)
 	interruptor.usado.connect(_al_usar_interruptor)
 
 	_llenar_libreta()

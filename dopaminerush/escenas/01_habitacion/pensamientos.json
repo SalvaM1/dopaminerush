@@ -35,6 +35,21 @@
 		"Después salgo."
 	],
 
+	"_la_noche": "Despues del apagon es de noche: la puerta no deja salir y hay que irse a dormir. A la mañana siguiente la compu no prende.",
+
+	"puerta_noche": [
+		"Ya es re tarde... mañana salgo.",
+		"Mañana. Ahora a dormir."
+	],
+
+	"compu_desenchufada": [
+		"No prende. Quedó desenchufada desde el apagón.",
+		"Podría enchufarla... o salir un rato.",
+		"Después la enchufo."
+	],
+
+	"cama_manana": "Ya dormí demasiado.",
+
 	"cajon_cerrado": "Hay algo acá adentro.",
 	"cajon_abierto": "La libreta que me regalaron para organizarme.",
 

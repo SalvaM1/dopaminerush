@@ -236,6 +236,13 @@ func obtener_minutos_del_dia() -> float:
 	return _minutos
 
 
+# La usa la habitacion al dormir: el dia siguiente empieza a otra hora. El
+# ciclo del dia escucha hora_cambio y acomoda el cielo y la luz solo.
+func poner_hora(minutos: float) -> void:
+	_minutos = clampf(minutos, 0.0, FIN_DEL_DIA)
+	_actualizar_reloj()
+
+
 func _actualizar_reloj() -> void:
 	var h := int(_minutos / 60.0) % 24
 	var m := int(_minutos) % 60

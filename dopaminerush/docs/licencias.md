@@ -35,6 +35,15 @@ Modelo Banco Parque: "Park Bench- Banco de parque" (https://skfb.ly/oGuEu) by da
 - Fuente: **a completar** (de dónde se bajó, autor y licencia).
 - Archivo: `assets/audio/ui/notificacion.mp3`.
 
+## Fuentes (carteles de los días)
+
+| Archivo | Fuente | Licencia |
+|---|---|---|
+| `assets/fuentes/CormorantGaramond-Italic.ttf` | Cormorant Garamond, de Christian Thalmann (Google Fonts, github.com/google/fonts) | SIL Open Font License 1.1 (`OFL-CormorantGaramond.txt`) |
+| `assets/fuentes/DMMono-Light.ttf` | DM Mono, de Colophon Foundry (Google Fonts, github.com/google/fonts) | SIL Open Font License 1.1 (`OFL-DMMono.txt`) |
+
+Se pueden incluir en el juego y distribuir con él; la licencia va al lado.
+
 ## Música de Loopify
 
 Temas comerciales con derechos de autor, usados en un proyecto de la materia que
