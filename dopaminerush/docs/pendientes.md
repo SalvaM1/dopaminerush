@@ -52,6 +52,9 @@ haciendo. El detalle técnico de lo ya hecho está en `estado_proyecto.md`.
 - **Celular:** notificación / vibración (`assets/audio/ambiente/celular.ogg`).
 - **Mercado Libre:** sonido de compra (el nodo `Comprar` está vacío).
 - **TikToks:** llegar a ~30 (hoy 20).
+- **Loopify: 3 o 4 temas más** (hoy hay 5). Cada uno: el mp3 y su tapa, con el
+  nombre `Artista - Tema` (los temas tienen que sonar bien desde el principio:
+  se usan sus primeros 30 s). Se integran recortados e igualados de volumen.
 - **Pasos de la pieza:** 3 o 4 variantes más (hoy hay una sola).
 
 ## C. Para ampliar, si sobra tiempo
