@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="128" height="128">
+  <g fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round">
+    <!-- vincha -->
+    <path d="M11 40 V33 A21 21 0 0 1 53 33 V40" stroke-width="3.4"/>
+    <path d="M16.5 30 A16 16 0 0 1 47.5 30" stroke-width="1.6" opacity="0.5"/>
+    <!-- orejeras, apenas inclinadas hacia adentro -->
+    <g transform="rotate(-8 13.5 47)">
+      <rect x="7" y="37" width="13" height="20" rx="4.5" stroke-width="3.4"/>
+      <path d="M16 41.5 V52.5" stroke-width="1.8" opacity="0.6"/>
+    </g>
+    <g transform="rotate(8 50.5 47)">
+      <rect x="44" y="37" width="13" height="20" rx="4.5" stroke-width="3.4"/>
+      <path d="M48 41.5 V52.5" stroke-width="1.8" opacity="0.6"/>
+    </g>
+  </g>
+</svg>

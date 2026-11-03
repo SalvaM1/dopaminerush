@@ -4458,18 +4458,19 @@ transform = Transform3D(-0.9999995, 0, -1.7881393e-07, 0, 1, 0, 1.7881393e-07, 0
 [node name="Sonidos" type="Node3D" parent="." unique_id=114288791]
 
 [node name="Pajaros" type="AudioStreamPlayer" parent="Sonidos" unique_id=1867889661]
-volume_db = -14.0
+volume_db = -12.0
 bus = &"Ambiente"
 
 [node name="Viento" type="AudioStreamPlayer" parent="Sonidos" unique_id=356213888]
-volume_db = -20.0
+volume_db = -27.0
 bus = &"Ambiente"
 
 [node name="Agua" type="AudioStreamPlayer3D" parent="Sonidos" unique_id=226415018]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.311337, 0.5, 3.4524384)
-volume_db = -8.0
-unit_size = 22.0
-max_distance = 45.0
+attenuation_model = 1
+volume_db = -12.0
+unit_size = 5.0
+max_distance = 24.0
 bus = &"Ambiente"
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1635620360]

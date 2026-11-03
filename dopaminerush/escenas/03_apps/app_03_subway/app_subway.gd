@@ -70,7 +70,7 @@ const RUTA_AUDIO := "res://assets/audio/apps/canales/"
 const RUTA_VIDEO := "res://assets/video/subway/"
 
 # ---- LOS CANALES ----
-# Son SEIS. Sacar o agregar uno es tocar esta lista y nada mas: la
+# Son CINCO. Sacar o agregar uno es tocar esta lista y nada mas: la
 # frescura, el sorteo y el medidor se arman solos a partir de aca.
 #
 # El id es tambien el nombre del archivo de video (assets/video/subway/
@@ -107,12 +107,6 @@ const CANALES := [
 		"nombre": "SoapCutting",
 		"titulo": "cortando jabones caros 🧼",
 		"color": Color(0.55, 0.85, 0.82),
-	},
-	{
-		"id": "alfombra",
-		"nombre": "DeepClean",
-		"titulo": "la alfombra MÁS SUCIA que limpié jamás",
-		"color": Color(0.24, 0.66, 0.5),
 	},
 ]
 

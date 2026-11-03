@@ -639,16 +639,16 @@ vertical_alignment = 1
 [node name="Sonidos" type="Node" parent="."]
 
 [node name="Oferta" type="AudioStreamPlayer" parent="Sonidos"]
-bus = &"UI"
+bus = &"Apps"
 
 [node name="Comprar" type="AudioStreamPlayer" parent="Sonidos"]
-bus = &"UI"
+bus = &"Apps"
 
 [node name="Tecla" type="AudioStreamPlayer" parent="Sonidos"]
-bus = &"UI"
+bus = &"Apps"
 
 [node name="Error" type="AudioStreamPlayer" parent="Sonidos"]
-bus = &"UI"
+bus = &"Apps"
 
 [node name="Exito" type="AudioStreamPlayer" parent="Sonidos"]
-bus = &"UI"
+bus = &"Apps"

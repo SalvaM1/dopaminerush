@@ -287,10 +287,22 @@ Lo que **falta**:
 | **Family Savings** | `palanca_sube`, `girando`, `rodillo_para`, `casi`, `jackpot`, `moneda`, `luz` | `assets/audio/apps/slots/` |
 | **Celular** | notificación / vibración | `assets/audio/ambiente/` |
 | **Mercado Libre** | el sonido de compra | `assets/audio/apps/` |
-| Parque | `pajaros`, `viento`, `agua` | `assets/audio/ambiente/` |
 
 **Ya están** (ver `licencias.md`): la **notificación** de app instalada, el
-**paso** de la pieza y la **caminata en ripio** del parque.
+**paso** de la pieza, la **caminata en ripio** del parque, la **pitada del
+vape** y el **ambiente del parque**:
+- **Pájaros** en todo el parque (sin posición) y también entrando por la
+  ventana de la pieza el martes a la mañana: es el mismo archivo.
+- **Viento** muy bajito, de fondo (-27 dB en el nodo, ~15 dB debajo de los
+  pájaros).
+- **Agua** solo cerca del lago: el sonido se para en el punto de la orilla más
+  cercano al jugador (`parque.gd`, "El agua sigue la orilla") y cae rápido con
+  la distancia (inversa al cuadrado, se apaga a ~20 m).
+- **Pitada del vape:** suena cuando el vape llega a la boca, junto con el humo.
+  La escena del vape no tenía nodo de sonido: se arma por código en
+  `habitacion.gd` (`_preparar_sonido_vape`), sin tocar el vape.
+Los ambientes se convirtieron con el final fundido sobre el principio, así el
+loop no se nota; el loop se activa por código. Test: `sonidos_parque_test.gd`.
 
 **Los pasos suenan de dos formas** (`jugador.gd`, test: `tools/tests/pasos_test.gd`):
 
@@ -314,13 +326,21 @@ formato. Si un archivo no está, la app avisa por consola y sigue andando.
 Ambiente y capas **en loop** (Import → Loop → Reimport), de 30 s o más.
 **Anotar cada descarga en `docs/licencias.md` en el momento** — hoy está vacío.
 
-### C) Video — hecho, salvo un archivo
+### C) Video — hecho
 
-**162 MB en total.** 11 clips de TikBrainRot (largo completo) + 5 canales de Slop
-(recortados a 35 s).
+Clips de TikBrainRot (largo completo; hoy 20, la idea es llegar a ~30) + 5
+canales de Slop (recortados a 35 s).
 
-Falta **`alfombra.ogv`**: el canal existe en el código pero no tiene video, así que
-se queda con su color de fondo.
+**El orden de los TikToks** (`app_scroll.gd`, test: `tiktok_lista_test.gd`):
+una lista mezclada al azar que se recorre sin repetir; al terminarse se mezcla
+otra vez (la vuelta nueva no arranca con el último visto). El **primer video del
+juego** es `clip_03`, `clip_06` o `clip_08`, sorteado (`PRIMEROS`); después, todo
+al azar. La lista vive en el script, no en la ventana: cerrar y reabrir la app
+sigue donde quedó. Cada vez que se abre el juego el orden es otro.
+
+El canal de la alfombra se sacó (no había video): Subway Slop tiene **5 canales**,
+todos con su video. Con 5 alcanza para rotar: cada uno se quema en ~30 s y vuelve
+en ~91 s, y dar la vuelta a los otros cuatro lleva unos 120 s.
 
 Scripts: `tools/convertir_videos.bat` (TikToks, sin recorte) y
 `tools/convertir_canales.bat` (canales, `-t 35`). Los dos son **incrementales**:
@@ -406,6 +426,46 @@ subiendo sola, muy despacio.
 **Un día nuevo tiene que sentirse igual que arrancar el juego por primera vez**:
 mismo fundido a negro antes de despertar (`SceneLoader.fundir_y_cambiar`).
 
+### El menú de inicio
+
+`escenas/00_menu/` (`menu.gd` + `fondo_menu.gd`). Test: `menu_test.gd`.
+
+- **El fondo es la escena real**, vista por una cámara que paneá despacio: ida y
+  vuelta con un seno (frena sola en las puntas), ±15° en la pieza y ±16° en el
+  parque, con un corrimiento lateral desfasado que da paralaje. Nunca da la vuelta.
+  - **Habitación** (por defecto): desde la ventana, del lado del marco derecho, a
+    las 9:30 (la luz del ciclo del día). Del otro lado de la ventana está la cama
+    y su cabecera tapaba media toma.
+  - **Parque** (una vez terminado el juego): del otro lado del lago, mirando al sol.
+  - La escena se carga **sin scripts** (se les sacan antes de entrar al árbol): no
+    arranca nada del juego. Se sacan el jugador, el perro, las interfaces y los
+    sonidos; el menú pone su ambiente (zumbido y pájaros, o pájaros, viento y agua).
+  - Las tomas se ajustan en `TOMAS` (`fondo_menu.gd`): posición, a dónde mira,
+    amplitud, período, hora.
+- **El juego terminado** se recuerda solo mientras el juego está abierto
+  (`Ajustes.marcar_completado()`, al final del parque): volver al menú desde los
+  créditos muestra el parque, pero **cada vez que se abre el juego arranca de cero**
+  con la habitación. No se guarda nada en disco: el juego se juega una sola vez.
+  Los créditos no se tocaron.
+- **La interfaz:** columna sobre el tercio izquierdo (x = 300), con degradé
+  oscuro desde la izquierda y viñeta suave. Título *Dopamine / Rush* en Cormorant
+  itálica (se revela con el mismo barrido que el cartel del día), botones EMPEZAR,
+  SONIDO y SALIR en DM Mono (al pasar se iluminan, se corren y aparece una raya).
+  Abajo a la derecha, los auriculares (`assets/ui/auriculares.svg`, dibujados para
+  el juego) y "Se recomienda jugar con auriculares". Funciona con teclado.
+- **Sonido:** un control por grupo (`Ajustes.GRUPOS`): General, Música (incluye
+  Loopify), Videos (TikTok y Subway), Televisión, Efectos de apps, Ambiente,
+  Interfaz. 100 % es la mezcla tal cual; se suma a los volúmenes del layout, no
+  los pisa. Se recuerda mientras el juego está abierto. El agache del AudioManager vuelve
+  al volumen del jugador. Hasta que el menú aplica los ajustes, el jugador no suma
+  nada (los tests ven siempre la mezcla original).
+
+**Ojo con la configuración de buses:** `project.godot` la pide por UID, y la
+caché de UIDs de Godot (`.godot/uid_cache.bin`) a veces la pierde (el editor la
+reescribe). Sin ella el juego arranca con el Master solo: todo suena igual y las
+barras del menú no andan (salvo General). `AudioManager._ready()` lo detecta y
+carga `default_bus_layout.tres` por su ruta. `mezcla_test` chequea los 9 buses.
+
 ### La noche y el día siguiente (antes del parque)
 
 Antes, al apagarse la compu era de noche y la puerta llevaba a un parque al
@@ -436,9 +496,8 @@ Fuentes: Cormorant Garamond itálica (el día) y DM Mono Light (la hora), en
 `assets/fuentes/` (OFL). El negro del despertar pasó de 3 a 6 s y el
 despertador suena con el cartel ya escrito (`DEMORA_DESPERTADOR`).
 
-⚠ **Faltan los pájaros:** `assets/audio/ambiente/pajaros.ogg` (el mismo que usa
-el parque). Con el archivo ahí, suenan solos en la pieza el martes y en el
-parque. Textos nuevos en `pensamientos.json`: `puerta_noche`,
+Los pájaros de la mañana son `assets/audio/ambiente/pajaros.ogg`, el mismo
+archivo del parque. Textos nuevos en `pensamientos.json`: `puerta_noche`,
 `compu_desenchufada`, `cama_manana`.
 
 ### El cuerpo del jugador (solo sombra)

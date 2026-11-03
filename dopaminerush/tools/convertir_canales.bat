@@ -6,9 +6,8 @@ REM
 REM  COMO SE USA:
 REM    1. Renombrar cada video con el ID DE SU CANAL:
 REM
-REM         slime.mp4       cuchillo.mp4    mukbang.mp4
-REM         prensa.mp4      asmr.mp4        jabon.mp4
-REM         alfombra.mp4    subway.mp4
+REM         slime.mp4    subway.mp4    prensa.mp4
+REM         asmr.mp4     jabon.mp4
 REM
 REM       El nombre NO es decorativo: la app busca el archivo por el
 REM       id del canal. Si se llama distinto, ese canal se queda con
@@ -99,6 +98,6 @@ echo   ya estaban        : %SALTEADOS%
 if %FALLOS% GTR 0 echo   fallaron          : %FALLOS%
 echo.
 echo   Canales que espera la app:
-echo     slime  cuchillo  subway  mukbang  prensa  asmr  jabon  alfombra
+echo     slime  subway  prensa  asmr  jabon
 echo.
 pause

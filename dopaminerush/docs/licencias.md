@@ -30,6 +30,19 @@ Modelo Banco Parque: "Park Bench- Banco de parque" (https://skfb.ly/oGuEu) by da
 - Adaptación: volumen +27,2 dB, Ogg Vorbis.
 - Archivo: `assets/audio/pasos/pieza/paso.ogg`.
 
+## Ambiente del parque y pitada del vape
+
+Los cuatro tienen el formato de nombre de **Pixabay** (`usuario-titulo-numero`).
+*Confirmar los links.* Licencia de Pixabay: uso libre, sin atribución
+obligatoria (igual se acredita).
+
+| Archivo del juego | Original | Usuario | Adaptación |
+|---|---|---|---|
+| `assets/audio/ambiente/pajaros.ogg` | `freesound_community-park-ambience-70029.mp3` | freesound_community (n.º 70029) | sin 1 s en cada punta, loop con el final fundido 2,5 s sobre el principio, +16,3 dB (-20 LUFS) |
+| `assets/audio/ambiente/viento.ogg` | `soundreality-wind-blowing-457954.mp3` | soundreality (n.º 457954) | igual que los pájaros, +10,1 dB (-20 LUFS) |
+| `assets/audio/ambiente/agua.ogg` | `freesound_community-water-small-stream-25614.mp3` | freesound_community (n.º 25614) | igual que los pájaros, +22,1 dB (-20 LUFS) |
+| `assets/audio/ambiente/vape_pitada.ogg` | `freesound_community-vapeinhale-39129.mp3` | freesound_community (n.º 39129) | de 0,3 a 2,1 s, fundido de salida de 0,55 s, +15,7 dB (-18 LUFS) |
+
 ## Notificación de app instalada
 - Archivo original: `noitificacion.mp3`, sin cambios.
 - Fuente: **a completar** (de dónde se bajó, autor y licencia).

@@ -51,6 +51,22 @@ const DOPAMINA_JACKPOT: float = 32.0
 # largo haria esperar medio minuto y uno corto regalaria la dopamina.
 const CARPETA_VIDEOS := "res://assets/video/scroll/"
 
+# EL ORDEN DE LOS VIDEOS. Como en la app real, no se repite ninguno hasta
+# haber visto todos: se arma una lista mezclada al azar y se recorre en
+# orden. Cuando se termina, se vuelve a mezclar y arranca otra vuelta. El
+# azar cambia cada vez que se abre el juego.
+#
+# El PRIMER video del juego sale de estos tres (cual de ellos, al azar):
+# son los que mejor enganchan. Despues, todo al azar.
+const PRIMEROS := ["clip_03.ogv", "clip_06.ogv", "clip_08.ogv"]
+
+# La lista vive en el SCRIPT, no en la ventana: cerrar la app destruye la
+# ventana, y reabrirla no tiene que reiniciar la lista ni volver a sacar
+# uno de los primeros. Sigue donde quedo.
+static var _lista: Array[String] = []
+static var _ultimo_video: String = ""
+static var _primera_vez: bool = true
+
 # EL TONO DEL 2x. speed_scale acelera el stream entero, asi que el audio
 # tambien sube de tono y queda voz de ardilla. Para evitarlo, el video
 # tiene su propio bus con un AudioEffectPitchShift: al acelerar se
@@ -86,7 +102,6 @@ var _x2_desbloqueado: bool = false
 var _tween_destello: Tween = null
 
 var _videos: Array[String] = []
-var _ultimo_video: String = ""
 var _tam_video_previo: Vector2 = Vector2.ZERO
 var _tam_marco_previo: Vector2 = Vector2.ZERO
 
@@ -251,15 +266,12 @@ func _sin_videos() -> void:
 	reproductor.hide()
 
 
-# Elige uno al azar sin repetir el anterior, y lo arranca desde cero.
+# El siguiente de la lista, arrancado desde cero.
 func _poner_clip() -> void:
 	if _videos.is_empty():
 		return
 
-	var elegido: String = _videos[randi() % _videos.size()]
-	if _videos.size() > 1:
-		while elegido == _ultimo_video:
-			elegido = _videos[randi() % _videos.size()]
+	var elegido := _siguiente_video()
 	_ultimo_video = elegido
 
 	var stream = load(elegido)
@@ -274,6 +286,44 @@ func _poner_clip() -> void:
 
 	# El clip nuevo puede tener otra medida que el anterior.
 	_tam_video_previo = Vector2.ZERO
+
+
+# Saca el proximo video de la lista; si se termino, arma otra vuelta.
+func _siguiente_video() -> String:
+	# Un video que ya no esta (se borro el archivo) se saltea
+	while not _lista.is_empty() and not _videos.has(_lista[0]):
+		_lista.pop_front()
+	if _lista.is_empty():
+		_mezclar_lista()
+	return _lista.pop_front()
+
+
+func _mezclar_lista() -> void:
+	_lista = _videos.duplicate()
+	_lista.shuffle()
+
+	if _primera_vez:
+		_primera_vez = false
+		var candidatos: Array[String] = []
+		for nombre in PRIMEROS:
+			if _videos.has(CARPETA_VIDEOS + nombre):
+				candidatos.append(CARPETA_VIDEOS + nombre)
+		if not candidatos.is_empty():
+			var primero: String = candidatos[randi() % candidatos.size()]
+			_lista.erase(primero)
+			_lista.push_front(primero)
+			return
+
+	# La vuelta nueva no arranca con el mismo con el que termino la anterior
+	if _lista.size() > 1 and _lista[0] == _ultimo_video:
+		_lista.append(_lista.pop_front())
+
+
+# Vuelve la lista a cero, como al abrir el juego (para los tests).
+static func reiniciar_lista() -> void:
+	_lista.clear()
+	_ultimo_video = ""
+	_primera_vez = true
 
 
 # Enciende o apaga el corrector de tono del bus del video.

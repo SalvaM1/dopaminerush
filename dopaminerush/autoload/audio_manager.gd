@@ -75,7 +75,18 @@ var _agachado: bool = false
 var _tween_agache: Tween = null
 
 
+# La configuracion de buses (default_bus_layout.tres). project.godot la
+# pide por UID, y si la cache de UIDs de Godot pierde ese UID (paso: el
+# editor la reescribe), el juego arranca con UN SOLO bus: todo suena por el
+# Master, sin la mezcla y sin que anden los volumenes del menu. Por eso se
+# chequea al arrancar y, si falta, se carga a mano por su ruta.
+const RUTA_LAYOUT := "res://default_bus_layout.tres"
+
+
 func _ready() -> void:
+	if AudioServer.get_bus_index(BUS_AMBIENTE) < 0 and ResourceLoader.exists(RUTA_LAYOUT):
+		push_warning("[AudioManager] no cargo la configuracion de buses: se carga de " + RUTA_LAYOUT)
+		AudioServer.set_bus_layout(load(RUTA_LAYOUT))
 	for bus in BUSES_AGACHABLES:
 		var i := AudioServer.get_bus_index(bus)
 		if i >= 0:
@@ -94,7 +105,9 @@ func agachar(activo: bool) -> void:
 		var i := AudioServer.get_bus_index(bus)
 		if i < 0:
 			continue
-		var destino: float = _volumen_original[bus] - (AGACHE_DB if activo else 0.0)
+		# Vuelve al volumen que eligio el jugador en el menu, no al de la mezcla
+		var destino: float = _volumen_original[bus] + Ajustes.db_usuario(bus) \
+			- (AGACHE_DB if activo else 0.0)
 		_tween_agache.tween_method(
 			func(db: float) -> void: AudioServer.set_bus_volume_db(i, db),
 			AudioServer.get_bus_volume_db(i), destino, FUNDIDO_AGACHE)

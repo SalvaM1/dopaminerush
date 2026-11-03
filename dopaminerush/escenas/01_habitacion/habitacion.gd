@@ -60,6 +60,7 @@ const RUTAS_PAJAROS := [
 ]
 const VOLUMEN_PAJAROS: float = -12.0
 const RUTA_BOTON_COMPU := "res://assets/audio/ui/softclick.wav"
+const RUTA_PITADA := "res://assets/audio/ambiente/vape_pitada.ogg"
 
 # Colapso
 const NEGRO_COLAPSO: float = 2.0
@@ -315,6 +316,7 @@ func _ready() -> void:
 	puerta.texto_interaccion = "Salir"
 
 	_vape_pos_base = vape.position
+	_preparar_sonido_vape()
 	_configurar_humo()
 	indicador_vape.hide()
 	_crear_aviso_vape()
@@ -797,6 +799,19 @@ func _crear_pajaros() -> void:
 			_pajaros.stream = sonido
 			return
 	print("[Habitacion] faltan los pajaros de la mañana: ", RUTAS_PAJAROS[0])
+
+
+# La pitada suena cuando el vape llega a la boca, junto con el humo (eso
+# ya lo hace _vapear). La escena del vape no trae el nodo de sonido: se
+# arma aca, para no tocarla.
+func _preparar_sonido_vape() -> void:
+	if sonido_vape == null:
+		sonido_vape = AudioStreamPlayer3D.new()
+		sonido_vape.name = "Sonido"
+		sonido_vape.bus = "Ambiente"
+		vape.add_child(sonido_vape)
+	if sonido_vape.stream == null and ResourceLoader.exists(RUTA_PITADA):
+		sonido_vape.stream = load(RUTA_PITADA)
 
 
 func _crear_boton_compu() -> void:

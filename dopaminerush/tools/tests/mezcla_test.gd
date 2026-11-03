@@ -42,6 +42,13 @@ func _efecto(bus: String, clase: String) -> AudioEffect:
 
 
 func _probar() -> void:
+	# ---- los buses cargan ----
+	# project.godot pide la configuracion por UID; si la cache de Godot lo
+	# pierde, el AudioManager la carga por su ruta. Sin esto el juego arranca
+	# con el Master solo y no andan ni la mezcla ni los volumenes del menu.
+	await process_frame
+	_comprobar(AudioServer.bus_count == 9, "Estan los 9 buses (%d)" % AudioServer.bus_count)
+
 	# ---- los buses y a donde mandan ----
 	for nombre in ["Master", "Musica", "Apps", "Ambiente", "UI", "Video", "Loopify", "Slop", "Tele"]:
 		_comprobar(_bus(nombre) >= 0, "Existe el bus " + nombre)
@@ -110,6 +117,10 @@ func _probar() -> void:
 	var tv = load("res://escenas/01_habitacion/netflox/netflox.tscn").instantiate()
 	_comprobar(tv.get_node("SonidoPelicula").bus == &"Tele", "La tele sale por Tele, no por Ambiente")
 	tv.free()
+	var ofertas = load("res://escenas/03_apps/app_05_ofertas/app_ofertas.tscn").instantiate()
+	for n in ofertas.get_node("Sonidos").get_children():
+		_comprobar(n.bus == &"Apps", "Mercado Libre suena por Apps, como las demas apps (%s)" % n.name)
+	ofertas.free()
 	var tiktok_app = load("res://escenas/03_apps/app_01_scroll/app_scroll.tscn").instantiate()
 	var video = tiktok_app.find_children("*", "VideoStreamPlayer", true, false)
 	_comprobar(video.size() > 0 and video[0].bus == &"Video", "El video de TikTok sale por Video")

@@ -42,6 +42,14 @@ var _vidrio: StandardMaterial3D
 
 
 func configurar(habitacion: Node3D) -> void:
+	preparar(habitacion)
+	habitacion.escritorio.hora_cambio.connect(_actualizar_hora)
+	_actualizar_hora(habitacion.escritorio.obtener_minutos_del_dia())
+
+
+# Todo lo que no depende del reloj de la compu. El menu lo usa solo, con
+# una hora fija, para el fondo de la habitacion.
+func preparar(habitacion: Node3D) -> void:
 	# Copias locales: las curvas no modifican recursos de otras escenas.
 	var world: WorldEnvironment = habitacion.get_node("WorldEnvironment")
 	_entorno = world.environment.duplicate()
@@ -63,8 +71,10 @@ func configurar(habitacion: Node3D) -> void:
 	vidrio.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	luz_ventana.global_position = vidrio.global_position + Vector3(0.0, 0.12, -0.4)
 	rebote.global_position = vidrio.global_position + Vector3(1.0, 0.2, 3.2)
-	habitacion.escritorio.hora_cambio.connect(_actualizar_hora)
-	_actualizar_hora(habitacion.escritorio.obtener_minutos_del_dia())
+
+
+func poner_hora(minutos: float) -> void:
+	_actualizar_hora(minutos)
 
 
 func _actualizar_hora(minutos: float) -> void:

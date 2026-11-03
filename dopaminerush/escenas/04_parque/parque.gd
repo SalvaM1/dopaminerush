@@ -68,6 +68,11 @@ var _terminando: bool = false
 var _dopamina: float = 0.0
 var _respirando: bool = false
 
+# La orilla del lago, en el piso (x, z), para que el agua suene desde el
+# punto de la orilla mas cercano al jugador.
+var _orilla: PackedVector2Array = []
+var _altura_lago: float = 0.0
+
 
 func _ready() -> void:
 	cartel_respirar.hide()
@@ -105,6 +110,8 @@ func _process(delta: float) -> void:
 
 	if _puede_respirar and not _terminando and Input.is_action_just_pressed("interactuar"):
 		_respirar()
+
+	_seguir_orilla(delta)
 
 
 # La barra del escritorio escucha a GameManager, asi que no hay que
@@ -206,6 +213,8 @@ func _respirar() -> void:
 	# el final de la obra, no el fundido.
 	await get_tree().create_timer(ESPERA_FINAL).timeout
 
+	# Termino el juego: desde ahora el menu de inicio muestra el parque.
+	Ajustes.marcar_completado()
 	await SceneLoader.cambiar_escena("res://escenas/05_creditos/creditos.tscn", Color.BLACK, DURACION_SUSPIRO)
 
 
@@ -215,8 +224,13 @@ func _respirar() -> void:
 #
 # Tres capas. En un parque el sonido aporta tanto como la imagen, y es
 # donde menos se nota que no hay un artista en el grupo.
-# Los archivos van en assets/audio/ambiente/ y tienen que estar en LOOP
-# (pestaña Import -> Loop -> Reimport).
+#   - Pajaros: en todo el parque, siempre igual (no tiene posicion).
+#   - Viento: muy bajito, de fondo, tambien en todo el parque.
+#   - Agua: solo cerca del lago. Sale del punto de la orilla mas cercano al
+#     jugador y se apaga rapido con la distancia (ver el nodo Agua).
+# Los archivos van en assets/audio/ambiente/. El loop se activa aca, por
+# codigo: no hace falta tocar la pestaña Import. Se convirtieron con el
+# final fundido con el principio, asi la vuelta no se nota.
 
 const AMBIENTE := {
 	"Pajaros": "res://assets/audio/ambiente/pajaros.ogg",
@@ -240,9 +254,53 @@ func _arrancar_ambiente() -> void:
 				print("[Parque] falta el ambiente: ", ruta)
 				continue
 			reproductor.stream = load(ruta)
+		if reproductor.stream is AudioStreamOggVorbis or reproductor.stream is AudioStreamMP3:
+			reproductor.stream.loop = true
 
 		# Entran de a poco, no de golpe
 		var volumen: float = reproductor.volume_db
 		reproductor.volume_db = -60.0
 		reproductor.play()
 		AudioManager.fundir_entrada(reproductor, 3.5, volumen)
+
+# ============================================================
+#  El agua sigue la orilla
+# ============================================================
+#
+# El lago mide unos 40 m: un sonido fijo en un punto se escucharia
+# fuerte de un lado y nada del otro, o en cualquier lado si se lo sube.
+# Entonces el sonido se para siempre en el punto de la orilla mas cercano
+# al jugador. Acercarse al agua, por donde sea, es escucharla.
+
+func _preparar_orilla() -> void:
+	var lago: CSGPolygon3D = get_node_or_null("Lago")
+	if lago == null:
+		return
+	_altura_lago = lago.global_position.y
+	_orilla.clear()
+	for p in lago.polygon:
+		var g: Vector3 = lago.global_transform * Vector3(p.x, p.y, 0.0)
+		_orilla.append(Vector2(g.x, g.z))
+
+
+func _seguir_orilla(delta: float) -> void:
+	var agua: Node3D = get_node_or_null("Sonidos/Agua")
+	if agua == null or not is_instance_valid(jugador):
+		return
+	if _orilla.is_empty():
+		_preparar_orilla()
+		if _orilla.is_empty():
+			return
+	var yo := Vector2(jugador.global_position.x, jugador.global_position.z)
+	var mejor := _orilla[0]
+	var mejor_distancia := INF
+	for i in _orilla.size():
+		var punto := Geometry2D.get_closest_point_to_segment(yo, _orilla[i], _orilla[(i + 1) % _orilla.size()])
+		var distancia := yo.distance_squared_to(punto)
+		if distancia < mejor_distancia:
+			mejor_distancia = distancia
+			mejor = punto
+	# Suavizado: en las curvas de la orilla el punto mas cercano puede
+	# saltar de un lado a otro, y el sonido no tiene que saltar con el.
+	var destino := Vector3(mejor.x, _altura_lago + 0.3, mejor.y)
+	agua.global_position = agua.global_position.lerp(destino, 1.0 - exp(-4.0 * delta))
