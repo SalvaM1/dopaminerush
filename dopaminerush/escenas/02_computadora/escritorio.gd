@@ -205,7 +205,14 @@ func _process(delta: float) -> void:
 
 	_revisar_linkedout(delta)
 
-	# --- SOLO PARA PROBAR — sacar antes de la entrega ---
+	# Las teclas de prueba solo andan en el editor y en exportaciones de
+	# depuracion. En el .exe final no hacen nada: la D tambien es caminar.
+	if OS.is_debug_build():
+		_teclas_de_prueba()
+
+
+# --- SOLO PARA PROBAR ---
+func _teclas_de_prueba() -> void:
 	# O = saltar al colapso
 	if Input.is_physical_key_pressed(KEY_O) and not GameManager.etapa_final:
 		_forzar_colapso()

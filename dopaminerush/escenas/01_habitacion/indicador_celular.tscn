@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
 [sub_resource type="StyleBoxFlat" id="Style_fondo"]
 bg_color = Color(0.0784314, 0.0862745, 0.109804, 0.803922)
@@ -11,6 +11,18 @@ border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
 border_color = Color(1, 0.901961, 0, 0.6)
+
+[sub_resource type="StyleBoxFlat" id="Style_celular"]
+bg_color = Color(1, 1, 1, 0)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 5
+border_color = Color(1, 0.901961, 0, 0.95)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 
 [node name="IndicadorCelular" type="Control"]
 layout_mode = 3
@@ -43,9 +55,22 @@ offset_top = 8.0
 offset_bottom = 52.0
 grow_horizontal = 2
 theme_override_font_sizes/font_size = 30
-text = "📱"
+text = ""
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Celular" type="Panel" parent="Icono"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -12.0
+offset_top = 4.0
+offset_right = 12.0
+offset_bottom = 42.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_celular")
 
 [node name="Contador" type="Label" parent="."]
 layout_mode = 1

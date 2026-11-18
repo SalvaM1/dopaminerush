@@ -101,6 +101,32 @@ var _numero_video: int = 0
 var _x2_desbloqueado: bool = false
 var _tween_destello: Tween = null
 
+# ---- EL 2x, QUE SE NOTE ----
+# Sin dialogos: todo pasa adentro de la app, como en la de verdad.
+#   1. Al desbloquearse, un cartel grande en el medio del video ("2x",
+#      DESBLOQUEADO) que entra con rebote y sonido, y despues cae hacia abajo.
+#   2. Ahi queda una pastilla latiendo, "MANTENE APRETADO » 2x", hasta que
+#      el jugador lo usa por primera vez.
+#   3. Mientras se usa: la pastilla rosa "2x »" arriba y la barra rosa.
+# Desbloqueado y usado se anotan en GameManager (como los tutoriales):
+# cerrar y reabrir la app no vuelve a anunciarlo, y una partida nueva si.
+const ACENTO := Color(1.0, 0.17, 0.33)       # el rosa de la app
+const ACENTO_2 := Color(0.15, 0.96, 0.93)    # el celeste
+const USO_PARA_ENTENDER: float = 0.6         # segundos a 2x para dar por aprendido
+const RUTA_SONIDO_X2 := "res://assets/audio/ui/levelup.wav"
+const CLAVE_X2 := "x2_desbloqueado"
+const CLAVE_X2_USADO := "x2_usado"
+
+var _banner_x2: Control = null
+var _x2_grande: Control = null
+var _pista_x2: Label = null
+var _latido_pista: Tween = null
+var _tiempo_rapido: float = 0.0
+var _rapido_antes: bool = false
+var _snd_x2: AudioStreamPlayer = null
+var _relleno_normal: StyleBox = null
+var _relleno_rapido: StyleBoxFlat = null
+
 var _videos: Array[String] = []
 var _tam_video_previo: Vector2 = Vector2.ZERO
 var _tam_marco_previo: Vector2 = Vector2.ZERO
@@ -116,7 +142,10 @@ func _ready() -> void:
 	aviso.hide()
 	indicador.modulate.a = 0.0
 
-	_x2_desbloqueado = forzar_2x_desbloqueado
+	_x2_desbloqueado = forzar_2x_desbloqueado or not GameManager.tutorial_pendiente(CLAVE_X2)
+	_armar_x2()
+	if _x2_desbloqueado and GameManager.tutorial_pendiente(CLAVE_X2_USADO):
+		_mostrar_pista_x2()
 
 	GameManager.dopamina_cambio.connect(_al_cambiar_dopamina)
 
@@ -159,6 +188,13 @@ func _process(delta: float) -> void:
 	# Un solo numero mueve las dos cosas: el progreso y el goteo.
 	_progreso = min(1.0, _progreso + (delta * velocidad) / DURACION_VIDEO)
 	barra.value = _progreso * 100.0
+
+	# Usarlo un ratito es haberlo entendido: se va la pista.
+	if velocidad > 1.0 and _pista_x2 and _pista_x2.visible:
+		_tiempo_rapido += delta
+		if _tiempo_rapido >= USO_PARA_ENTENDER:
+			GameManager.marcar_tutorial(CLAVE_X2_USADO)
+			_ocultar_pista_x2()
 
 
 	if _progreso >= 1.0:
@@ -412,14 +448,22 @@ func _al_cambiar_dopamina(valor: float, _maximo: float) -> void:
 		return
 	if valor <= UMBRAL_2X:
 		_x2_desbloqueado = true
-		_mostrar_aviso("Mantené apretado\npara ver a 2x")
+		GameManager.marcar_tutorial(CLAVE_X2)
+		_anunciar_x2()
 
 
 func _actualizar_velocidad() -> void:
 	var rapido: bool = _manteniendo and _x2_desbloqueado and _progreso < 1.0
 
 	etiqueta_velocidad.visible = rapido
-	etiqueta_velocidad.text = "2x"
+	if rapido and not _rapido_antes:
+		etiqueta_velocidad.scale = Vector2(0.7, 0.7)
+		var pop := create_tween()
+		pop.tween_property(etiqueta_velocidad, "scale", Vector2.ONE, 0.25) \
+			.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_rapido_antes = rapido
+	if _relleno_rapido:
+		barra.add_theme_stylebox_override("fill", _relleno_rapido if rapido else _relleno_normal)
 
 	# speed_scale mueve el stream entero, imagen Y sonido. Por eso al
 	# acelerar la voz suena mas aguda, igual que cuando adelantas un
@@ -451,6 +495,192 @@ func _destello(color: Color) -> void:
 	sobre.modulate = color
 	_tween_destello = create_tween()
 	_tween_destello.tween_property(sobre, "modulate", Color.WHITE, 0.18)
+
+
+# ============================================================
+#  El 2x: el cartel, la pista y la pastilla
+# ============================================================
+
+func _armar_x2() -> void:
+	var telefono: Control = $Telefono
+	var fuente := ThemeDB.fallback_font
+
+	# Mientras se usa: pastilla rosa arriba, al centro
+	etiqueta_velocidad.text = "2x  \u00bb"
+	etiqueta_velocidad.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	etiqueta_velocidad.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	etiqueta_velocidad.add_theme_color_override("font_color", Color.WHITE)
+	etiqueta_velocidad.add_theme_font_size_override("font_size", 22)
+	etiqueta_velocidad.add_theme_font_override("font", _negrita(fuente))
+	etiqueta_velocidad.add_theme_stylebox_override("normal", _pildora(ACENTO, Color(0, 0, 0, 0), 0))
+	etiqueta_velocidad.set_anchors_preset(Control.PRESET_CENTER_TOP)
+	etiqueta_velocidad.offset_left = -52
+	etiqueta_velocidad.offset_right = 52
+	etiqueta_velocidad.offset_top = 54
+	etiqueta_velocidad.offset_bottom = 90
+	etiqueta_velocidad.pivot_offset = Vector2(52, 18)
+
+	# La barra se pinta del mismo rosa mientras va rapido
+	_relleno_normal = barra.get_theme_stylebox("fill")
+	_relleno_rapido = StyleBoxFlat.new()
+	_relleno_rapido.bg_color = ACENTO
+
+	# El cartel del desbloqueo
+	_banner_x2 = Control.new()
+	_banner_x2.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_banner_x2.set_anchors_preset(Control.PRESET_CENTER)
+	_banner_x2.offset_left = -140
+	_banner_x2.offset_right = 140
+	_banner_x2.offset_top = -120
+	_banner_x2.offset_bottom = 90
+	_banner_x2.pivot_offset = Vector2(140, 105)
+	_banner_x2.visible = false
+	telefono.add_child(_banner_x2)
+
+	var fondo := Panel.new()
+	fondo.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	fondo.set_anchors_preset(Control.PRESET_FULL_RECT)
+	fondo.add_theme_stylebox_override("panel", _pildora(Color(0, 0, 0, 0.74), ACENTO, 3, 28))
+	_banner_x2.add_child(fondo)
+
+	# "2x" con el efecto del logo: una copia rosa y una celeste corridas
+	_x2_grande = Control.new()
+	_x2_grande.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_x2_grande.position = Vector2(0, 8)
+	_x2_grande.size = Vector2(280, 120)
+	_x2_grande.pivot_offset = Vector2(140, 60)
+	_banner_x2.add_child(_x2_grande)
+	for capa in [[ACENTO_2, -4.0], [ACENTO, 4.0], [Color.WHITE, 0.0]]:
+		var l := _etiqueta_x2("2x", 104, capa[0], fuente)
+		l.position = Vector2(capa[1], 0)
+		l.size = Vector2(280, 120)
+		_x2_grande.add_child(l)
+
+	var titulo := _etiqueta_x2("DESBLOQUEADO", 15, Color(1, 1, 1, 0.9), fuente, 5)
+	titulo.position = Vector2(0, 124)
+	titulo.size = Vector2(280, 24)
+	_banner_x2.add_child(titulo)
+	var como := _etiqueta_x2("Mantené apretado el video", 17, Color(1, 1, 1, 0.75), fuente)
+	como.position = Vector2(0, 154)
+	como.size = Vector2(280, 28)
+	_banner_x2.add_child(como)
+
+	# La pista que queda hasta usarlo
+	_pista_x2 = Label.new()
+	_pista_x2.text = "MANTENÉ APRETADO  \u00bb  2x"
+	_pista_x2.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_pista_x2.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_pista_x2.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_pista_x2.add_theme_font_override("font", _negrita(fuente, 2))
+	_pista_x2.add_theme_font_size_override("font_size", 15)
+	_pista_x2.add_theme_color_override("font_color", Color.WHITE)
+	_pista_x2.add_theme_stylebox_override("normal", _pildora(Color(0, 0, 0, 0.62), ACENTO, 2))
+	_pista_x2.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
+	_pista_x2.offset_left = -130
+	_pista_x2.offset_right = 130
+	_pista_x2.offset_top = -124
+	_pista_x2.offset_bottom = -88
+	_pista_x2.pivot_offset = Vector2(130, 18)
+	_pista_x2.visible = false
+	telefono.add_child(_pista_x2)
+
+	_snd_x2 = AudioStreamPlayer.new()
+	_snd_x2.bus = "Apps"
+	_snd_x2.volume_db = -5.0
+	if ResourceLoader.exists(RUTA_SONIDO_X2):
+		_snd_x2.stream = load(RUTA_SONIDO_X2)
+	add_child(_snd_x2)
+
+
+func _anunciar_x2() -> void:
+	if _banner_x2 == null:
+		return
+	if _snd_x2.stream:
+		_snd_x2.play()
+	_destello(Color(1.35, 1.15, 1.3))
+	var y_base := _banner_x2.position.y
+	_banner_x2.visible = true
+	_banner_x2.modulate.a = 0.0
+	_banner_x2.scale = Vector2(0.5, 0.5)
+	var t := create_tween()
+	t.set_parallel(true)
+	t.tween_property(_banner_x2, "modulate:a", 1.0, 0.18)
+	t.tween_property(_banner_x2, "scale", Vector2.ONE, 0.55).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	t.set_parallel(false)
+	# El "2x" late dos veces
+	for i in 2:
+		t.tween_property(_x2_grande, "scale", Vector2(1.14, 1.14), 0.16).set_trans(Tween.TRANS_SINE)
+		t.tween_property(_x2_grande, "scale", Vector2.ONE, 0.22).set_trans(Tween.TRANS_SINE)
+	t.tween_interval(1.7)
+	# Y cae hacia donde queda la pista
+	t.set_parallel(true)
+	t.tween_property(_banner_x2, "position:y", y_base + 250.0, 0.45).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	t.tween_property(_banner_x2, "scale", Vector2(0.35, 0.35), 0.45).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	t.tween_property(_banner_x2, "modulate:a", 0.0, 0.45)
+	t.set_parallel(false)
+	t.tween_callback(func():
+		_banner_x2.visible = false
+		_banner_x2.position.y = y_base
+		if GameManager.tutorial_pendiente(CLAVE_X2_USADO):
+			_mostrar_pista_x2())
+
+
+func _mostrar_pista_x2() -> void:
+	if _pista_x2 == null or _pista_x2.visible:
+		return
+	_tiempo_rapido = 0.0
+	_pista_x2.visible = true
+	_pista_x2.modulate.a = 0.0
+	_pista_x2.scale = Vector2(0.8, 0.8)
+	var entra := create_tween().set_parallel(true)
+	entra.tween_property(_pista_x2, "modulate:a", 1.0, 0.3)
+	entra.tween_property(_pista_x2, "scale", Vector2.ONE, 0.35).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	if _latido_pista and _latido_pista.is_valid():
+		_latido_pista.kill()
+	_latido_pista = create_tween().set_loops()
+	_latido_pista.tween_interval(0.4)
+	_latido_pista.tween_property(_pista_x2, "scale", Vector2(1.07, 1.07), 0.32).set_trans(Tween.TRANS_SINE)
+	_latido_pista.tween_property(_pista_x2, "scale", Vector2.ONE, 0.32).set_trans(Tween.TRANS_SINE)
+
+
+func _ocultar_pista_x2() -> void:
+	if _latido_pista and _latido_pista.is_valid():
+		_latido_pista.kill()
+	var t := create_tween().set_parallel(true)
+	t.tween_property(_pista_x2, "scale", Vector2(1.2, 1.2), 0.3).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	t.tween_property(_pista_x2, "modulate:a", 0.0, 0.3)
+	t.chain().tween_callback(func(): _pista_x2.visible = false)
+
+
+func _etiqueta_x2(texto: String, tamano: int, color: Color, fuente: Font, espaciado: int = 0) -> Label:
+	var l := Label.new()
+	l.text = texto
+	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	l.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	l.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	l.add_theme_font_override("font", _negrita(fuente, espaciado))
+	l.add_theme_font_size_override("font_size", tamano)
+	l.add_theme_color_override("font_color", color)
+	return l
+
+
+func _negrita(fuente: Font, espaciado: int = 0) -> FontVariation:
+	var v := FontVariation.new()
+	v.base_font = fuente
+	v.variation_embolden = 0.9
+	v.spacing_glyph = espaciado
+	return v
+
+
+func _pildora(fondo: Color, borde: Color, ancho_borde: int, radio: int = 18) -> StyleBoxFlat:
+	var c := StyleBoxFlat.new()
+	c.bg_color = fondo
+	c.border_color = borde
+	c.set_border_width_all(ancho_borde)
+	c.set_corner_radius_all(radio)
+	c.content_margin_left = 14
+	c.content_margin_right = 14
+	return c
 
 
 func _mostrar_aviso(texto: String) -> void:

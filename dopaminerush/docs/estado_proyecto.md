@@ -328,7 +328,8 @@ Ambiente y capas **en loop** (Import → Loop → Reimport), de 30 s o más.
 
 ### C) Video — hecho
 
-Clips de TikBrainRot (largo completo; hoy 20, la idea es llegar a ~30) + 5
+Clips de TikBrainRot (largo completo; 30, los nombres originales en
+`videos_originales/_nombres_originales.txt`) + 5
 canales de Slop (recortados a 35 s).
 
 **El orden de los TikToks** (`app_scroll.gd`, test: `tiktok_lista_test.gd`):

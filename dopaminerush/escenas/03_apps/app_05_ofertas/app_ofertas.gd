@@ -140,6 +140,7 @@ func _ready() -> void:
 
 	_armar_digitos()
 	_armar_teclado()
+	_armar_aviso_celular()
 
 	boton_comprar.pressed.connect(_comprar)
 	boton_confirmar.pressed.connect(_confirmar)
@@ -265,6 +266,7 @@ func _comprar() -> void:
 		_codigo += str(randi() % 10)
 
 	_mostrar_panel(panel_codigo)
+	_latir_aviso_celular()
 	Juice.sonar(snd_comprar)
 
 	# El celular de la habitacion se entera por el GameManager. La app no
@@ -516,6 +518,120 @@ func _estilo_tecla(fondo: Color) -> StyleBoxFlat:
 # ============================================================
 #  Interfaz
 # ============================================================
+
+# ============================================================
+#  "Mira tu celular": grande, que no se pierda
+# ============================================================
+#
+# Era una linea de 13 px y el jugador se quedaba mirando el teclado sin
+# saber de donde sacar el codigo. Ahora es un bloque en el amarillo de la
+# marca, con la tecla C dibujada como una tecla de verdad, latiendo
+# mientras se espera el codigo.
+#
+# OJO CON EL ALTO: la ventana mide 470, pero la barra de titulo se lleva 38
+# y el panel arranca 50 mas abajo: quedan 382 px. Todo el panel se acomoda
+# aca, con posiciones fijas, para que el boton Confirmar entre entero.
+
+const AMARILLO_ML := Color(1.0, 0.9, 0.0)
+# [arriba, abajo] de cada cosa del panel, en px desde el borde del panel
+const LUGAR_TITULO := [6.0, 28.0]
+const LUGAR_AVISO := [32.0, 86.0]
+const LUGAR_DIGITOS := [92.0, 146.0]
+const LUGAR_TECLADO := [154.0, 320.0]
+const LUGAR_CONFIRMAR := [328.0, 368.0]
+
+var _tecla_c: Control = null
+var _latido_c: Tween = null
+
+
+func _armar_aviso_celular() -> void:
+	var viejo := panel_codigo.get_node_or_null("Tip") as Control
+	if viejo:
+		viejo.visible = false
+	var titulo_panel := panel_codigo.get_node_or_null("Titulo") as Control
+	for par in [[titulo_panel, LUGAR_TITULO], [digitos, LUGAR_DIGITOS],
+			[teclado, LUGAR_TECLADO], [boton_confirmar, LUGAR_CONFIRMAR]]:
+		if par[0]:
+			par[0].offset_top = par[1][0]
+			par[0].offset_bottom = par[1][1]
+
+	var bloque := Panel.new()
+	bloque.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var estilo := StyleBoxFlat.new()
+	estilo.bg_color = AMARILLO_ML
+	estilo.set_corner_radius_all(10)
+	estilo.shadow_color = Color(0, 0, 0, 0.18)
+	estilo.shadow_size = 4
+	estilo.shadow_offset = Vector2(0, 2)
+	bloque.add_theme_stylebox_override("panel", estilo)
+	bloque.set_anchors_preset(Control.PRESET_TOP_WIDE)
+	bloque.offset_left = 22
+	bloque.offset_right = -22
+	bloque.offset_top = LUGAR_AVISO[0]
+	bloque.offset_bottom = LUGAR_AVISO[1]
+	panel_codigo.add_child(bloque)
+
+	# La tecla C: blanca, con el borde de abajo mas grueso, como una tecla
+	_tecla_c = Panel.new()
+	_tecla_c.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var tecla := StyleBoxFlat.new()
+	tecla.bg_color = Color.WHITE
+	tecla.border_color = Color(0.2, 0.2, 0.22)
+	tecla.border_width_left = 2
+	tecla.border_width_top = 2
+	tecla.border_width_right = 2
+	tecla.border_width_bottom = 6
+	tecla.set_corner_radius_all(8)
+	_tecla_c.add_theme_stylebox_override("panel", tecla)
+	_tecla_c.position = Vector2(10, 6)
+	_tecla_c.size = Vector2(40, 40)
+	_tecla_c.pivot_offset = _tecla_c.size * 0.5
+	bloque.add_child(_tecla_c)
+	var letra := Label.new()
+	letra.text = "C"
+	letra.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	letra.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	letra.set_anchors_preset(Control.PRESET_FULL_RECT)
+	letra.offset_bottom = -3
+	letra.add_theme_font_override("font", _negrita())
+	letra.add_theme_font_size_override("font_size", 24)
+	letra.add_theme_color_override("font_color", Color(0.13, 0.13, 0.15))
+	_tecla_c.add_child(letra)
+
+	var titulo := Label.new()
+	titulo.text = "MIRÁ TU CELULAR"
+	titulo.position = Vector2(62, 3)
+	titulo.add_theme_font_override("font", _negrita())
+	titulo.add_theme_font_size_override("font_size", 19)
+	titulo.add_theme_color_override("font_color", Color(0.13, 0.13, 0.15))
+	bloque.add_child(titulo)
+	var sub := Label.new()
+	sub.text = "Te llegó el código por SMS. Apretá C."
+	sub.position = Vector2(63, 29)
+	sub.add_theme_font_size_override("font_size", 13)
+	sub.add_theme_color_override("font_color", Color(0.2, 0.2, 0.22, 0.85))
+	bloque.add_child(sub)
+
+
+# La tecla late mientras se espera el codigo.
+func _latir_aviso_celular() -> void:
+	if _tecla_c == null:
+		return
+	if _latido_c and _latido_c.is_valid():
+		_latido_c.kill()
+	_tecla_c.scale = Vector2.ONE
+	_latido_c = create_tween().set_loops()
+	_latido_c.tween_interval(0.35)
+	_latido_c.tween_property(_tecla_c, "scale", Vector2(1.14, 1.14), 0.18).set_trans(Tween.TRANS_SINE)
+	_latido_c.tween_property(_tecla_c, "scale", Vector2.ONE, 0.26).set_trans(Tween.TRANS_SINE)
+
+
+func _negrita() -> FontVariation:
+	var v := FontVariation.new()
+	v.base_font = ThemeDB.fallback_font
+	v.variation_embolden = 0.9
+	return v
+
 
 func _mostrar_panel(cual: Control) -> void:
 	for p in [panel_espera, panel_oferta, panel_codigo, panel_final]:

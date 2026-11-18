@@ -19,9 +19,9 @@ haciendo. El detalle técnico de lo ya hecho está en `estado_proyecto.md`.
    carteles del juego, y con un sonido.
 5. **Mejorar visualmente la app de TikTok (TikBrainRot).** Es la primera app y
    la que más se usa: que se vea al nivel del resto (Preguntados, Loopify).
-6. **Tutorial del 2x de TikTok.** Cuando se desbloquea la velocidad x2, que el
-   juego lo explique (un pensamiento como los de primera vez, o un cartel), para
-   que el jugador sepa que existe y cómo se usa.
+6. ~~**Tutorial del 2x de TikTok.**~~ Hecho adentro de la app, sin diálogos:
+   cartel grande "2x DESBLOQUEADO", pista latiendo hasta usarlo, pastilla y barra
+   rosas mientras se usa (`tiktok_x2_test.gd`).
 7. **Íconos del dock dibujados.** La barra de tareas del escritorio de la compu
    (abajo, un botón por app) usa emojis como íconos (▶ 🎰 🦉 📺 🛒 🎵) que
    la fuente no tiene: se ven como cuadraditos vacíos. Dibujarlos con el estilo
@@ -33,7 +33,8 @@ haciendo. El detalle técnico de lo ya hecho está en `estado_proyecto.md`.
    `escenas/03_apps/app_05_ofertas/productos.json` (tostadora que imprime tu cara,
    ventilador para el mate, almohada con forma de pierna...): revisarlos y sumar
    los más ridículos.
-9. **Tutorial de Mercado Libre.** La primera vez que se abre, explicar cómo se
+9. **Tutorial de Mercado Libre.** (El aviso de "mirá tu celular, tecla C" ya
+   está agrandado: bloque amarillo con la tecla C latiendo.) La primera vez que se abre, explicar cómo se
    juega (las ofertas, el código que llega al celular, la tecla C), con el mismo
    estilo que los demás tutoriales.
 10. **Limpieza:** teclas de debug O / U / P / D (apagadas, pero disponibles para
@@ -51,7 +52,7 @@ haciendo. El detalle técnico de lo ya hecho está en `estado_proyecto.md`.
   `moneda`, `luz` (`assets/audio/apps/slots/`). Hoy solo suena la palanca.
 - **Celular:** notificación / vibración (`assets/audio/ambiente/celular.ogg`).
 - **Mercado Libre:** sonido de compra (el nodo `Comprar` está vacío).
-- **TikToks:** llegar a ~30 (hoy 20).
+- ~~**TikToks:** llegar a ~30.~~ Hay 30.
 - **Loopify: 3 o 4 temas más** (hoy hay 5). Cada uno: el mp3 y su tapa, con el
   nombre `Artista - Tema` (los temas tienen que sonar bien desde el principio:
   se usan sus primeros 30 s). Se integran recortados e igualados de volumen.
